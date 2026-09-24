@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-container-low":"#0b1c30","on-primary-fixed-variant":"#3c475b","on-tertiary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","secondary-fixed":"#d7e2ff","on-secondary-fixed-variant":"#004591","primary":"#bbc7df","on-background":"#d3e4fe","surface-container-high":"#1b2b3f","surface-variant":"#26364a","tertiary-container":"#231200","on-error":"#690005","primary-fixed-dim":"#bbc7df","surface-dim":"#031427","secondary-fixed-dim":"#acc7ff","tertiary-fixed-dim":"#ffb95f","surface-tint":"#bbc7df","secondary-container":"#0365cf","error":"#ffb4ab","on-secondary-fixed":"#001a40","on-secondary":"#002f67","on-primary-fixed":"#101c2e","on-error-container":"#ffdad6","error-container":"#93000a","on-primary":"#253144","surface-container":"#102034","outline-variant":"#45474c","background":"#031427","on-surface":"#d3e4fe","primary-container":"#0a1628","inverse-on-surface":"#213145","tertiary-fixed":"#ffddb8","outline":"#8f9097","on-tertiary":"#472a00","secondary":"#acc7ff","on-surface-variant":"#c5c6cd","on-tertiary-container":"#b37100","surface-container-highest":"#26364a","inverse-surface":"#d3e4fe","on-primary-container":"#758096","surface-bright":"#2a3a4f","surface":"#031427","tertiary":"#ffb95f","on-tertiary-fixed":"#2a1700","primary-fixed":"#d7e3fc","on-secondary-container":"#e0e8ff","inverse-primary":"#535f74"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{gutter:"0.5rem","space-sm":"0.25rem","space-xl":"1rem",margin:"0.75rem","space-xs":"0.125rem","space-lg":"0.75rem","space-md":"0.5rem"},fontFamily:{"headline-md":["IBM Plex Sans"],"label-telemetry-sm":["JetBrains Mono"],"body-sm":["IBM Plex Sans"],"body-lg":["IBM Plex Sans"],"label-telemetry-md":["JetBrains Mono"],"label-telemetry-lg":["JetBrains Mono"],"body-md":["IBM Plex Sans"],"headline-lg":["IBM Plex Sans"],"headline-sm":["IBM Plex Sans"],"label-caps":["IBM Plex Sans"]},fontSize:{"headline-md":["1.25rem",{lineHeight:"1.75rem",fontWeight:"600"}],"label-telemetry-sm":["0.6875rem",{lineHeight:"0.875rem",fontWeight:"500"}],"body-sm":["0.75rem",{lineHeight:"1rem",fontWeight:"400"}],"body-lg":["0.9375rem",{lineHeight:"1.375rem",fontWeight:"400"}],"label-telemetry-md":["0.8125rem",{lineHeight:"1rem",fontWeight:"500"}],"label-telemetry-lg":["1.125rem",{lineHeight:"1.25rem",fontWeight:"600"}],"body-md":["0.8125rem",{lineHeight:"1.125rem",fontWeight:"400"}],"headline-lg":["1.75rem",{lineHeight:"2.25rem",fontWeight:"600"}],"headline-sm":["1rem",{lineHeight:"1.5rem",fontWeight:"600"}],"label-caps":["0.6875rem",{lineHeight:"0.875rem",fontWeight:"600"}]}}}};</script></head><body class="bg-background text-on-surface font-body-md text-body-md min-h-screen"><header class="fixed top-0 left-0 right-0 h-14 bg-surface-container-low/95 backdrop-blur-md z-50 shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="h-14 w-full px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg shrink-0"><img alt="STEG Dispatching National Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VXWnD-FH0ODFvq3ztyXT8mgWrEPIrjyk5gcvRSlLehiOUhsELd9EaDFIEFPioRn4ELqmkwkvibpTHR_1f_EUBKaqaXjy5tFExDvm_uJNJ3hxoCWu2-GVlmeZtM1c5GzocoIKqujRH9GFHZhqCR9CFDF-pXTLQDWzzeEKMgt2OgWlbgnIB0FZ3PiXN6s6-BB0pgO1psy57vl11s4O7NTm4rAWgDCQWiGRCpK2YuJn5nlAxXUB28jvszJ9I"/><div class="flex flex-col"><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm text-primary tracking-wide uppercase">STEG CONDUITE</span><span class="px-space-sm py-space-xs rounded bg-surface-container-highest text-on-surface-variant font-label-caps text-label-caps tracking-wider">PROD 225/150/90/30 kV</span></div><div class="flex items-center gap-space-sm font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span><span>RÉSEAU INTERCONNECTÉ</span></div></div><div class="hidden xl:flex items-center bg-surface-container px-space-md py-space-xs rounded gap-space-md"><div class="flex flex-col"><span class="font-label-caps text-label-caps text-on-surface-variant">FRÉQUENCE RÉSEAU</span><span class="font-label-telemetry-md text-label-telemetry-md text-secondary">50,02 Hz</span></div><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-high"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface">NOMINALE</span></div></div></div><nav class="flex items-center bg-surface-container-lowest p-space-xs rounded" data-active-classes="bg-surface-container-high text-on-surface font-headline-sm"><a aria-current="page" class="px-space-lg py-space-xs rounded transition-colors bg-surface-container-high text-on-surface font-headline-sm" data-path="supervision-dn" href="#">Tableau de bord</a><a class="px-space-lg py-space-xs rounded font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors" data-path="editeur-sig-topologie" href="#">Cartographie SIG</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="hidden lg:flex flex-col items-end bg-surface-container px-space-md py-space-xs rounded font-label-telemetry-sm text-label-telemetry-sm"><span class="text-primary">14:32:18 UTC+1</span><span class="text-on-surface-variant">TU 13:32:18</span></div><div class="hidden md:flex items-center gap-space-md pl-space-md"><div class="flex flex-col items-end leading-tight"><span class="font-headline-sm text-body-sm text-on-surface font-semibold">Ing. K. Ben Salem</span><span class="font-label-caps text-label-caps text-on-surface-variant">OPÉRATEUR NATIONAL DN • TUNIS</span></div></div><button class="relative p-space-sm rounded bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface flex items-center justify-center" title="Alarmes actives" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute -top-1 -right-1 px-space-xs bg-error-container text-on-error-container rounded-full font-label-telemetry-sm text-[10px] leading-none py-0.5">4</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><a class="p-space-sm rounded bg-surface-container hover:bg-error-container hover:text-on-error-container transition-colors text-on-surface-variant flex items-center justify-center" data-path="login" href="#" title="Déconnexion sécurisée"><span class="material-symbols-outlined text-[20px]">power_settings_new</span></a></div></div></header><aside class="fixed left-0 top-14 bottom-8 w-64 bg-surface-container-low z-40 flex flex-col justify-between shadow-[1px_0_8px_rgba(0,0,0,0.3)]"><div class="flex flex-col py-space-md"><div class="px-space-lg py-space-xs font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-space-xs">Architecture Téléconduite</div><nav class="flex flex-col px-space-sm gap-space-xs" data-active-classes="bg-surface-container-high text-secondary"><a aria-current="page" class="flex items-center gap-space-md px-space-md py-space-sm rounded transition-all bg-surface-container-high text-secondary" data-path="supervision-dn" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-body-md text-body-md">Supervision DN</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="conduite-regionale" href="#"><span class="material-symbols-outlined text-[20px]">alt_route</span><span class="font-body-md text-body-md">Conduite Régionale</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="postes-locaux" href="#"><span class="material-symbols-outlined text-[20px]">domain</span><span class="font-body-md text-body-md">Postes Locaux (7 BCCs)</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="analyse-historique-ens" href="#"><span class="material-symbols-outlined text-[20px]">query_stats</span><span class="font-body-md text-body-md">Analyse &amp; Historique ENS</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="editeur-sig-topologie" href="#"><span class="material-symbols-outlined text-[20px]">map</span><span class="font-body-md text-body-md">Éditeur SIG &amp; Topologie</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="parametres-systeme" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span class="font-body-md text-body-md">Paramètres &amp; Seuils</span></a></nav></div><div class="p-space-sm"><div class="bg-surface-container-lowest p-space-sm rounded mb-space-sm"><div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant mb-space-xs"><span>CYCLE AUTOMATE</span><span class="font-label-telemetry-sm text-secondary">20 ms</span></div><div class="w-full bg-surface-container-high h-1 rounded"><div class="bg-secondary h-1 rounded" style="width: 92%"></div></div></div><button class="w-full flex items-center justify-center gap-space-sm px-space-md py-space-sm rounded bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-body-sm text-body-sm" type="button"><span class="material-symbols-outlined text-[18px]">keyboard_double_arrow_left</span><span>Réduire Pupitre</span></button></div></aside><div class="pl-64"><main class="w-full pt-14 pb-8 min-h-screen bg-background"><div class="flex flex-col w-full">
+<!-- Sub-Header / Map Command Toolbar -->
+<section class="w-full bg-surface-container-low px-space-lg py-space-sm flex flex-wrap items-center justify-between gap-space-md shadow-md z-30">
+<!-- View Switcher & Title -->
+<div class="flex items-center gap-space-lg flex-wrap">
+<div class="flex items-center gap-space-xs bg-surface-container-lowest p-space-xs rounded">
+<a class="flex items-center gap-space-xs px-space-md py-space-xs rounded font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" data-path="supervision-dn" href="#">
+<span class="material-symbols-outlined text-[16px]">monitoring</span>
+<span>Tableau de bord</span>
+</a>
+<a class="flex items-center gap-space-xs px-space-md py-space-xs rounded font-body-sm text-body-sm text-secondary bg-surface-container-high font-semibold shadow-sm" data-path="editeur-sig-topologie" href="#">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">map</span>
+<span>SIG &amp; Topologie (Actif)</span>
+</a>
+</div>
+<div class="h-4 w-px bg-surface-container-highest hidden md:block"></div>
+<!-- Layer Toggles -->
+<div class="flex items-center gap-space-xs flex-wrap font-label-caps text-label-caps">
+<button class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-high text-on-surface hover:bg-surface-bright transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px] text-secondary">check_box</span>
+<span>CRC NORD/SUD</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-high text-on-surface hover:bg-surface-bright transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px] text-secondary">check_box</span>
+<span>7 BCCs</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-high text-on-surface hover:bg-surface-bright transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px] text-secondary">check_box</span>
+<span>LIGNES 225/150 kV</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-error-container/40 text-error hover:bg-error-container/60 transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+<span>PRIORITAIRES P0</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">check_box_outline_blank</span>
+<span>FEEDERS 30 kV</span>
+</button>
+</div>
+</div>
+<!-- Map Tools & Quick Stats -->
+<div class="flex items-center gap-space-md">
+<div class="hidden lg:flex items-center gap-space-sm bg-surface-container-lowest px-space-md py-space-xs rounded font-label-telemetry-sm text-label-telemetry-sm">
+<span class="text-on-surface-variant uppercase">SYNCHRO SIG:</span>
+<span class="text-secondary font-semibold">TRAME ACTIVE #8841</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+</div>
+<div class="flex items-center bg-surface-container-lowest p-space-xs rounded gap-space-xs">
+<button class="w-7 h-7 flex items-center justify-center rounded bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" title="Zoom avant (+)" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center rounded bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" title="Zoom arrière (-)" type="button">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center rounded bg-surface-container hover:bg-surface-container-high text-secondary transition-colors" title="Recadrer sur Tunisie" type="button">
+<span class="material-symbols-outlined text-[16px]">crop_free</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center rounded bg-surface-container-high text-on-surface transition-colors" title="Fond CartoDB Sombre" type="button">
+<span class="material-symbols-outlined text-[16px]">layers</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center rounded bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" title="Plein écran opérationnel" type="button">
+<span class="material-symbols-outlined text-[16px]">fullscreen</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Main Operational Canvas -->
+<div class="relative w-full h-[calc(100vh-8rem)] flex overflow-hidden bg-surface-container-lowest">
+<!-- Vector Map Container -->
+<div class="relative flex-1 h-full overflow-hidden select-none cursor-crosshair">
+<!-- Coordinate Grid Lines & Dark Matter Backdrop -->
+<div class="absolute inset-0 bg-gradient-to-b from-[#031427] via-[#051121] to-[#020b17] opacity-100 pointer-events-none"></div>
+<!-- SVG Map Canvas: High Precision Tunisia Cartography with BCCs & Grid -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="xMidYMid meet" viewbox="0 0 1100 820">
+<defs>
+<!-- Grid & Regional Pattern -->
+<pattern height="40" id="sigGrid" patternunits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="#102034" stroke-dasharray="2 3" stroke-width="0.75"></path>
+</pattern>
+<lineargradient id="crcNordGrad" x1="0" x2="1" y1="0" y2="1">
+<stop offset="0%" stop-color="#0365cf" stop-opacity="0.14"></stop>
+<stop offset="100%" stop-color="#0365cf" stop-opacity="0.03"></stop>
+</lineargradient>
+<lineargradient id="crcSudGrad" x1="0" x2="1" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffb95f" stop-opacity="0.12"></stop>
+<stop offset="100%" stop-color="#ffb95f" stop-opacity="0.02"></stop>
+</lineargradient>
+<filter height="160%" id="glowCritical" width="160%" x="-30%" y="-30%">
+<fegaussianblur result="blur" stddeviation="6"></fegaussianblur>
+<fecomposite in="SourceGraphic" in2="blur" operator="over"></fecomposite>
+</filter>
+</defs>
+<!-- Coordinate Grid -->
+<rect fill="url(#sigGrid)" height="100%" width="100%"></rect>
+<!-- Bathymetric / Coastline Ambience (Mediterranean Sea) -->
+<path d="M 330 30 Q 550 40 760 120 T 920 280 L 1100 280 L 1100 0 L 330 0 Z" fill="#0a1828" opacity="0.45"></path>
+<path d="M 680 430 Q 780 470 750 630 T 730 780 L 1100 780 L 1100 430 Z" fill="#0a1828" opacity="0.3"></path>
+<!-- CRC NORD Boundary (Large Polygon) -->
+<path d="M 390 110 L 460 70 L 530 85 L 610 135 L 635 180 L 580 255 L 530 290 L 430 300 L 370 230 L 360 150 Z" fill="url(#crcNordGrad)" stroke="#0365cf" stroke-dasharray="6 3" stroke-width="1.5"></path>
+<!-- CRC SUD Boundary (Large Polygon) -->
+<path d="M 430 300 L 530 290 L 580 255 L 645 285 L 630 430 L 580 540 L 510 650 L 460 740 L 430 740 L 410 600 L 400 450 L 410 350 Z" fill="url(#crcSudGrad)" stroke="#b37100" stroke-dasharray="6 3" stroke-width="1.5"></path>
+<!-- BCC 4: Bizerte - Mateur (Polygon) -->
+<polygon fill="#1b2b3f" fill-opacity="0.4" points="430,78 500,68 535,115 480,140 430,115" stroke="#45474c" stroke-width="1"></polygon>
+<!-- BCC 3: Nord-Ouest (Béja - Jendouba) -->
+<polygon fill="#231200" fill-opacity="0.35" points="365,145 430,115 450,175 420,245 350,225" stroke="#b37100" stroke-width="1"></polygon>
+<!-- BCC 1: Grand Tunis Nord -->
+<polygon fill="#102034" fill-opacity="0.7" points="500,68 555,100 550,145 490,140" stroke="#0365cf" stroke-width="1.25"></polygon>
+<!-- BCC 2: Grand Tunis Sud / Ben Arous -->
+<polygon fill="#102034" fill-opacity="0.7" points="490,140 550,145 565,195 505,200" stroke="#0365cf" stroke-width="1.25"></polygon>
+<!-- BCC 6: Sahel (Sousse - Monastir - Mahdia) -->
+<polygon fill="#102034" fill-opacity="0.5" points="565,195 625,210 635,310 575,320 545,245" stroke="#45474c" stroke-width="1"></polygon>
+<!-- BCC 5: Centre (Kairouan - Sidi Bouzid) [CRITICAL ALERT AREA - HIGHLIGHTED] -->
+<polygon class="animate-pulse" fill="#93000a" fill-opacity="0.25" filter="url(#glowCritical)" points="450,205 545,225 570,335 485,385 435,290" stroke="#ffb4ab" stroke-width="2"></polygon>
+<!-- BCC 7: Sud (Sfax - Gabès - Médenine - Tataouine) -->
+<polygon fill="#1b2b3f" fill-opacity="0.4" points="485,385 570,335 630,430 580,540 510,650 440,570 455,440" stroke="#45474c" stroke-width="1"></polygon>
+<!-- Transmission Grid Lines (225 kV Lilas/Cyan & 150 kV Jaune/Ambre) -->
+<!-- 225 kV Backbone -->
+<g opacity="0.85" stroke="#acc7ff" stroke-linecap="round" stroke-width="2.5">
+<line x1="515" x2="525" y1="110" y2="155"></line> <!-- Mornaguia -> Radès -->
+<line x1="525" x2="590" y1="155" y2="235"></line> <!-- Radès -> Sousse -->
+<line x1="590" x2="510" y1="235" y2="295"></line> <!-- Sousse -> Oueslatia -->
+<line x1="590" x2="575" y1="235" y2="445"></line> <!-- Sousse -> Sfax -->
+<line x1="575" x2="550" y1="445" y2="540"></line> <!-- Sfax -> Ghannouch (Gabès) -->
+</g>
+<!-- 150 kV Regional Ties -->
+<g opacity="0.7" stroke="#ffb95f" stroke-dasharray="4 2" stroke-linecap="round" stroke-width="1.5">
+<line x1="465" x2="515" y1="100" y2="110"></line> <!-- Bizerte -> Mornaguia -->
+<line x1="400" x2="515" y1="175" y2="110"></line> <!-- Jendouba -> Mornaguia -->
+<line x1="510" x2="480" y1="295" y2="345"></line> <!-- Oueslatia -> Sidi Bouzid -->
+<line x1="480" x2="575" y1="345" y2="445"></line> <!-- Sidi Bouzid -> Sfax -->
+<line x1="550" x2="505" y1="540" y2="640"></line> <!-- Gabès -> Médenine -->
+</g>
+<!-- Substation Markers (Postes Sources) -->
+<!-- Mornaguia 225kV -->
+<circle cx="515" cy="110" fill="#acc7ff" r="4.5" stroke="#000f21" stroke-width="1.5"></circle>
+<!-- Radès 225kV -->
+<circle cx="525" cy="155" fill="#acc7ff" r="5" stroke="#000f21" stroke-width="1.5"></circle>
+<!-- Sousse 225kV -->
+<circle cx="590" cy="235" fill="#acc7ff" r="5" stroke="#000f21" stroke-width="1.5"></circle>
+<!-- Oueslatia 225kV -->
+<circle cx="510" cy="295" fill="#acc7ff" r="4" stroke="#000f21" stroke-width="1.5"></circle>
+<!-- Sfax 225kV -->
+<circle cx="575" cy="445" fill="#acc7ff" r="4.5" stroke="#000f21" stroke-width="1.5"></circle>
+<!-- Ghannouch / Gabès 225kV -->
+<circle cx="550" cy="540" fill="#acc7ff" r="4.5" stroke="#000f21" stroke-width="1.5"></circle>
+</svg>
+<!-- Cartographic DOM Badges / Interactive Markers positioned over Map -->
+<!-- CRC NORD Tag -->
+<div class="absolute top-8 left-16 pointer-events-none bg-surface-container/80 backdrop-blur px-space-md py-space-xs rounded shadow-sm">
+<div class="font-label-caps text-label-caps text-secondary font-bold tracking-wider">CRC NORD (TUNIS)</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">4 ZONES BCC • CIBLE: 300 MW</div>
+</div>
+<!-- CRC SUD Tag -->
+<div class="absolute top-[52%] left-16 pointer-events-none bg-surface-container/80 backdrop-blur px-space-md py-space-xs rounded shadow-sm">
+<div class="font-label-caps text-label-caps text-tertiary-fixed-dim font-bold tracking-wider">CRC SUD (SFAX)</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">3 ZONES BCC • CIBLE: 150 MW</div>
+</div>
+<!-- BCC 1 Marker: Grand Tunis Nord -->
+<div class="absolute top-[12%] left-[48%] -translate-x-1/2 flex flex-col items-center">
+<div class="bg-surface-container-high/95 backdrop-blur px-space-sm py-space-xs rounded shadow-sm hover:scale-105 transition-transform cursor-pointer">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-caps text-label-caps text-on-surface font-semibold">BCC 1 — Tunis Nord</span>
+</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-secondary mt-0.5">110 MW / 110 MW (100%)</div>
+</div>
+</div>
+<!-- BCC 2 Marker: Grand Tunis Sud / Ben Arous -->
+<div class="absolute top-[20%] left-[50%] -translate-x-1/2 flex flex-col items-center">
+<div class="bg-surface-container-high/95 backdrop-blur px-space-sm py-space-xs rounded shadow-sm hover:scale-105 transition-transform cursor-pointer">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-caps text-label-caps text-on-surface font-semibold">BCC 2 — Tunis Sud</span>
+</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-secondary mt-0.5">90 MW / 89,8 MW (100%)</div>
+</div>
+</div>
+<!-- BCC 3 Marker: Nord-Ouest -->
+<div class="absolute top-[23%] left-[32%] -translate-x-1/2 flex flex-col items-center">
+<div class="bg-surface-container-high/95 backdrop-blur px-space-sm py-space-xs rounded shadow-sm hover:scale-105 transition-transform cursor-pointer">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-label-caps text-label-caps text-on-surface font-semibold">BCC 3 — Béja / Jendouba</span>
+</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary mt-0.5">38 MW / 50 MW (-12 MW)</div>
+</div>
+</div>
+<!-- BCC 4 Marker: Bizerte -->
+<div class="absolute top-[8%] left-[41%] -translate-x-1/2 flex flex-col items-center">
+<div class="bg-surface-container-high/95 backdrop-blur px-space-sm py-space-xs rounded shadow-sm hover:scale-105 transition-transform cursor-pointer">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-label-caps text-label-caps text-on-surface font-semibold">BCC 4 — Bizerte / Mateur</span>
+</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary mt-0.5">44 MW / 50 MW (-6 MW)</div>
+</div>
+</div>
+<!-- BCC 5 Marker: Centre (CRITICAL - SELECTED) -->
+<div class="absolute top-[34%] left-[47%] -translate-x-1/2 flex flex-col items-center z-20">
+<div class="relative bg-error-container text-on-error-container px-space-md py-space-xs rounded shadow-xl ring-2 ring-error animate-bounce cursor-pointer">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-error animate-ping"></span>
+<span class="font-label-caps text-label-caps text-on-error-container font-bold uppercase tracking-wide">BCC 5 — Kairouan / Sidi Bouzid</span>
+</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-on-error-container font-bold mt-0.5">
+            33,5 MW / 50 MW <span class="bg-error text-on-error px-1 py-0.5 rounded text-[10px] ml-1">DÉFICIT -16,5 MW</span>
+</div>
+<!-- Arrow pointer -->
+<div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-error-container rotate-45"></div>
+</div>
+</div>
+<!-- BCC 6 Marker: Sahel -->
+<div class="absolute top-[28%] left-[58%] -translate-x-1/2 flex flex-col items-center">
+<div class="bg-surface-container-high/95 backdrop-blur px-space-sm py-space-xs rounded shadow-sm hover:scale-105 transition-transform cursor-pointer">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-caps text-label-caps text-on-surface font-semibold">BCC 6 — Sahel (Sousse)</span>
+</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-secondary mt-0.5">61 MW / 60 MW (+1 MW)</div>
+</div>
+</div>
+<!-- BCC 7 Marker: Sud -->
+<div class="absolute top-[54%] left-[53%] -translate-x-1/2 flex flex-col items-center">
+<div class="bg-surface-container-high/95 backdrop-blur px-space-sm py-space-xs rounded shadow-sm hover:scale-105 transition-transform cursor-pointer">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-label-caps text-label-caps text-on-surface font-semibold">BCC 7 — Sfax / Gabès</span>
+</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary mt-0.5">35 MW / 40 MW (-5 MW)</div>
+</div>
+</div>
+<!-- Protected P0 Markers with Shields -->
+<!-- P0: Hôpital Militaire Tunis -->
+<div class="absolute top-[16%] left-[46%] group cursor-pointer" title="Hôpital Militaire Tunis - P0 Inviolable">
+<div class="flex items-center justify-center w-6 h-6 rounded-full bg-error-container text-error shadow-md hover:scale-125 transition-transform">
+<span class="material-symbols-outlined text-[14px]">local_hospital</span>
+</div>
+</div>
+<!-- P0: Station SONEDE Belli -->
+<div class="absolute top-[21%] left-[54%] group cursor-pointer" title="Station de pompage SONEDE Belli - P0 Inviolable">
+<div class="flex items-center justify-center w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container shadow-md hover:scale-125 transition-transform">
+<span class="material-symbols-outlined text-[14px]">water_drop</span>
+</div>
+</div>
+<!-- P0: CHU Habib Bourguiba Sfax -->
+<div class="absolute top-[48%] left-[55%] group cursor-pointer" title="CHU Habib Bourguiba (Sfax) - P0 Inviolable">
+<div class="flex items-center justify-center w-6 h-6 rounded-full bg-error-container text-error shadow-md hover:scale-125 transition-transform">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+</div>
+</div>
+<!-- P0: Dessalement Zarat Gabès -->
+<div class="absolute top-[65%] left-[55%] group cursor-pointer" title="Dessalement Eau de Mer Zarat - P0 Inviolable">
+<div class="flex items-center justify-center w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container shadow-md hover:scale-125 transition-transform">
+<span class="material-symbols-outlined text-[14px]">water_drop</span>
+</div>
+</div>
+<!-- Bottom-Left Weather & Grid Load Overlay Card -->
+<div class="absolute bottom-4 left-4 z-20 w-80 bg-surface-container/90 backdrop-blur-md rounded shadow-xl overflow-hidden">
+<div class="bg-surface-container-high px-space-md py-space-xs flex items-center justify-between">
+<div class="flex items-center gap-space-xs font-label-caps text-label-caps text-on-surface">
+<span class="material-symbols-outlined text-[15px] text-tertiary">thermostat</span>
+<span>MÉTÉO &amp; POINTE DE CLIMATISATION</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-tertiary uppercase font-bold">VAGUE DE CHALEUR</span>
+</div>
+<div class="p-space-md space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">TEMP. MOYENNE NATIONALE</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-label-telemetry-lg text-headline-md text-tertiary">41,5</span>
+<span class="font-label-telemetry-sm text-tertiary">°C</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-caps text-label-caps text-on-surface-variant">POINT DE CONSIGNATION</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-label-telemetry-lg text-headline-md text-on-surface">4 850</span>
+<span class="font-label-telemetry-sm text-on-surface-variant">MW</span>
+</div>
+</div>
+</div>
+<div class="w-full bg-surface-container-lowest h-1.5 rounded overflow-hidden">
+<div class="bg-tertiary h-full rounded" style="width: 89%;"></div>
+</div>
+<div class="flex items-center justify-between font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant pt-space-xs">
+<span>CHARGE RÉSEAU: 89,2%</span>
+<span class="text-secondary">FRÉQUENCE: 50,02 Hz</span>
+</div>
+</div>
+</div>
+<!-- Compact Floating Map Legend (Top Left) -->
+<div class="absolute top-4 left-4 z-10 bg-surface-container/85 backdrop-blur px-space-md py-space-sm rounded shadow-md font-label-caps text-label-caps space-y-1">
+<div class="text-on-surface-variant uppercase text-[10px] tracking-wider mb-1 font-bold">LÉGENDE CONDUITE SIG</div>
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="text-on-surface">Consigne respectée (±0 MW)</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<span class="text-on-surface">Sous-délestage modéré (-5 à -15 MW)</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-error animate-ping"></span>
+<span class="text-error font-semibold">Déficit critique (&gt; -15 MW)</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[14px] text-error">shield</span>
+<span class="text-on-surface">Poste prioritaire P0 inviolable</span>
+</div>
+</div>
+</div>
+<!-- Right-Hand Inspection Drawer (Zone Focus Panel: BCC 5 Centre) -->
+<aside class="w-96 bg-surface-container h-full overflow-y-auto z-30 flex flex-col shadow-2xl shrink-0">
+<!-- Drawer Header with Critical Indicator -->
+<div class="bg-surface-container-high px-space-md py-space-md shadow-sm">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs font-label-caps text-label-caps text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">explore</span>
+<span>INSPECTION TOPOLOGIQUE SIG</span>
+</div>
+<span class="px-space-sm py-space-xs rounded bg-error-container text-on-error-container font-label-caps text-[10px] font-bold tracking-wider animate-pulse">
+            ALERTE DÉFICIT
+          </span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">BCC 5 — Centre</h2>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant mt-0.5">
+          Gouvernorats : Kairouan &amp; Sidi Bouzid • Rattaché au CRC Sud
+        </div>
+</div>
+<!-- Critical Zone Telemetry Card -->
+<div class="p-space-md space-y-space-md flex-1">
+<div class="bg-surface-container-lowest p-space-md rounded space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">ÉTAT D'ÉQUILIBRE ACTUEL</span>
+<span class="font-label-telemetry-sm text-error font-bold">ÉCART -16,5 MW</span>
+</div>
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs">
+<div class="bg-surface-container-high p-space-sm rounded">
+<span class="font-label-caps text-label-caps text-on-surface-variant block">CIBLE TRANSMIS</span>
+<span class="font-label-telemetry-lg text-headline-sm text-on-surface">50,0</span>
+<span class="font-label-telemetry-sm text-on-surface-variant ml-1">MW</span>
+</div>
+<div class="bg-surface-container-high p-space-sm rounded">
+<span class="font-label-caps text-label-caps text-on-surface-variant block">COUPURE OBSERVÉE</span>
+<span class="font-label-telemetry-lg text-headline-sm text-tertiary">33,5</span>
+<span class="font-label-telemetry-sm text-on-surface-variant ml-1">MW</span>
+</div>
+</div>
+<!-- Progress Visualization -->
+<div class="pt-space-xs">
+<div class="flex justify-between font-label-telemetry-sm text-[11px] text-on-surface-variant mb-1">
+<span>Exécution consigne : 67%</span>
+<span class="text-error font-semibold">MANQUE: 16,5 MW</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 67%;"></div>
+<div class="bg-error h-full animate-pulse" style="width: 33%;"></div>
+</div>
+</div>
+</div>
+<!-- Operator Contact Card -->
+<div class="bg-surface-container-low p-space-md rounded space-y-space-xs">
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">POSTE DE COMMANDE LOCAL</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[16px]">person</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Ing. H. Jaziri</span>
+<span class="font-label-telemetry-sm text-[11px] text-on-surface-variant">Pupitre Conduite BCC 5</span>
+</div>
+</div>
+<a class="p-space-sm bg-surface-container-high hover:bg-surface-bright text-secondary rounded flex items-center justify-center transition-colors" href="tel:+21677230450" title="Appeler Pupitre BCC 5">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</a>
+</div>
+<div class="pt-space-xs flex items-center justify-between font-label-telemetry-sm text-[11px] text-on-surface-variant">
+<span>LIGNE DIRECTE : +216 77 230 450</span>
+<span class="text-secondary">RADIO UHF : CH-08</span>
+</div>
+</div>
+<!-- Feeders List (Départs 30 kV) -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">DÉPARTS HTA 30 kV SURVEILLÉS</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">5 DÉPARTS</span>
+</div>
+<div class="space-y-1 font-body-sm">
+<!-- Feeder 1 -->
+<div class="bg-surface-container-low p-space-sm rounded flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-telemetry-sm font-bold text-on-surface">F08 - Kairouan Médina</span>
+<span class="font-label-caps text-[9px] px-1 bg-surface-container-highest text-on-surface-variant rounded">P1</span>
+</div>
+<span class="font-label-telemetry-sm text-[11px] text-on-surface-variant">8,5 MW • Déconnecté depuis 32m</span>
+</div>
+<span class="px-space-sm py-space-xs rounded bg-tertiary-container text-tertiary font-label-caps text-[10px] font-semibold">
+                DÉLESTÉ
+              </span>
+</div>
+<!-- Feeder 2 -->
+<div class="bg-surface-container-low p-space-sm rounded flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-telemetry-sm font-bold text-on-surface">F12 - Sbikha Industriel</span>
+<span class="font-label-caps text-[9px] px-1 bg-surface-container-highest text-on-surface-variant rounded">P2</span>
+</div>
+<span class="font-label-telemetry-sm text-[11px] text-on-surface-variant">12,0 MW • Déconnecté depuis 24m</span>
+</div>
+<span class="px-space-sm py-space-xs rounded bg-tertiary-container text-tertiary font-label-caps text-[10px] font-semibold">
+                DÉLESTÉ
+              </span>
+</div>
+<!-- Feeder 3 -->
+<div class="bg-surface-container-low p-space-sm rounded flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-telemetry-sm font-bold text-on-surface">F04 - Sidi Bouzid Nord</span>
+<span class="font-label-caps text-[9px] px-1 bg-surface-container-highest text-on-surface-variant rounded">P2</span>
+</div>
+<span class="font-label-telemetry-sm text-[11px] text-on-surface-variant">13,0 MW • Déconnecté depuis 18m</span>
+</div>
+<span class="px-space-sm py-space-xs rounded bg-tertiary-container text-tertiary font-label-caps text-[10px] font-semibold">
+                DÉLESTÉ
+              </span>
+</div>
+<!-- Feeder 4 (Actionable for resolving gap) -->
+<div class="bg-secondary-container/20 p-space-sm rounded flex items-center justify-between ring-1 ring-secondary/30">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-telemetry-sm font-bold text-on-surface">F19 - Oueslatia Agro</span>
+<span class="font-label-caps text-[9px] px-1 bg-secondary-container text-on-secondary-container rounded">P3 PROPOSÉ</span>
+</div>
+<span class="font-label-telemetry-sm text-[11px] text-secondary">7,5 MW • En service (Action requise)</span>
+</div>
+<button class="px-space-sm py-space-xs rounded bg-secondary text-on-secondary font-label-caps text-[10px] font-bold hover:bg-secondary-fixed transition-colors" type="button">
+                COUPER 30kV
+              </button>
+</div>
+<!-- Feeder 5 (Protected P0) -->
+<div class="bg-surface-container-low p-space-sm rounded flex items-center justify-between opacity-80">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-telemetry-sm font-bold text-on-surface">F02 - CHU Ibn El Jazzar</span>
+<span class="font-label-caps text-[9px] px-1 bg-error-container text-error rounded font-bold">P0 CRITIQUE</span>
+</div>
+<span class="font-label-telemetry-sm text-[11px] text-on-surface-variant">6,2 MW • Ligne sécurisée prioritaire</span>
+</div>
+<span class="flex items-center gap-1 font-label-caps text-[10px] text-error font-bold">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+                PROTÉGÉ
+              </span>
+</div>
+</div>
+</div>
+<!-- Dispatcher Actions Toolbar -->
+<div class="pt-space-sm space-y-space-xs">
+<button class="w-full flex items-center justify-center gap-space-sm px-space-md py-space-sm rounded bg-secondary hover:bg-secondary-fixed text-on-secondary font-headline-sm text-body-md font-semibold transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">send</span>
+<span>Émettre Consigne Corrective (+16,5 MW)</span>
+</button>
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="flex items-center justify-center gap-space-xs px-space-sm py-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-on-surface font-body-sm text-body-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary">headset_mic</span>
+<span>Appeler BCC 5</span>
+</button>
+<button class="flex items-center justify-center gap-space-xs px-space-sm py-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-on-surface font-body-sm text-body-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-tertiary">smart_toy</span>
+<span>Recommandation IA</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Drawer Sub-Footer with Timestamps -->
+<div class="bg-surface-container-lowest px-space-md py-space-xs flex items-center justify-between font-label-telemetry-sm text-[10px] text-on-surface-variant">
+<span>DERNIÈRE SYNCHRO SCADA : 14:32:16</span>
+<span>LATENCE SIG : 12 ms</span>
+</div>
+</aside>
+</div>
+</div></main></div><footer class="fixed bottom-0 left-0 right-0 h-8 bg-surface-container-lowest z-50 shadow-[0_-1px_6px_rgba(0,0,0,0.5)]"><div class="h-8 w-full px-space-lg flex items-center justify-between font-label-telemetry-sm text-label-telemetry-sm"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm text-on-surface-variant"><span class="material-symbols-outlined text-[16px] text-primary">schedule</span><span>03/09/2025 • 14:32:18</span></div><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim animate-ping"></span><span class="text-tertiary-fixed-dim">4 DÉLESTAGES EN COURS</span></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-surface-container"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="text-on-surface">TENSION RÉSEAU : ÉQUILIBRÉ</span><span class="text-on-surface-variant">(RÉSERVE 185 MW)</span></div><div class="hidden md:flex items-center gap-space-xs text-on-surface-variant"><span class="material-symbols-outlined text-[14px] text-secondary">hub</span><span>SCADA: 99,8%</span><span class="text-secondary">(0 RETARD TRAME)</span></div></div></div></footer></body></html>

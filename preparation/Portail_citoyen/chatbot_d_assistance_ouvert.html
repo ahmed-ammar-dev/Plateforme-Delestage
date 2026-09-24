@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>STEG - Portail Citoyen</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-low": "#f2f4f6", "on-error": "#ffffff", "on-background": "#191c1e", "on-primary": "#ffffff", "surface-tint": "#535f74", "on-tertiary": "#ffffff", "surface-bright": "#f7f9fb", "outline-variant": "#c5c6cd", "primary-container": "#101c2e", "error": "#ba1a1a", "surface-container-high": "#e6e8ea", "background": "#f7f9fb", "secondary-container": "#8fa7fe", "on-secondary": "#ffffff", "on-primary-fixed": "#101c2e", "surface-dim": "#d8dadc", "on-primary-container": "#79849b", "on-tertiary-fixed": "#00174b", "surface-variant": "#e0e3e5", "surface": "#f7f9fb", "primary-fixed": "#d7e3fc", "primary": "#000000", "on-secondary-container": "#1d3989", "tertiary-fixed-dim": "#b4c5ff", "secondary-fixed": "#dce1ff", "outline": "#75777d", "on-tertiary-fixed-variant": "#003ea8", "surface-container-highest": "#e0e3e5", "on-secondary-fixed-variant": "#264191", "on-tertiary-container": "#497cff", "secondary": "#4059aa", "tertiary-fixed": "#dbe1ff", "on-secondary-fixed": "#00164e", "on-surface": "#191c1e", "surface-container-lowest": "#ffffff", "tertiary": "#000000", "primary-fixed-dim": "#bbc7df", "inverse-surface": "#2d3133", "surface-container": "#eceef0", "secondary-fixed-dim": "#b6c4ff", "inverse-primary": "#bbc7df", "inverse-on-surface": "#eff1f3", "tertiary-container": "#00174b", "on-error-container": "#93000a", "on-surface-variant": "#45474c", "error-container": "#ffdad6", "on-primary-fixed-variant": "#3c475b" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xl": "2.5rem", "gutter-tablet": "1.5rem", "space-lg": "1.5rem", "margin": "1rem", "space-sm": "0.5rem", "space-md": "1rem", "space-xs": "0.25rem", "gutter": "1rem", "gutter-desktop": "1.5rem", "margin-desktop": "3rem", "margin-tablet": "2rem" }, "fontFamily": { "body-sm": ["IBM Plex Sans"], "label-lg": ["IBM Plex Sans"], "headline-sm": ["IBM Plex Sans"], "label-sm": ["IBM Plex Sans"], "headline-xl": ["IBM Plex Sans"], "body-lg": ["IBM Plex Sans"], "headline-xl-mobile": ["IBM Plex Sans"], "headline-lg": ["IBM Plex Sans"], "headline-md": ["IBM Plex Sans"], "headline-lg-mobile": ["IBM Plex Sans"], "body-md": ["IBM Plex Sans"], "label-md": ["IBM Plex Sans"] }, "fontSize": { "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}], "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}], "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}], "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "700"}], "headline-xl": ["36px", {"lineHeight": "44px", "fontWeight": "700"}], "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}], "headline-xl-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}], "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "600"}], "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}], "headline-lg-mobile": ["22px", {"lineHeight": "30px", "fontWeight": "600"}], "body-md": ["15px", {"lineHeight": "22px", "fontWeight": "400"}], "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "600"}] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0 flex-1"><img alt="Brand logo. - Primary color: #0a1628
+- Font: ibmPlexSans
+- Mode: dark
+- Roundness: rounded-sm
+" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1VXWnD-FH0ODFvq3ztyXT8mgWrEPIrjyk5gcvRSlLehiOUhsELd9EaDFIEFPioRn4ELqmkwkvibpTHR_1f_EUBKaqaXjy5tFExDvm_uJNJ3hxoCWu2-GVlmeZtM1c5GzocoIKqujRH9GFHZhqCR9CFDF-pXTLQDWzzeEKMgt2OgWlbgnIB0FZ3PiXN6s6-BB0pgO1psy57vl11s4O7NTm4rAWgDCQWiGRCpK2YuJn5nlAxXUB28jvszJ9I"/><div class="flex flex-col min-w-0"><span class="font-label-sm text-label-sm text-secondary tracking-wide uppercase truncate">STEG National</span><h1 class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate leading-tight">Délestage En Direct</h1></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><div class="px-space-xs py-space-xs rounded-lg bg-surface-container-low flex items-center gap-1"><span class="font-label-md text-label-md text-secondary font-bold px-1.5 py-0.5 rounded bg-surface-container-lowest shadow-[0_1px_2px_rgba(0,0,0,0.05)]">FR</span><span class="font-label-sm text-label-sm text-outline px-1">AR <span class="text-[9px] opacity-70">(bientôt)</span></span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-20 pb-40 bg-surface"><div class="flex flex-col w-full">
+<!-- Status & Timestamp Bar -->
+<div class="px-gutter pt-space-sm pb-space-xs">
+<div class="flex flex-wrap items-center justify-between gap-space-xs mb-space-xs">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface">
+<span class="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse"></span>
+<span class="font-label-sm text-label-sm font-semibold tracking-wide">Flux officiel STEG en direct</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[15px]">schedule</span>
+<span>Mise à jour : 14h35</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+      État en temps réel de l'alimentation électrique par délégation et quartier à travers toute la Tunisie.
+    </p>
+</div>
+<!-- Search & Geolocation Module -->
+<div class="px-gutter py-space-sm">
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-secondary text-[20px] pointer-events-none">search</span>
+<input class="w-full h-11 pl-10 pr-24 rounded-lg bg-surface-container-low text-on-surface font-body-sm text-body-sm placeholder:text-outline focus:outline-none focus:bg-surface-container focus:ring-0" id="search-input" placeholder="Rechercher délégation, ville (ex: Béja, Ariana...)" type="text" value="Béja Nord"/>
+<button class="absolute right-1.5 h-8 px-2.5 rounded-md bg-secondary-fixed text-on-secondary-fixed flex items-center gap-1 font-label-sm text-label-sm active:scale-95 transition-transform" id="geo-btn" type="button">
+<span class="material-symbols-outlined text-[16px]">my_location</span>
+<span class="hidden xs:inline font-bold">GPS</span>
+</button>
+</div>
+<!-- Quick Chips -->
+<div class="flex items-center gap-1.5 mt-space-xs overflow-x-auto pb-0.5 no-scrollbar text-on-surface-variant font-label-sm text-label-sm">
+<span class="text-outline text-[11px] uppercase tracking-wider flex-shrink-0">Récents :</span>
+<button class="px-2 py-0.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors flex-shrink-0 font-medium text-secondary" type="button">Béja Nord</button>
+<button class="px-2 py-0.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors flex-shrink-0 font-medium" type="button">Tunis Médina</button>
+<button class="px-2 py-0.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors flex-shrink-0 font-medium" type="button">Kairouan Sud</button>
+</div>
+</div>
+</div>
+<!-- Interactive Citizen Map Card -->
+<div class="px-gutter py-space-xs">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">public</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Carte du Réseau National</span>
+</div>
+<div class="flex rounded-lg bg-surface-container-low p-0.5 text-on-surface">
+<button class="px-2.5 py-1 rounded font-label-sm text-label-sm bg-surface-container-lowest text-secondary font-bold shadow-xs" id="btn-view-nat" type="button">Nationale</button>
+<button class="px-2.5 py-1 rounded font-label-sm text-label-sm text-on-surface-variant font-medium" id="btn-view-reg" type="button">Par District</button>
+</div>
+</div>
+<!-- Stylized Tunisia SVG Map Display -->
+<div class="relative w-full rounded-xl bg-gradient-to-b from-surface-container-low to-surface-container p-space-sm flex flex-col items-center justify-center overflow-hidden">
+<!-- SVG Map of Tunisia with Governorates stylized -->
+<svg class="w-full max-w-[260px] h-auto drop-shadow-sm select-none" viewbox="0 0 320 340" xmlns="http://www.w3.org/2000/svg">
+<!-- Bizerte (Normal - Vert) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 130 25 C 145 20, 165 24, 160 40 C 150 48, 140 45, 130 42 Z" fill="#16A34A" id="reg-bizerte"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="7" font-weight="700" text-anchor="middle" x="142" y="34">Bizerte</text>
+<!-- Grand Tunis (Normal - Vert) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 160 40 C 175 42, 185 55, 172 65 C 160 62, 155 52, 160 40 Z" fill="#16A34A" id="reg-tunis"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="7" font-weight="700" text-anchor="middle" x="168" y="54">Tunis</text>
+<!-- Nabeul (Normal - Vert) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 172 65 C 190 60, 205 75, 195 95 C 180 88, 175 75, 172 65 Z" fill="#16A34A" id="reg-nabeul"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="7" font-weight="700" text-anchor="middle" x="186" y="80">Cap Bon</text>
+<!-- Béja (En coupure - Rouge) -->
+<path class="animate-pulse cursor-pointer" d="M 105 45 C 130 42, 140 55, 125 75 C 110 70, 100 58, 105 45 Z" fill="#DC2626" id="reg-beja"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="8" font-weight="700" text-anchor="middle" x="122" y="60">Béja</text>
+<!-- Jendouba (Normal - Vert) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 80 55 C 105 48, 110 70, 95 85 C 80 80, 75 65, 80 55 Z" fill="#16A34A" id="reg-jendouba"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="7" font-weight="600" text-anchor="middle" x="92" y="70">Jendouba</text>
+<!-- Zaghouan / Siliana (Normal - Vert) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 125 75 C 150 72, 155 95, 135 110 C 115 105, 115 85, 125 75 Z" fill="#16A34A" id="reg-siliana"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="7" font-weight="600" text-anchor="middle" x="135" y="93">Siliana</text>
+<!-- Sousse & Monastir (Rétablissement récent - Bleu) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 170 95 C 190 95, 195 125, 175 135 C 160 120, 160 105, 170 95 Z" fill="#0284C7" id="reg-sahel"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="7" font-weight="700" text-anchor="middle" x="178" y="115">Sahel</text>
+<!-- Kairouan (Programmé - Jaune/Orange) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 135 110 C 160 108, 165 135, 140 148 C 125 140, 125 120, 135 110 Z" fill="#D97706" id="reg-kairouan"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="8" font-weight="700" text-anchor="middle" x="145" y="128">Kairouan</text>
+<!-- Kasserine (Normal - Vert) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 95 115 C 125 115, 125 155, 95 165 C 80 145, 85 125, 95 115 Z" fill="#16A34A" id="reg-kasserine"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="7" font-weight="600" text-anchor="middle" x="105" y="140">Kasserine</text>
+<!-- Sidi Bouzid (Normal - Vert) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 125 148 C 150 145, 145 180, 120 185 C 110 170, 115 155, 125 148 Z" fill="#16A34A" id="reg-sidibouzid"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="6.5" font-weight="600" text-anchor="middle" x="130" y="166">S.Bouzid</text>
+<!-- Sfax (Normal - Vert) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 155 140 C 185 135, 185 185, 155 195 C 145 175, 148 150, 155 140 Z" fill="#16A34A" id="reg-sfax"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="8" font-weight="700" text-anchor="middle" x="168" y="165">Sfax</text>
+<!-- Gafsa (Normal - Vert) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 85 165 C 120 165, 115 205, 80 205 C 75 185, 75 175, 85 165 Z" fill="#16A34A" id="reg-gafsa"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="7" font-weight="600" text-anchor="middle" x="95" y="185">Gafsa</text>
+<!-- Gabès (Normal - Vert) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 120 195 C 155 190, 160 230, 130 235 C 118 220, 115 205, 120 195 Z" fill="#16A34A" id="reg-gabes"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="7" font-weight="600" text-anchor="middle" x="138" y="215">Gabès</text>
+<!-- Sud / Médenine & Tataouine (Normal - Vert) -->
+<path class="transition-opacity hover:opacity-80 cursor-pointer" d="M 90 220 C 145 220, 175 250, 140 325 C 110 320, 75 260, 90 220 Z" fill="#16A34A" id="reg-sud"></path>
+<text fill="#ffffff" font-family="IBM Plex Sans" font-size="9" font-weight="700" text-anchor="middle" x="125" y="275">Grand Sud</text>
+</svg>
+<!-- Dynamic Tap Indicator -->
+<div class="mt-2 text-center">
+<span class="font-label-sm text-label-sm text-secondary font-medium">Touchez une région pour afficher son calendrier</span>
+</div>
+</div>
+<!-- Accessible Color Legend -->
+<div class="grid grid-cols-2 gap-x-space-sm gap-y-space-xs pt-space-xs">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-[#16A34A] flex-shrink-0"></span>
+<span class="font-label-sm text-label-sm text-on-surface">Normal (Alimenté)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-[#DC2626] flex-shrink-0"></span>
+<span class="font-label-sm text-label-sm text-on-surface">Coupure en cours</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-[#D97706] flex-shrink-0"></span>
+<span class="font-label-sm text-label-sm text-on-surface">Programmé (Aujourd'hui)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-[#0284C7] flex-shrink-0"></span>
+<span class="font-label-sm text-label-sm text-on-surface">Rétabli (&lt; 30 min)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Search Result Card (Simulation : Béja Nord) -->
+<div class="px-gutter py-space-sm">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-md overflow-hidden relative">
+<!-- Accent Line Left -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-[#DC2626]"></div>
+<!-- Card Header -->
+<div class="pl-2">
+<div class="flex items-start justify-between gap-space-sm mb-space-xs">
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase font-bold tracking-wider">Résultat pour votre recherche</span>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Délégation Béja Nord</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Secteur : Quartier Z.I. &amp; Faubourg Est</p>
+</div>
+<!-- Status Badge -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-error-container text-on-error-container flex-shrink-0">
+<span class="w-2 h-2 rounded-full bg-[#DC2626] animate-ping"></span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-tight">Coupure en cours</span>
+</div>
+</div>
+<!-- Timer / Metrics Callout -->
+<div class="my-space-sm rounded-lg bg-surface-container-low p-space-sm">
+<div class="grid grid-cols-2 gap-space-sm">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Plage de rotation</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">14h05 – 14h50</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Rétablissement estimé</span>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-sm text-headline-sm text-error font-bold">14h50</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">(~ 15 min)</span>
+</div>
+</div>
+</div>
+<!-- Progress Visual Bar -->
+<div class="mt-space-sm">
+<div class="flex justify-between text-[11px] font-label-sm text-on-surface-variant mb-1 font-medium">
+<span>Début (14h05)</span>
+<span class="font-bold text-on-surface">66% écoulé</span>
+<span>Fin (14h50)</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 66%;"></div>
+</div>
+</div>
+</div>
+<!-- Official Citizen Reason -->
+<div class="space-y-space-xs text-on-surface">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px] mt-0.5 flex-shrink-0">info</span>
+<div>
+<span class="font-label-md text-label-md font-bold block">Motif de la coupure temporaire</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                Équilibrage préventif du réseau national sous forte chaleur pour éviter des pannes généralisées. Les rotations sont limitées à 45 minutes maximum.
+              </p>
+</div>
+</div>
+<!-- Practical Advice Box -->
+<div class="flex items-start gap-2.5 p-space-sm rounded-lg bg-secondary-fixed/30 text-on-secondary-fixed">
+<span class="material-symbols-outlined text-secondary text-[20px] flex-shrink-0">electrical_services</span>
+<div class="flex-1">
+<span class="font-label-md text-label-md font-bold text-secondary">Conseil de sécurité STEG</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Pensez à débrancher vos téléviseurs, réfrigérateurs et ordinateurs pour les protéger des micro-variations lors du réarmement du courant.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Regional Daily Outage Digest -->
+<div class="px-gutter py-space-sm">
+<div class="flex items-center justify-between mb-space-xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Rotations régionales aujourd'hui</h3>
+<span class="font-label-sm text-label-sm text-secondary font-bold">24 gouvernorats</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Grand Tunis Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[22px]">apartment</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Grand Tunis</span>
+<span class="text-[11px] font-label-sm text-on-surface-variant font-normal">(4 districts)</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Toutes les délégations stables</p>
+</div>
+</div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#DCFCE7] text-[#15803D]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#16A34A]"></span>
+<span class="font-label-sm text-label-sm font-bold">Normal</span>
+</div>
+</div>
+<!-- Kairouan Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[22px]">location_city</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Kairouan</span>
+<span class="text-[11px] font-label-sm text-on-surface-variant font-normal">Secteur Sud</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Rotation programmée : 15h00 – 15h45</p>
+</div>
+</div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FEF3C7] text-[#B45309]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#D97706]"></span>
+<span class="font-label-sm text-label-sm font-bold">15h00</span>
+</div>
+</div>
+<!-- Sousse Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[22px]">waves</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Sousse</span>
+<span class="text-[11px] font-label-sm text-on-surface-variant font-normal">Jawhara &amp; Sahloul</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Courant rétabli à 14h15</p>
+</div>
+</div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#E0F2FE] text-[#0369A1]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#0284C7]"></span>
+<span class="font-label-sm text-label-sm font-bold">Rétabli</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Frequently Asked Citizen Questions Mini-Module -->
+<div class="px-gutter py-space-sm">
+<div class="rounded-xl bg-surface-container-low p-space-md">
+<div class="flex items-center gap-2 mb-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">help_center</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">Questions fréquentes</h4>
+</div>
+<div class="space-y-space-xs">
+<button class="w-full text-left p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-bright flex items-center justify-between transition-colors shadow-xs" type="button">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Pourquoi la coupure ne dure-t-elle que 40 à 45 minutes ?</span>
+<span class="material-symbols-outlined text-outline text-[18px]">chevron_right</span>
+</button>
+<button class="w-full text-left p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-bright flex items-center justify-between transition-colors shadow-xs" type="button">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Les hôpitaux et cliniques sont-ils concernés ?</span>
+<span class="material-symbols-outlined text-outline text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Floating Citizen Bot Button & Dialog Trigger -->
+<div class="fixed right-4 bottom-28 z-40 flex flex-col items-end pointer-events-auto hidden">
+<!-- Collapsible Mini Pop-up Chat Preview (Interactive) -->
+<div class="hidden max-w-[270px] mb-2 p-3 rounded-2xl bg-surface-container-lowest shadow-xl text-on-surface transition-all animate-bounce-short" id="chat-popup">
+<div class="flex items-start justify-between gap-2 mb-1.5">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-[#16A34A]"></span>
+<span class="font-label-sm text-label-sm font-bold text-secondary">Assistant Virtuel STEG</span>
+</div>
+<button class="text-outline hover:text-on-surface" id="close-chat-popup" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+        Besoin d'aide immédiate ? Tapez votre question :
+      </p>
+<div class="flex flex-col gap-1 mt-2">
+<button class="text-left text-[11px] font-label-sm px-2 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors" type="button">
+          • Quand revient le courant chez moi ?
+        </button>
+<button class="text-left text-[11px] font-label-sm px-2 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors" type="button">
+          • Signaler un incident sur un poteau
+        </button>
+</div>
+</div>
+<!-- Floating Action Button -->
+<button aria-label="Ouvrir l'assistant citoyen" class="h-12 px-4 rounded-full bg-secondary text-on-secondary shadow-lg flex items-center gap-2 active:scale-95 transition-transform" id="chat-fab-btn" type="button">
+<span class="material-symbols-outlined text-[22px]">support_agent</span>
+<span class="font-label-md text-label-md font-bold">Aide STEG</span>
+</button>
+</div>
+</div>
+<script>
+  // Simple interactive client-side behaviors
+  document.addEventListener('DOMContentLoaded', () => {
+    const chatBtn = document.getElementById('chat-fab-btn');
+    const chatPopup = document.getElementById('chat-popup');
+    const closePopup = document.getElementById('close-chat-popup');
+
+    if (chatBtn && chatPopup) {
+      chatBtn.addEventListener('click', () => {
+        chatPopup.classList.toggle('hidden');
+      });
+    }
+
+    if (closePopup && chatPopup) {
+      closePopup.addEventListener('click', (e) => {
+        e.stopPropagation();
+        chatPopup.classList.add('hidden');
+      });
+    }
+
+    // Geolocation trigger simulation
+    const geoBtn = document.getElementById('geo-btn');
+    const searchInput = document.getElementById('search-input');
+    if (geoBtn && searchInput) {
+      geoBtn.addEventListener('click', () => {
+        geoBtn.classList.add('opacity-50');
+        searchInput.value = "Localisation : Béja Nord (36.72° N, 9.18° E)";
+        setTimeout(() => {
+          geoBtn.classList.remove('opacity-50');
+        }, 600);
+      });
+    }
+
+    // Map view switcher buttons
+    const btnNat = document.getElementById('btn-view-nat');
+    const btnReg = document.getElementById('btn-view-reg');
+    if (btnNat && btnReg) {
+      btnNat.addEventListener('click', () => {
+        btnNat.className = "px-2.5 py-1 rounded font-label-sm text-label-sm bg-surface-container-lowest text-secondary font-bold shadow-xs";
+        btnReg.className = "px-2.5 py-1 rounded font-label-sm text-label-sm text-on-surface-variant font-medium";
+      });
+      btnReg.addEventListener('click', () => {
+        btnReg.className = "px-2.5 py-1 rounded font-label-sm text-label-sm bg-surface-container-lowest text-secondary font-bold shadow-xs";
+        btnNat.className = "px-2.5 py-1 rounded font-label-sm text-label-sm text-on-surface-variant font-medium";
+      });
+    }
+  });
+</script></main><div class="fixed bottom-20 inset-x-0 z-40 bg-surface-container-lowest/95 backdrop-blur-md px-gutter py-space-xs shadow-[0_-2px_10px_rgba(0,0,0,0.03)]"><div class="flex items-center justify-between gap-space-sm text-on-surface"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="font-label-sm text-label-sm text-on-surface font-medium">Assistance Citoyenne 24h/7j</span></div><a class="flex items-center gap-1 font-label-md text-label-md text-secondary font-bold px-2.5 py-1 rounded-full bg-secondary-fixed/50 active:bg-secondary-fixed" href="tel:71341400"><span class="material-symbols-outlined text-[14px]">emergency</span><span>71 341 400</span></a></div></div><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-secondary font-bold"><div class="flex justify-around items-center h-20 px-space-xs"><a class="flex flex-col items-center justify-center w-16 h-16 min-h-[44px] min-w-[44px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="delestage-en-direct" href="#"><span class="material-symbols-outlined text-[22px]">power_off</span><span class="font-label-sm text-label-sm mt-0.5">Direct</span></a><a class="flex flex-col items-center justify-center w-16 h-16 min-h-[44px] min-w-[44px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="calendrier-programme" href="#"><span class="material-symbols-outlined text-[22px]">calendar_today</span><span class="font-label-sm text-label-sm mt-0.5">Plannings</span></a><a class="flex flex-col items-center justify-center w-16 h-16 min-h-[44px] min-w-[44px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="carte-du-reseau" href="#"><span class="material-symbols-outlined text-[22px]">map</span><span class="font-label-sm text-label-sm mt-0.5">Carte</span></a><a class="flex flex-col items-center justify-center w-16 h-16 min-h-[44px] min-w-[44px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="signaler-panne" href="#"><span class="material-symbols-outlined text-[22px]">report_problem</span><span class="font-label-sm text-label-sm mt-0.5">Signaler</span></a></div></nav><div class="fixed inset-0 z-50 flex flex-col justify-end bg-black/60 backdrop-blur-sm transition-opacity" id="steg-chat-drawer-modal"><div class="absolute inset-0 cursor-pointer" onclick="document.getElementById('steg-chat-drawer-modal').classList.add('hidden')"></div><div class="relative w-full max-w-lg mx-auto bg-surface-container-lowest rounded-t-3xl shadow-2xl flex flex-col h-[90vh] max-h-[850px] overflow-hidden z-10 animate-in slide-in-from-bottom duration-300"><div class="w-full flex justify-center pt-2.5 pb-1 bg-surface-container-lowest"><div class="w-10 h-1 rounded-full bg-outline-variant"></div></div><div class="px-gutter py-2.5 bg-surface-container-lowest border-b border-surface-container-high flex items-center justify-between gap-space-xs"><div class="flex items-center gap-2.5 min-w-0 flex-1"><div class="relative flex-shrink-0"><div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary"><span class="material-symbols-outlined text-[22px]">support_agent</span></div><span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#16A34A] border-2 border-white"></span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-1.5"><h2 class="font-headline-sm text-[16px] text-on-surface font-bold leading-tight truncate">Assistant Citoyen STEG</h2><span class="px-1.5 py-0.5 rounded text-[10px] font-label-sm font-bold bg-secondary/10 text-secondary uppercase">Officiel</span></div><span class="font-label-sm text-[11px] text-[#15803D] flex items-center gap-1 leading-snug"><span class="w-1.5 h-1.5 rounded-full bg-[#16A34A] animate-pulse"></span>En ligne • Réponses instantanées 24h/7j</span></div></div><div class="flex items-center gap-1.5 flex-shrink-0"><a class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-secondary-fixed/40 hover:bg-secondary-fixed text-secondary font-label-sm text-[11px] font-bold transition-colors" href="tel:71341400"><span class="material-symbols-outlined text-[14px]">call</span><span>71 341 400</span></a><button aria-label="Fermer le dialogue" class="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-colors" onclick="document.getElementById('steg-chat-drawer-modal').classList.add('hidden')" type="button"><span class="material-symbols-outlined text-[18px]">close</span></button></div></div><div class="flex-1 overflow-y-auto px-gutter py-space-sm space-y-space-md bg-surface-container-low"><div class="flex items-start gap-2.5 max-w-[90%]"><div class="w-8 h-8 rounded-full bg-secondary-fixed flex-shrink-0 flex items-center justify-center text-secondary mt-0.5"><span class="material-symbols-outlined text-[18px]">electric_bolt</span></div><div class="flex flex-col gap-1"><div class="bg-surface-container-lowest p-space-sm rounded-2xl rounded-tl-sm shadow-xs border border-surface-container-high text-on-surface"><p class="font-body-sm text-body-sm leading-relaxed">Bonjour ! Je suis l'assistant officiel de la STEG. Je peux vous renseigner en temps réel sur les coupures programmées, la durée estimée dans votre quartier ou vous guider sur la protection de vos équipements électriques.</p><p class="font-body-sm text-body-sm font-medium mt-1 text-secondary">Que souhaitez-vous savoir ?</p></div><span class="text-[10px] font-label-sm text-outline px-1">14:32 • Assistant STEG</span></div></div><div class="pl-10 space-y-1.5"><span class="text-[11px] font-label-sm text-outline uppercase font-semibold tracking-wider block">Questions suggérées :</span><div class="flex flex-wrap gap-1.5"><button class="text-left text-[12px] font-label-sm px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-bright text-secondary border border-secondary/20 shadow-xs transition-colors" type="button">⚡ Quand le courant revient-il à Béja Nord ?</button><button class="text-left text-[12px] font-label-sm px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-bright text-on-surface border border-surface-container-high shadow-xs transition-colors" type="button">📍 Mon quartier est-il concerné aujourd'hui ?</button><button class="text-left text-[12px] font-label-sm px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-bright text-on-surface border border-surface-container-high shadow-xs transition-colors" type="button">🛡️ Comment protéger mes appareils électroménagers ?</button><button class="text-left text-[12px] font-label-sm px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-bright text-on-surface border border-surface-container-high shadow-xs transition-colors" type="button">❓ Pourquoi des délestages de 45 minutes en été ?</button></div></div><div class="flex flex-col items-end gap-1 max-w-[85%] ml-auto"><div class="bg-secondary text-on-secondary p-space-sm rounded-2xl rounded-tr-sm shadow-xs"><p class="font-body-sm text-body-sm leading-relaxed text-white">Bonjour, je suis à Béja Nord (Faubourg Est), le courant a coupé vers 14h05. C'est normal ?</p></div><span class="text-[10px] font-label-sm text-outline px-1">14:34 • Vous (Citoyen)</span></div><div class="flex items-start gap-2.5 max-w-[92%]"><div class="w-8 h-8 rounded-full bg-secondary-fixed flex-shrink-0 flex items-center justify-center text-secondary mt-0.5"><span class="material-symbols-outlined text-[18px]">electric_bolt</span></div><div class="flex flex-col gap-2 flex-1"><div class="bg-surface-container-lowest p-space-sm rounded-2xl rounded-tl-sm shadow-xs border border-surface-container-high text-on-surface space-y-2.5"><p class="font-body-sm text-body-sm leading-relaxed">Oui, rassurez-vous : il s'agit d'une <span class="font-semibold text-error">rotation préventive programmée</span> suite au pic de forte consommation nationale liée aux températures extrêmes.</p><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Votre secteur (<strong class="text-on-surface">Béja Nord – Faubourg Est</strong>) a été suspendu à 14h05. Le rétablissement est planifié à <strong class="text-error">14h50 au plus tard</strong> (durée maximale de 45 minutes). Tout le réseau haute tension est stable et sous contrôle permanent.</p><div class="p-2.5 rounded-xl bg-surface-container-low border border-surface-container-high"><div class="flex items-center justify-between gap-1 mb-1.5"><span class="text-[11px] font-label-sm font-bold text-secondary uppercase tracking-wide flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">sync_alt</span> Rotation active</span><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#DCFCE7] text-[#15803D]">Fin dans ~12 min</span></div><div class="grid grid-cols-2 gap-2 text-[12px] font-label-sm pt-1 border-t border-surface-container"><div class="text-on-surface-variant">Fin prévue : <span class="font-bold text-on-surface">14h50</span></div><div class="text-on-surface-variant text-right">Prochaine rotation : <span class="font-bold text-secondary">&gt; 14 jours</span></div></div></div></div><div class="bg-secondary-fixed/30 p-2.5 rounded-xl border border-secondary/20 flex items-start gap-2 text-on-surface"><span class="text-[18px]">💡</span><div class="text-[12px] font-body-sm leading-relaxed text-on-surface-variant"><strong class="text-secondary font-semibold">Conseil sécurité STEG :</strong> Débranchez réfrigérateurs, téléviseurs et climatiseurs pendant la coupure pour éviter tout pic de surtension transitoire au réarmement de la ligne.</div></div><span class="text-[10px] font-label-sm text-outline px-1">14:35 • Assistant STEG</span></div></div></div><div class="p-space-sm bg-surface-container-lowest border-t border-surface-container-high pb-safe"><div class="relative flex items-center gap-2"><div class="relative flex-1 flex items-center"><input class="w-full h-11 pl-3.5 pr-10 rounded-full bg-surface-container-low text-on-surface font-body-sm text-[13px] placeholder:text-outline focus:outline-none focus:bg-surface-container focus:ring-1 focus:ring-secondary transition-all" placeholder="Écrivez votre question (ville, quartier, panne...)" type="text"/><button class="absolute right-2 text-outline hover:text-secondary flex items-center justify-center p-1 rounded-full transition-colors" title="Entrée vocale" type="button"><span class="material-symbols-outlined text-[19px]">mic</span></button></div><button aria-label="Envoyer" class="w-11 h-11 rounded-full bg-secondary hover:bg-secondary/90 text-on-secondary flex items-center justify-center flex-shrink-0 shadow-md active:scale-95 transition-transform" type="button"><span class="material-symbols-outlined text-[20px]">send</span></button></div><div class="mt-1.5 flex items-center justify-center gap-1.5 text-center"><span class="material-symbols-outlined text-[13px] text-outline">verified_user</span><p class="text-[10px] font-label-sm text-outline">Service d'information officiel STEG — Aucune donnée confidentielle requise</p></div></div></div></div></body></html>

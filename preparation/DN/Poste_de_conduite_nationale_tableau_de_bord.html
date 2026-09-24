@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-container-low":"#0b1c30","on-primary-fixed-variant":"#3c475b","on-tertiary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","secondary-fixed":"#d7e2ff","on-secondary-fixed-variant":"#004591","primary":"#bbc7df","on-background":"#d3e4fe","surface-container-high":"#1b2b3f","surface-variant":"#26364a","tertiary-container":"#231200","on-error":"#690005","primary-fixed-dim":"#bbc7df","surface-dim":"#031427","secondary-fixed-dim":"#acc7ff","tertiary-fixed-dim":"#ffb95f","surface-tint":"#bbc7df","secondary-container":"#0365cf","error":"#ffb4ab","on-secondary-fixed":"#001a40","on-secondary":"#002f67","on-primary-fixed":"#101c2e","on-error-container":"#ffdad6","error-container":"#93000a","on-primary":"#253144","surface-container":"#102034","outline-variant":"#45474c","background":"#031427","on-surface":"#d3e4fe","primary-container":"#0a1628","inverse-on-surface":"#213145","tertiary-fixed":"#ffddb8","outline":"#8f9097","on-tertiary":"#472a00","secondary":"#acc7ff","on-surface-variant":"#c5c6cd","on-tertiary-container":"#b37100","surface-container-highest":"#26364a","inverse-surface":"#d3e4fe","on-primary-container":"#758096","surface-bright":"#2a3a4f","surface":"#031427","tertiary":"#ffb95f","on-tertiary-fixed":"#2a1700","primary-fixed":"#d7e3fc","on-secondary-container":"#e0e8ff","inverse-primary":"#535f74"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{gutter:"0.5rem","space-sm":"0.25rem","space-xl":"1rem",margin:"0.75rem","space-xs":"0.125rem","space-lg":"0.75rem","space-md":"0.5rem"},fontFamily:{"headline-md":["IBM Plex Sans"],"label-telemetry-sm":["JetBrains Mono"],"body-sm":["IBM Plex Sans"],"body-lg":["IBM Plex Sans"],"label-telemetry-md":["JetBrains Mono"],"label-telemetry-lg":["JetBrains Mono"],"body-md":["IBM Plex Sans"],"headline-lg":["IBM Plex Sans"],"headline-sm":["IBM Plex Sans"],"label-caps":["IBM Plex Sans"]},fontSize:{"headline-md":["1.25rem",{lineHeight:"1.75rem",fontWeight:"600"}],"label-telemetry-sm":["0.6875rem",{lineHeight:"0.875rem",fontWeight:"500"}],"body-sm":["0.75rem",{lineHeight:"1rem",fontWeight:"400"}],"body-lg":["0.9375rem",{lineHeight:"1.375rem",fontWeight:"400"}],"label-telemetry-md":["0.8125rem",{lineHeight:"1rem",fontWeight:"500"}],"label-telemetry-lg":["1.125rem",{lineHeight:"1.25rem",fontWeight:"600"}],"body-md":["0.8125rem",{lineHeight:"1.125rem",fontWeight:"400"}],"headline-lg":["1.75rem",{lineHeight:"2.25rem",fontWeight:"600"}],"headline-sm":["1rem",{lineHeight:"1.5rem",fontWeight:"600"}],"label-caps":["0.6875rem",{lineHeight:"0.875rem",fontWeight:"600"}]}}}};</script></head><body class="bg-background text-on-surface font-body-md text-body-md min-h-screen"><header class="fixed top-0 left-0 right-0 h-14 bg-surface-container-low/95 backdrop-blur-md z-50 shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="h-14 w-full px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg shrink-0"><img alt="STEG Dispatching National Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VXWnD-FH0ODFvq3ztyXT8mgWrEPIrjyk5gcvRSlLehiOUhsELd9EaDFIEFPioRn4ELqmkwkvibpTHR_1f_EUBKaqaXjy5tFExDvm_uJNJ3hxoCWu2-GVlmeZtM1c5GzocoIKqujRH9GFHZhqCR9CFDF-pXTLQDWzzeEKMgt2OgWlbgnIB0FZ3PiXN6s6-BB0pgO1psy57vl11s4O7NTm4rAWgDCQWiGRCpK2YuJn5nlAxXUB28jvszJ9I"/><div class="flex flex-col"><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm text-primary tracking-wide uppercase">STEG CONDUITE</span><span class="px-space-sm py-space-xs rounded bg-surface-container-highest text-on-surface-variant font-label-caps text-label-caps tracking-wider">PROD 225/150/90/30 kV</span></div><div class="flex items-center gap-space-sm font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span><span>RÉSEAU INTERCONNECTÉ</span></div></div><div class="hidden xl:flex items-center bg-surface-container px-space-md py-space-xs rounded gap-space-md"><div class="flex flex-col"><span class="font-label-caps text-label-caps text-on-surface-variant">FRÉQUENCE RÉSEAU</span><span class="font-label-telemetry-md text-label-telemetry-md text-secondary">50,02 Hz</span></div><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-high"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface">NOMINALE</span></div></div></div><nav class="flex items-center bg-surface-container-lowest p-space-xs rounded" data-active-classes="bg-surface-container-high text-on-surface font-headline-sm"><a aria-current="page" class="px-space-lg py-space-xs rounded transition-colors bg-surface-container-high text-on-surface font-headline-sm" data-path="supervision-dn" href="#">Tableau de bord</a><a class="px-space-lg py-space-xs rounded font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors" data-path="editeur-sig-topologie" href="#">Cartographie SIG</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="hidden lg:flex flex-col items-end bg-surface-container px-space-md py-space-xs rounded font-label-telemetry-sm text-label-telemetry-sm"><span class="text-primary">14:32:18 UTC+1</span><span class="text-on-surface-variant">TU 13:32:18</span></div><div class="hidden md:flex items-center gap-space-md pl-space-md"><div class="flex flex-col items-end leading-tight"><span class="font-headline-sm text-body-sm text-on-surface font-semibold">Ing. K. Ben Salem</span><span class="font-label-caps text-label-caps text-on-surface-variant">OPÉRATEUR NATIONAL DN • TUNIS</span></div></div><button class="relative p-space-sm rounded bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface flex items-center justify-center" title="Alarmes actives" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute -top-1 -right-1 px-space-xs bg-error-container text-on-error-container rounded-full font-label-telemetry-sm text-[10px] leading-none py-0.5">4</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><a class="p-space-sm rounded bg-surface-container hover:bg-error-container hover:text-on-error-container transition-colors text-on-surface-variant flex items-center justify-center" data-path="login" href="#" title="Déconnexion sécurisée"><span class="material-symbols-outlined text-[20px]">power_settings_new</span></a></div></div></header><aside class="fixed left-0 top-14 bottom-8 w-64 bg-surface-container-low z-40 flex flex-col justify-between shadow-[1px_0_8px_rgba(0,0,0,0.3)]"><div class="flex flex-col py-space-md"><div class="px-space-lg py-space-xs font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-space-xs">Architecture Téléconduite</div><nav class="flex flex-col px-space-sm gap-space-xs" data-active-classes="bg-surface-container-high text-secondary"><a aria-current="page" class="flex items-center gap-space-md px-space-md py-space-sm rounded transition-all bg-surface-container-high text-secondary" data-path="supervision-dn" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-body-md text-body-md">Supervision DN</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="conduite-regionale" href="#"><span class="material-symbols-outlined text-[20px]">alt_route</span><span class="font-body-md text-body-md">Conduite Régionale</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="postes-locaux" href="#"><span class="material-symbols-outlined text-[20px]">domain</span><span class="font-body-md text-body-md">Postes Locaux (7 BCCs)</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="analyse-historique-ens" href="#"><span class="material-symbols-outlined text-[20px]">query_stats</span><span class="font-body-md text-body-md">Analyse &amp; Historique ENS</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="editeur-sig-topologie" href="#"><span class="material-symbols-outlined text-[20px]">map</span><span class="font-body-md text-body-md">Éditeur SIG &amp; Topologie</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="parametres-systeme" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span class="font-body-md text-body-md">Paramètres &amp; Seuils</span></a></nav></div><div class="p-space-sm"><div class="bg-surface-container-lowest p-space-sm rounded mb-space-sm"><div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant mb-space-xs"><span>CYCLE AUTOMATE</span><span class="font-label-telemetry-sm text-secondary">20 ms</span></div><div class="w-full bg-surface-container-high h-1 rounded"><div class="bg-secondary h-1 rounded" style="width: 92%"></div></div></div><button class="w-full flex items-center justify-center gap-space-sm px-space-md py-space-sm rounded bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-body-sm text-body-sm" type="button"><span class="material-symbols-outlined text-[18px]">keyboard_double_arrow_left</span><span>Réduire Pupitre</span></button></div></aside><div class="pl-64"><main class="w-full pt-14 pb-8 min-h-screen bg-background"><div class="flex flex-col w-full text-on-surface">
+<!-- 1. BARRE SUPÉRIEURE : SÉLECTEUR DE VUE & BANDEAU D'ALERTE OPÉRATIONNELLE -->
+<section class="flex flex-col gap-space-sm p-space-md bg-surface-container-lowest">
+<div class="flex flex-wrap items-center justify-between gap-space-md">
+<!-- Sélecteur de mode Dispatching -->
+<div class="flex items-center gap-space-xs bg-surface-container-low p-space-xs rounded">
+<button class="flex items-center gap-space-sm px-space-md py-space-xs rounded bg-surface-container-high text-secondary font-headline-sm text-body-sm shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span>Tableau de bord (Actif)</span>
+</button>
+<button class="flex items-center gap-space-sm px-space-md py-space-xs rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all font-body-sm text-body-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">map</span>
+<span>Cartographie SIG</span>
+</button>
+</div>
+<!-- Métadonnées opérationnelles -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-sm bg-surface-container-low px-space-md py-space-xs rounded font-label-telemetry-sm text-label-telemetry-sm">
+<span class="text-on-surface-variant">STATUT RÉSEAU :</span>
+<span class="px-space-sm py-0.5 rounded bg-error-container text-on-error-container font-semibold animate-pulse">SOUS-DÉLESTAGE ACTIF</span>
+<span class="text-outline">|</span>
+<span class="text-on-surface-variant">CYCLAGE : <strong class="text-secondary font-semibold">20 ms</strong></span>
+</div>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm transition-colors" id="btn-export-rapport" type="button">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Rapport DN</span>
+</button>
+</div>
+</div>
+<!-- Bandeau critique de délestage non atteint -->
+<div class="relative overflow-hidden flex flex-wrap lg:flex-nowrap items-center justify-between gap-space-md px-space-lg py-space-sm bg-error-container/30 rounded">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="flex items-center justify-center w-8 h-8 rounded bg-error-container text-on-error-container shrink-0">
+<span class="material-symbols-outlined text-[20px] animate-bounce">warning</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-sm text-body-sm font-bold text-error tracking-wider uppercase">ALERTE DÉFICIT DÉLESTAGE STEG</span>
+<span class="px-space-xs py-0.5 rounded bg-surface-container-lowest text-error font-label-telemetry-sm text-label-telemetry-sm">SEUIL &gt; 25,0 MW DÉPASSÉ</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface truncate">
+            Écart national de <strong class="text-error font-semibold font-label-telemetry-sm">-38,5 MW</strong> par rapport à la consigne requise. <span class="text-error font-semibold">BCC 3 (Nord-Ouest)</span> et <span class="text-error font-semibold">BCC 5 (Kairouan)</span> en défaut partiel d’exécution.
+          </p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="px-space-md py-space-xs rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm transition-all shadow-sm" id="btn-open-modal-detail" type="button">
+          Ouvrir Analyse Détaillée
+        </button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-secondary-container hover:bg-secondary text-on-secondary font-headline-sm text-body-sm transition-all shadow-sm" id="btn-trigger-ai-alert" type="button">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+<span>Analyser avec l'IA</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 2. PREMIÈRE RANGÉE : 5 CARTES KPI TÉLÉMÉTRIE (Grille 5 colonnes) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-md p-space-md bg-surface">
+<!-- KPI 1 : Planifié -->
+<div class="flex flex-col justify-between p-space-md rounded bg-surface-container-low hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Planifié National</span>
+<span class="material-symbols-outlined text-[18px] text-primary">event_note</span>
+</div>
+<div class="my-space-xs flex items-baseline gap-space-xs">
+<span class="font-label-telemetry-lg text-headline-lg text-primary font-bold">450,0</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">MW</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 100%"></div>
+</div>
+<span class="font-body-sm text-label-telemetry-sm text-on-surface-variant">Programme arrêté à 06h00</span>
+</div>
+</div>
+<!-- KPI 2 : Réalisé Actuel -->
+<div class="flex flex-col justify-between p-space-md rounded bg-surface-container-low hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Réalisé Instantané</span>
+<span class="px-space-xs py-0.5 rounded bg-tertiary-container text-tertiary font-label-telemetry-sm text-label-telemetry-sm font-semibold">91,4 %</span>
+</div>
+<div class="my-space-xs flex items-baseline gap-space-xs">
+<span class="font-label-telemetry-lg text-headline-lg text-tertiary font-bold">411,5</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">MW</span>
+<span class="ml-auto font-label-telemetry-sm text-label-telemetry-sm text-error font-semibold">-38,5 MW</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary" style="width: 91.4%"></div>
+</div>
+<span class="font-body-sm text-label-telemetry-sm text-on-surface-variant">Cadence télémesure : 2 sec</span>
+</div>
+</div>
+<!-- KPI 3 : Régions en délestage -->
+<div class="flex flex-col justify-between p-space-md rounded bg-surface-container-low hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Zones Actives</span>
+<span class="material-symbols-outlined text-[18px] text-secondary">share</span>
+</div>
+<div class="my-space-xs flex items-baseline gap-space-xs">
+<span class="font-label-telemetry-lg text-headline-lg text-secondary font-bold">4</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Régions</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-telemetry-sm text-[10px]">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span>GT</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span>CENTRE</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span>SUD-EST</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span>SAHEL</span>
+</div>
+<span class="font-body-sm text-label-telemetry-sm text-on-surface-variant">Rotation palier n°3 en cours</span>
+</div>
+</div>
+<!-- KPI 4 : BCCs en alerte -->
+<div class="flex flex-col justify-between p-space-md rounded bg-surface-container-low hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase tracking-wider">BCCs en Anomalie</span>
+<span class="flex items-center gap-1 px-space-xs py-0.5 rounded bg-error-container text-on-error-container font-label-telemetry-sm text-label-telemetry-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
+<span>CRITIQUE</span>
+</span>
+</div>
+<div class="my-space-xs flex items-baseline gap-space-xs">
+<span class="font-label-telemetry-lg text-headline-lg text-error font-bold">2 <span class="text-body-lg text-on-surface-variant font-normal">/ 7</span></span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Postes</span>
+</div>
+<div class="flex items-center justify-between font-label-telemetry-sm text-label-telemetry-sm">
+<span class="text-error">BCC 3 (-12,0 MW)</span>
+<span class="text-error">BCC 5 (-16,5 MW)</span>
+</div>
+</div>
+<!-- KPI 5 : ENS & Coût Réseau -->
+<div class="flex flex-col justify-between p-space-md rounded bg-surface-container-low hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase tracking-wider">ENS Estimée J+0</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary">bolt</span>
+</div>
+<div class="my-space-xs flex items-baseline gap-space-xs">
+<span class="font-label-telemetry-lg text-headline-lg text-on-surface font-bold">1 428,6</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">MWh</span>
+</div>
+<div class="flex items-center justify-between font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<span>Coût: <strong class="text-on-surface">~428 kDT</strong></span>
+<span class="text-secondary font-semibold">SAIDI +4,2 min</span>
+</div>
+</div>
+</section>
+<!-- 3. DEUXIÈME RANGÉE : COURBE PRÉVU vs RÉALISÉ & DÉCROCHAGE DE CHARGE -->
+<section class="p-space-md bg-surface">
+<div class="bg-surface-container-low p-space-lg rounded flex flex-col gap-space-md">
+<!-- En-tête graphique & Action IA contextuelle -->
+<div class="flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">ssid_chart</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Suivi d'Exécution du Délestage National — 24 Heures</h2>
+<span class="px-space-xs py-0.5 rounded bg-surface-container text-on-surface-variant font-label-caps text-label-caps uppercase">Profil Quotidien HTB</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Comparatif télémesuré instantané entre la consigne ordonnancée DN et le repli effectif du réseau</span>
+</div>
+<div class="flex items-center gap-space-md">
+<!-- Légende technique -->
+<div class="hidden sm:flex items-center gap-space-md bg-surface-container-lowest px-space-md py-space-xs rounded font-label-telemetry-sm text-label-telemetry-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-0.5 bg-secondary"></span>
+<span class="text-on-surface-variant">Consigne Planifiée (MW)</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-0.5 bg-primary"></span>
+<span class="text-on-surface">Puissance Délestée Réelle (MW)</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-2 bg-error-container/60 rounded-xs"></span>
+<span class="text-error font-semibold">Déficit (-38,5 MW)</span>
+</div>
+</div>
+<!-- Déclencheur Assistant IA -->
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-surface-container-high hover:bg-secondary-container hover:text-on-secondary-container text-secondary font-body-sm text-body-sm transition-all shadow-sm" id="btn-toggle-ai-panel" type="button">
+<span class="material-symbols-outlined text-[18px]">smart_toy</span>
+<span>Analyser le décrochage avec l'IA</span>
+</button>
+</div>
+</div>
+<!-- Canevas SVG SCADA haute précision -->
+<div class="relative w-full h-64 bg-surface-container-lowest rounded p-space-md overflow-hidden select-none">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 240">
+<defs>
+<lineargradient id="deficitGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#93000a" stop-opacity="0.55"></stop>
+<stop offset="100%" stop-color="#93000a" stop-opacity="0.05"></stop>
+</lineargradient>
+<pattern height="10" id="hatchDeficit" patterntransform="rotate(45 0 0)" patternunits="userSpaceOnUse" width="10">
+<line stroke="#ffb4ab" stroke-opacity="0.4" stroke-width="1" x1="0" x2="0" y1="0" y2="10"></line>
+</pattern>
+</defs>
+<!-- Grille horizontale MW (0, 150, 300, 450, 600 MW) -->
+<line stroke="#1b2b3f" stroke-width="1" x1="45" x2="980" y1="210" y2="210"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="45" x2="980" y1="160" y2="160"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="45" x2="980" y1="110" y2="110"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="45" x2="980" y1="60" y2="60"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="45" x2="980" y1="15" y2="15"></line>
+<!-- Libellés axe Y -->
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="end" x="35" y="213">0</text>
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="end" x="35" y="163">150</text>
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="end" x="35" y="113">300</text>
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="end" x="35" y="63">450</text>
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="end" x="35" y="18">600</text>
+<text class="font-label-caps text-[9px]" fill="#8f9097" text-anchor="start" x="10" y="15">MW</text>
+<!-- Lignes verticales temporelles (00h, 04h, 08h, 12h, 14h30, 16h, 20h, 24h) -->
+<line stroke="#1b2b3f" stroke-width="1" x1="50" x2="50" y1="15" y2="210"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="205" x2="205" y1="15" y2="210"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="360" x2="360" y1="15" y2="210"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="515" x2="515" y1="15" y2="210"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="554" x2="554" y1="15" y2="210"></line>
+<line stroke="#ffb4ab" stroke-dasharray="3,3" stroke-width="1.5" x1="612" x2="612" y1="15" y2="210"></line> <!-- 14h30 Actuel -->
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="670" x2="670" y1="15" y2="210"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="825" x2="825" y1="15" y2="210"></line>
+<line stroke="#1b2b3f" stroke-width="1" x1="980" x2="980" y1="15" y2="210"></line>
+<!-- Libellés axe X -->
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="middle" x="50" y="225">00:00</text>
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="middle" x="205" y="225">04:00</text>
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="middle" x="360" y="225">08:00</text>
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="middle" x="515" y="225">12:00</text>
+<text class="font-label-telemetry-sm text-[10px] font-bold" fill="#ffb4ab" text-anchor="middle" x="612" y="225">14:30 (NOW)</text>
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="middle" x="670" y="225">16:00</text>
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="middle" x="825" y="225">20:00</text>
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" text-anchor="middle" x="980" y="225">23:59</text>
+<!-- Zone de décrochage / déficit hachurée (13h00 à 14h30) -->
+<!-- 13h00: x=554, Prévu=60 (450MW), Réel=60 -> 14h30: x=612, Prévu=60 (450MW), Réel=73 (411.5MW) -->
+<polygon fill="url(#deficitGradient)" points="554,60 580,60 612,60 612,73 580,69 554,60"></polygon>
+<polygon fill="url(#hatchDeficit)" points="554,60 580,60 612,60 612,73 580,69 554,60"></polygon>
+<!-- Courbe 1 : Consigne Planifiée (Pointillé Cyan) -->
+<path d="M 50,195 L 120,195 L 200,180 L 280,140 L 360,110 L 440,90 L 515,70 L 554,60 L 612,60 L 700,60 L 780,95 L 860,150 L 980,190" fill="none" stroke="#acc7ff" stroke-dasharray="4,4" stroke-width="2"></path>
+<!-- Courbe 2 : Puissance Délestée Réelle (Trait Continu Vert/Blanc SCADA jusqu'à 14h30) -->
+<path d="M 50,195 L 120,193 L 200,181 L 280,139 L 360,110 L 440,92 L 515,69 L 554,60 L 580,69 L 612,73" fill="none" stroke="#d3e4fe" stroke-width="2.5"></path>
+<!-- Points remarquables -->
+<circle cx="554" cy="60" fill="#acc7ff" r="3"></circle>
+<circle cx="612" cy="60" fill="#acc7ff" r="3.5"></circle>
+<circle cx="612" cy="73" fill="#ffb4ab" r="4.5"></circle>
+<!-- Tooltip interactif SCADA fixé sur l'instant 14h30 -->
+<g transform="translate(618, 20)">
+<rect class="shadow-xl" fill="#0b1c30" height="74" rx="4" stroke="none" width="180"></rect>
+<text class="font-label-telemetry-sm text-[10px]" fill="#8f9097" x="10" y="16">HORODATAGE : 14:30:00 TU+1</text>
+<text class="font-label-telemetry-sm text-[11px] font-semibold" fill="#acc7ff" x="10" y="32">CONSIGNE : 450,0 MW</text>
+<text class="font-label-telemetry-sm text-[11px] font-semibold" fill="#d3e4fe" x="10" y="48">RÉALISÉ  : 411,5 MW</text>
+<text class="font-label-telemetry-sm text-[11px] font-bold" fill="#ffb4ab" x="10" y="64">DÉFICIT  : -38,5 MW (8,6%)</text>
+</g>
+</svg>
+</div>
+</div>
+</section>
+<!-- 4. TROISIÈME RANGÉE : 2 CRC RÉGIONAUX (60%) vs FLUX ALERTES TEMPS RÉEL (40%) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-md p-space-md bg-surface">
+<!-- Colonne gauche (7 cols / ~60%) : Centres Régionaux de Conduite -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">alt_route</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Centres Régionaux de Conduite (CRC)</h3>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Régie Nationale HTB/HTA</span>
+</div>
+<!-- Carte CRC NORD -->
+<div class="p-space-lg rounded bg-surface-container-low flex flex-col gap-space-md">
+<div class="flex flex-wrap items-start justify-between gap-space-sm">
+<div>
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-semibold">CRC NORD — Région Grand Tunis &amp; Nord</h4>
+<span class="px-space-xs py-0.5 rounded bg-tertiary-container text-tertiary font-label-telemetry-sm text-label-telemetry-sm font-semibold">DÉFICIT MODÉRÉ</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Poste de commandement La Goulette / Tunis</span>
+</div>
+<div class="flex items-baseline gap-space-xs font-label-telemetry-md text-label-telemetry-md">
+<span class="text-on-surface-variant">Réalisé:</span>
+<strong class="text-on-surface">282,0 MW</strong>
+<span class="text-on-surface-variant">/ 300,0 MW</span>
+<span class="ml-space-sm font-bold text-tertiary">(-18,0 MW)</span>
+</div>
+</div>
+<!-- Jauge d'exécution bicolore -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex justify-between font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<span>Taux de réalisation de l'ordre : <strong class="text-on-surface">94,0 %</strong></span>
+<span>Synchro SCADA : il y a 45s</span>
+</div>
+<div class="w-full h-2 rounded bg-surface-container-highest overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 94%"></div>
+<div class="bg-tertiary h-full" style="width: 6%"></div>
+</div>
+</div>
+<!-- BCCs rattachés & Coordonnées opérateur -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm">
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">BCC 1</span>
+<span class="w-2 h-2 rounded-full bg-secondary" title="Conforme"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold truncate">Tunis Nord</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">110,2 MW</span>
+</div>
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">BCC 2</span>
+<span class="w-2 h-2 rounded-full bg-secondary" title="Conforme"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold truncate">Tunis Sud</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">89,8 MW</span>
+</div>
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-tertiary">BCC 3</span>
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse" title="Sous-consigne"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold truncate">Nord-Ouest</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary font-bold">38,0 MW (-12)</span>
+</div>
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">BCC 4</span>
+<span class="w-2 h-2 rounded-full bg-secondary" title="Conforme"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold truncate">Bizerte</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface">44,0 MW</span>
+</div>
+</div>
+<!-- Contact téléconduite -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<div class="flex items-center gap-space-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">call</span> +216 71 340 102</span>
+<span class="flex items-center gap-1 text-secondary"><span class="material-symbols-outlined text-[14px]">radio</span> VHF-04 Canal Conduite</span>
+</div>
+<span class="text-on-surface-variant truncate">crc.nord@steg.com.tn</span>
+</div>
+</div>
+<!-- Carte CRC SUD -->
+<div class="p-space-lg rounded bg-surface-container-low flex flex-col gap-space-md">
+<div class="flex flex-wrap items-start justify-between gap-space-sm">
+<div>
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-error animate-ping"></span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-semibold">CRC SUD — Région Centre &amp; Sud</h4>
+<span class="px-space-xs py-0.5 rounded bg-error-container text-on-error-container font-label-telemetry-sm text-label-telemetry-sm font-semibold">DÉFICIT CRITIQUE</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Poste de commandement Thyna / Sfax</span>
+</div>
+<div class="flex items-baseline gap-space-xs font-label-telemetry-md text-label-telemetry-md">
+<span class="text-on-surface-variant">Réalisé:</span>
+<strong class="text-on-surface">129,5 MW</strong>
+<span class="text-on-surface-variant">/ 150,0 MW</span>
+<span class="ml-space-sm font-bold text-error">(-20,5 MW)</span>
+</div>
+</div>
+<!-- Jauge d'exécution bicolore -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex justify-between font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<span>Taux de réalisation de l'ordre : <strong class="text-error font-semibold">86,3 %</strong></span>
+<span>Synchro SCADA : il y a 20s</span>
+</div>
+<div class="w-full h-2 rounded bg-surface-container-highest overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 86.3%"></div>
+<div class="bg-error h-full" style="width: 13.7%"></div>
+</div>
+</div>
+<!-- BCCs rattachés & Coordonnées -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-sm">
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-error font-bold">BCC 5</span>
+<span class="w-2 h-2 rounded-full bg-error animate-ping" title="Déficit Critique"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold truncate">Centre / Kairouan</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-error font-bold">33,5 MW (-16,5)</span>
+</div>
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">BCC 6</span>
+<span class="w-2 h-2 rounded-full bg-secondary" title="Conforme"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold truncate">Sahel / Sousse</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary font-bold">61,0 MW (+1,0)</span>
+</div>
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">BCC 7</span>
+<span class="w-2 h-2 rounded-full bg-tertiary" title="Attention"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold truncate">Sud / Sfax - Gabès</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface font-semibold">35,0 MW (-5,0)</span>
+</div>
+</div>
+<!-- Contact téléconduite -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<div class="flex items-center gap-space-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">call</span> +216 73 221 800</span>
+<span class="flex items-center gap-1 text-secondary"><span class="material-symbols-outlined text-[14px]">radio</span> VHF-09 Canal Exploitation</span>
+</div>
+<span class="text-on-surface-variant truncate">crc.sud@steg.com.tn</span>
+</div>
+</div>
+</div>
+<!-- Colonne droite (5 cols / ~40%) : Flux des alertes opérationnelles temps réel -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-error text-[20px]">notifications_active</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Journal des Alertes SCADA</h3>
+</div>
+<span class="px-space-xs py-0.5 rounded bg-surface-container text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">5 Récents</span>
+</div>
+<div class="flex flex-col gap-space-xs p-space-sm rounded bg-surface-container-low overflow-y-auto max-h-[480px]">
+<!-- Alerte 1 (Critique) -->
+<div class="flex flex-col gap-space-xs p-space-md rounded bg-surface-container-lowest hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded bg-error-container text-on-error-container font-label-telemetry-sm text-[10px] font-bold">CRITIQUE</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-error font-semibold">BCC 5 — Kairouan</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">14:28:04</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-snug">
+            Écart de 16,5 MW sous la consigne depuis 28 min. Départ P2 non déclenché suite à saturation secours auxiliaires.
+          </p>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant">ACQUIT : NON-ACQUIT</span>
+<button class="text-secondary hover:underline font-label-telemetry-sm text-label-telemetry-sm" type="button">Acquitter</button>
+</div>
+</div>
+<!-- Alerte 2 (Avertissement) -->
+<div class="flex flex-col gap-space-xs p-space-md rounded bg-surface-container-lowest hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded bg-tertiary-container text-tertiary font-label-telemetry-sm text-[10px] font-bold">AVERTISSEMENT</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary font-semibold">BCC 3 — Béja / Jendouba</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">14:15:12</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-snug">
+            Décrochage de 12,0 MW suite à refus d'ouverture disjoncteur HTB D22. Télécommande réitérée sans succès.
+          </p>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant">EN COURS D'INVESTIGATION</span>
+<button class="text-secondary hover:underline font-label-telemetry-sm text-label-telemetry-sm" type="button">Détail Relais</button>
+</div>
+</div>
+<!-- Alerte 3 (Info) -->
+<div class="flex flex-col gap-space-xs p-space-md rounded bg-surface-container-lowest hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-telemetry-sm text-[10px] font-bold">INFO</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">CRC Nord</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">13:58:40</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+            Validation palier de rotation n°3 transmise aux postes sources 225/30 kV. Ordre appliqué sur feeders prioritaires P1.
+          </p>
+</div>
+<!-- Alerte 4 (Critique Ligne) -->
+<div class="flex flex-col gap-space-xs p-space-md rounded bg-surface-container-lowest hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded bg-error-container text-on-error-container font-label-telemetry-sm text-[10px] font-bold">CRITIQUE</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-error font-semibold">Ligne 225 kV Mornaguia</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">13:42:19</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-snug">
+            Liaison Mornaguia-Mhamdia : Déclenchement automatique par protection de surcharge de transit (480 A mesuré).
+          </p>
+</div>
+<!-- Alerte 5 (Avertissement Fréquence) -->
+<div class="flex flex-col gap-space-xs p-space-md rounded bg-surface-container-lowest hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded bg-tertiary-container text-tertiary font-label-telemetry-sm text-[10px] font-bold">AVERTISSEMENT</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary font-semibold">Fréquence Interconnectée</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">13:30:00</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-snug">
+            Creux transitoire à 49,84 Hz enregistré. Mobilisation réserve primaire rapide (stabilisé à 50,02 Hz).
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. QUATRIÈME RANGÉE : TABLEAU INDUSTRIEL COMPLET DES 7 BCCs -->
+<section class="p-space-md bg-surface">
+<div class="bg-surface-container-low p-space-lg rounded flex flex-col gap-space-md">
+<div class="flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">table_rows</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">État Télémétrique Détaillé des 7 Postes de Conduite Locaux (BCC)</h3>
+</div>
+<div class="flex items-center gap-space-sm font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary"></span> 4 Conformes</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-tertiary"></span> 2 Attention</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-error"></span> 1 Critique</span>
+</div>
+</div>
+<!-- Table SCADA ultra dense -->
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-lowest font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
+<tr>
+<th class="py-space-sm px-space-md">Zone Opérationnelle</th>
+<th class="py-space-sm px-space-md">CRC Tutelle</th>
+<th class="py-space-sm px-space-md text-right">Consigne (MW)</th>
+<th class="py-space-sm px-space-md text-right">Réalisé (MW)</th>
+<th class="py-space-sm px-space-md text-right">Écart (MW)</th>
+<th class="py-space-sm px-space-md text-center">Exécution</th>
+<th class="py-space-sm px-space-md text-center">Statut Télémesure</th>
+<th class="py-space-sm px-space-md">Validation</th>
+<th class="py-space-sm px-space-md">Opérateur Responsable</th>
+<th class="py-space-sm px-space-md text-center">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 font-label-telemetry-sm text-label-telemetry-sm">
+<!-- BCC 1 -->
+<tr class="bg-surface-container hover:bg-surface-container-high transition-colors">
+<td class="py-space-sm px-space-md font-bold text-on-surface">BCC 1 (Tunis Ville &amp; Nord)</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">CRC Nord</td>
+<td class="py-space-sm px-space-md text-right text-primary">110,0</td>
+<td class="py-space-sm px-space-md text-right font-bold text-on-surface">110,2</td>
+<td class="py-space-sm px-space-md text-right text-secondary">+0,2</td>
+<td class="py-space-sm px-space-md text-center text-secondary font-bold">100,2 %</td>
+<td class="py-space-sm px-space-md text-center">
+<span class="px-space-sm py-0.5 rounded bg-surface-container-highest text-secondary font-label-caps text-[10px] font-bold">CONFORME</span>
+</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">14:25:10</td>
+<td class="py-space-sm px-space-md font-body-sm text-body-sm text-on-surface">Ing. M. Trabelsi</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="px-space-sm py-0.5 rounded bg-surface-container-lowest text-on-surface hover:text-secondary" title="Télé-contrôle" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+</td>
+</tr>
+<!-- BCC 2 -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-high transition-colors">
+<td class="py-space-sm px-space-md font-bold text-on-surface">BCC 2 (Tunis Sud &amp; Ben Arous)</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">CRC Nord</td>
+<td class="py-space-sm px-space-md text-right text-primary">90,0</td>
+<td class="py-space-sm px-space-md text-right font-bold text-on-surface">89,8</td>
+<td class="py-space-sm px-space-md text-right text-on-surface-variant">-0,2</td>
+<td class="py-space-sm px-space-md text-center text-secondary font-bold">99,8 %</td>
+<td class="py-space-sm px-space-md text-center">
+<span class="px-space-sm py-0.5 rounded bg-surface-container-highest text-secondary font-label-caps text-[10px] font-bold">CONFORME</span>
+</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">14:28:44</td>
+<td class="py-space-sm px-space-md font-body-sm text-body-sm text-on-surface">Ing. A. Chahed</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="px-space-sm py-0.5 rounded bg-surface-container-lowest text-on-surface hover:text-secondary" title="Télé-contrôle" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+</td>
+</tr>
+<!-- BCC 3 -->
+<tr class="bg-surface-container hover:bg-surface-container-high transition-colors">
+<td class="py-space-sm px-space-md font-bold text-tertiary">BCC 3 (Nord-Ouest / Béja - Jendouba)</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">CRC Nord</td>
+<td class="py-space-sm px-space-md text-right text-primary">50,0</td>
+<td class="py-space-sm px-space-md text-right font-bold text-tertiary">38,0</td>
+<td class="py-space-sm px-space-md text-right text-error font-bold">-12,0</td>
+<td class="py-space-sm px-space-md text-center text-error font-bold">76,0 %</td>
+<td class="py-space-sm px-space-md text-center">
+<span class="px-space-sm py-0.5 rounded bg-tertiary-container text-tertiary font-label-caps text-[10px] font-bold">SOUS-CONSIGNE</span>
+</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">14:10:02</td>
+<td class="py-space-sm px-space-md font-body-sm text-body-sm text-on-surface">Tech. S. Dridi</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="px-space-sm py-0.5 rounded bg-error-container text-on-error-container hover:bg-error" title="Ordre de manœuvre forcé" type="button">
+<span class="material-symbols-outlined text-[16px]">flash_on</span>
+</button>
+</td>
+</tr>
+<!-- BCC 4 -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-high transition-colors">
+<td class="py-space-sm px-space-md font-bold text-on-surface">BCC 4 (Bizerte - Mateur)</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">CRC Nord</td>
+<td class="py-space-sm px-space-md text-right text-primary">50,0</td>
+<td class="py-space-sm px-space-md text-right font-bold text-on-surface">44,0</td>
+<td class="py-space-sm px-space-md text-right text-tertiary">-6,0</td>
+<td class="py-space-sm px-space-md text-center text-tertiary font-bold">88,0 %</td>
+<td class="py-space-sm px-space-md text-center">
+<span class="px-space-sm py-0.5 rounded bg-tertiary-container text-tertiary font-label-caps text-[10px] font-bold">ATTENTION</span>
+</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">14:22:15</td>
+<td class="py-space-sm px-space-md font-body-sm text-body-sm text-on-surface">Ing. R. Gharbi</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="px-space-sm py-0.5 rounded bg-surface-container-lowest text-on-surface hover:text-secondary" title="Télé-contrôle" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+</td>
+</tr>
+<!-- BCC 5 -->
+<tr class="bg-surface-container hover:bg-surface-container-high transition-colors">
+<td class="py-space-sm px-space-md font-bold text-error">BCC 5 (Centre / Kairouan - Sidi Bouzid)</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">CRC Sud</td>
+<td class="py-space-sm px-space-md text-right text-primary">50,0</td>
+<td class="py-space-sm px-space-md text-right font-bold text-error">33,5</td>
+<td class="py-space-sm px-space-md text-right text-error font-extrabold">-16,5</td>
+<td class="py-space-sm px-space-md text-center text-error font-extrabold">67,0 %</td>
+<td class="py-space-sm px-space-md text-center">
+<span class="px-space-sm py-0.5 rounded bg-error-container text-on-error-container font-label-caps text-[10px] font-bold animate-pulse">CRITIQUE</span>
+</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">14:05:30</td>
+<td class="py-space-sm px-space-md font-body-sm text-body-sm text-on-surface">Ing. H. Jaziri</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="px-space-sm py-0.5 rounded bg-error text-on-error hover:bg-error-container" title="Forcer délestage P2" type="button">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+</button>
+</td>
+</tr>
+<!-- BCC 6 -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-high transition-colors">
+<td class="py-space-sm px-space-md font-bold text-on-surface">BCC 6 (Sahel / Sousse - Monastir)</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">CRC Sud</td>
+<td class="py-space-sm px-space-md text-right text-primary">60,0</td>
+<td class="py-space-sm px-space-md text-right font-bold text-on-surface">61,0</td>
+<td class="py-space-sm px-space-md text-right text-secondary">+1,0</td>
+<td class="py-space-sm px-space-md text-center text-secondary font-bold">101,6 %</td>
+<td class="py-space-sm px-space-md text-center">
+<span class="px-space-sm py-0.5 rounded bg-surface-container-highest text-secondary font-label-caps text-[10px] font-bold">CONFORME</span>
+</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">14:30:12</td>
+<td class="py-space-sm px-space-md font-body-sm text-body-sm text-on-surface">Ing. F. Mansour</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="px-space-sm py-0.5 rounded bg-surface-container-lowest text-on-surface hover:text-secondary" title="Télé-contrôle" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+</td>
+</tr>
+<!-- BCC 7 -->
+<tr class="bg-surface-container hover:bg-surface-container-high transition-colors">
+<td class="py-space-sm px-space-md font-bold text-on-surface">BCC 7 (Sud / Sfax - Gabès - Médenine)</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">CRC Sud</td>
+<td class="py-space-sm px-space-md text-right text-primary">40,0</td>
+<td class="py-space-sm px-space-md text-right font-bold text-on-surface">35,0</td>
+<td class="py-space-sm px-space-md text-right text-tertiary">-5,0</td>
+<td class="py-space-sm px-space-md text-center text-tertiary font-bold">87,5 %</td>
+<td class="py-space-sm px-space-md text-center">
+<span class="px-space-sm py-0.5 rounded bg-tertiary-container text-tertiary font-label-caps text-[10px] font-bold">ATTENTION</span>
+</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">14:18:22</td>
+<td class="py-space-sm px-space-md font-body-sm text-body-sm text-on-surface">Tech. Y. Ayari</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="px-space-sm py-0.5 rounded bg-surface-container-lowest text-on-surface hover:text-secondary" title="Télé-contrôle" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+</td>
+</tr>
+</tbody>
+<!-- TOTALISATION NATIONALE SCADA -->
+<tfoot class="bg-surface-container-lowest font-label-telemetry-md text-label-telemetry-md font-bold border-t-0">
+<tr>
+<td class="py-space-md px-space-md text-on-surface uppercase tracking-wider font-headline-sm" colspan="2">
+                Total Réseau Interconnecté (DN)
+              </td>
+<td class="py-space-md px-space-md text-right text-primary">450,0 MW</td>
+<td class="py-space-md px-space-md text-right text-tertiary">411,5 MW</td>
+<td class="py-space-md px-space-md text-right text-error">-38,5 MW</td>
+<td class="py-space-md px-space-md text-center text-error font-extrabold">91,4 %</td>
+<td class="py-space-md px-space-md text-center">
+<span class="px-space-sm py-0.5 rounded bg-error-container text-on-error-container font-label-caps text-[10px]">
+                  DÉFICIT ACTIF
+                </span>
+</td>
+<td class="py-space-md px-space-md text-right text-on-surface-variant font-label-telemetry-sm" colspan="3">
+                7 BCCs synchronisés (cycle 20 ms)
+              </td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+</section>
+<!-- 6. VOLET COULISSANT LATÉRAL : ASSISTANT IA SCADA (400px à droite) -->
+<div class="fixed top-14 bottom-8 right-0 w-96 max-w-[90vw] bg-surface-container-low shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between" id="ai-slide-panel">
+<!-- En-tête Assistant IA -->
+<div class="p-space-md bg-surface-container flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded bg-secondary-container text-on-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">smart_toy</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md font-semibold text-on-surface">Analyse IA — Décision DN</span>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant">Déficit National 03/09 • 14h30</span>
+</div>
+</div>
+<button class="p-space-xs rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface" id="btn-close-ai" title="Fermer le volet" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Contenu du flux de diagnostic conversationnel -->
+<div class="p-space-md flex-1 overflow-y-auto flex flex-col gap-space-md font-body-sm text-body-sm">
+<!-- Diagnostic automatisé système -->
+<div class="p-space-md rounded bg-surface-container-lowest flex flex-col gap-space-sm">
+<div class="flex items-center justify-between text-secondary">
+<span class="font-label-caps text-label-caps font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+            DIAGNOSTIC AUTOMATISÉ STEG-AI
+          </span>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant">14:30:15</span>
+</div>
+<p class="text-on-surface leading-relaxed">
+          Le déficit global atteint <strong class="text-error font-semibold font-label-telemetry-sm">-38,5 MW</strong> (exécution 91,4%). Les goulets d’étranglement critiques sont identifiés sur <strong class="text-on-surface">BCC 5</strong> (Kairouan : -16,5 MW) et <strong class="text-on-surface">BCC 3</strong> (Béja : -12,0 MW).
+        </p>
+<div class="p-space-sm rounded bg-surface-container-high flex flex-col gap-space-xs font-label-telemetry-sm text-label-telemetry-sm">
+<span class="font-label-caps text-label-caps text-tertiary uppercase">Recommandations d'Arbitrage Immédiat :</span>
+<ol class="list-decimal list-inside space-y-1 text-on-surface">
+<li>
+<strong>BCC 5</strong> : Ordre de délestage complémentaire sur le départ P2 <em>'Zone Industrielle Kairouan Sud'</em> (<span class="text-secondary font-semibold">+15 MW</span>).
+            </li>
+<li>
+<strong>BCC 6</strong> : Transfert de consigne de compensation (<span class="text-secondary font-semibold">+10 MW</span> sur départ P3) ; dispose d'une marge sans risque pour les postes P0.
+            </li>
+</ol>
+</div>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-space-xs font-label-telemetry-sm">
+<span>Gain estimé : <strong class="text-secondary">+25 MW</strong></span>
+<span>Impact fréquence : <strong class="text-on-surface">+0,04 Hz</strong></span>
+</div>
+</div>
+<!-- Suggestions rapides opérateur -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Prompts Rapides Régulateur</span>
+<div class="flex flex-col gap-space-xs font-body-sm text-body-sm">
+<button class="text-left p-space-sm rounded bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors flex items-center justify-between group" type="button">
+<span class="truncate">Simuler impact fréquence si report sur BCC 6</span>
+<span class="material-symbols-outlined text-[16px] text-secondary group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</button>
+<button class="text-left p-space-sm rounded bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors flex items-center justify-between group" type="button">
+<span class="truncate">Vérifier feeders hôpitaux P0 dans BCC 5</span>
+<span class="material-symbols-outlined text-[16px] text-secondary group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</button>
+<button class="text-left p-space-sm rounded bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors flex items-center justify-between group" type="button">
+<span class="truncate">Générer message télex pour le chef de quart CRC Sud</span>
+<span class="material-symbols-outlined text-[16px] text-secondary group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Champ de saisie prompt et mention légale -->
+<div class="p-space-md bg-surface-container flex flex-col gap-space-sm shadow-inner">
+<div class="flex items-center gap-space-xs bg-surface-container-lowest p-space-xs rounded">
+<input class="w-full bg-transparent px-space-sm py-space-xs font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none" placeholder="Poser une consigne à l'assistant SCADA..." type="text"/>
+<button class="p-space-xs rounded bg-secondary-container text-on-secondary hover:bg-secondary transition-colors" title="Envoyer" type="button">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+<p class="font-body-sm text-[10px] text-on-surface-variant leading-tight text-center">
+        Avertissement : Les préconisations de l'IA sont strictement informatives. La décision d'ouverture disjoncteur incombe exclusivement à l'Ingénieur de Quart STEG.
+      </p>
+</div>
+</div>
+<!-- MODALE MODULAIRE : DÉTAIL DU DÉLESTAGE (Cachée par défaut) -->
+<div class="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm hidden items-center justify-center p-space-md" id="modal-detail-delestage">
+<div class="bg-surface-container-low max-w-2xl w-full rounded p-space-lg shadow-2xl flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-error text-[24px]">analytics</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Synthèse Technique du Déficit de Repli</h3>
+</div>
+<button class="p-space-xs rounded bg-surface-container text-on-surface hover:bg-surface-container-high" id="btn-close-modal" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-sm font-body-sm text-body-sm text-on-surface">
+<div class="p-space-md rounded bg-surface-container-lowest flex justify-between items-center font-label-telemetry-sm">
+<div>
+<span class="text-on-surface-variant">ÉCART ACTUEL NATIONAL :</span>
+<strong class="text-error ml-space-xs text-headline-sm">-38,5 MW</strong>
+</div>
+<span class="px-space-sm py-0.5 rounded bg-error-container text-on-error-container">SEUIL D'ALARME 25 MW FRANCHI</span>
+</div>
+<p>
+          Le protocole d’effacement d’urgence n°4 (délestage par rotation des départs HTA) présente un retard critique d’application sur les postes sources de Kairouan et Béja.
+        </p>
+<div class="grid grid-cols-2 gap-space-sm font-label-telemetry-sm">
+<div class="p-space-sm rounded bg-surface-container">
+<span class="text-on-surface-variant">Fréquence Réseau :</span>
+<div class="font-bold text-secondary text-label-telemetry-lg">50,02 Hz</div>
+<span class="text-[10px] text-on-surface-variant">Stabilité sous réserve tournante</span>
+</div>
+<div class="p-space-sm rounded bg-surface-container">
+<span class="text-on-surface-variant">Réserve Primaire Mobilisée :</span>
+<div class="font-bold text-tertiary text-label-telemetry-lg">185 MW</div>
+<span class="text-[10px] text-on-surface-variant">Marge résiduelle : 42 MW</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-end gap-space-md pt-space-xs">
+<button class="px-space-md py-space-xs rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm" id="btn-close-modal-footer" type="button">
+          Fermer
+        </button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-secondary-container text-on-secondary hover:bg-secondary font-body-sm text-body-sm" id="btn-modal-to-ai" type="button">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+<span>Lancer Ordre Assisté</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- SCRIPT INTERACTIF POUR PILOTER LE VOLET IA ET LA MODALE -->
+<script>
+  (function() {
+    const aiPanel = document.getElementById('ai-slide-panel');
+    const btnToggleAi = document.getElementById('btn-toggle-ai-panel');
+    const btnTriggerAiAlert = document.getElementById('btn-trigger-ai-alert');
+    const btnCloseAi = document.getElementById('btn-close-ai');
+
+    const modalDetail = document.getElementById('modal-detail-delestage');
+    const btnOpenModal = document.getElementById('btn-open-modal-detail');
+    const btnCloseModal = document.getElementById('btn-close-modal');
+    const btnCloseModalFooter = document.getElementById('btn-close-modal-footer');
+    const btnModalToAi = document.getElementById('btn-modal-to-ai');
+
+    function openAiPanel() {
+      if (aiPanel) {
+        aiPanel.classList.remove('translate-x-full');
+      }
+    }
+
+    function closeAiPanel() {
+      if (aiPanel) {
+        aiPanel.classList.add('translate-x-full');
+      }
+    }
+
+    function openModal() {
+      if (modalDetail) {
+        modalDetail.classList.remove('hidden');
+        modalDetail.classList.add('flex');
+      }
+    }
+
+    function closeModal() {
+      if (modalDetail) {
+        modalDetail.classList.remove('flex');
+        modalDetail.classList.add('hidden');
+      }
+    }
+
+    if (btnToggleAi) btnToggleAi.addEventListener('click', openAiPanel);
+    if (btnTriggerAiAlert) btnTriggerAiAlert.addEventListener('click', openAiPanel);
+    if (btnCloseAi) btnCloseAi.addEventListener('click', closeAiPanel);
+
+    if (btnOpenModal) btnOpenModal.addEventListener('click', openModal);
+    if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
+    if (btnCloseModalFooter) btnCloseModalFooter.addEventListener('click', closeModal);
+
+    if (btnModalToAi) {
+      btnModalToAi.addEventListener('click', function() {
+        closeModal();
+        openAiPanel();
+      });
+    }
+  })();
+</script></main></div><footer class="fixed bottom-0 left-0 right-0 h-8 bg-surface-container-lowest z-50 shadow-[0_-1px_6px_rgba(0,0,0,0.5)]"><div class="h-8 w-full px-space-lg flex items-center justify-between font-label-telemetry-sm text-label-telemetry-sm"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm text-on-surface-variant"><span class="material-symbols-outlined text-[16px] text-primary">schedule</span><span>03/09/2025 • 14:32:18</span></div><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim animate-ping"></span><span class="text-tertiary-fixed-dim">4 DÉLESTAGES EN COURS</span></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-surface-container"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="text-on-surface">TENSION RÉSEAU : ÉQUILIBRÉ</span><span class="text-on-surface-variant">(RÉSERVE 185 MW)</span></div><div class="hidden md:flex items-center gap-space-xs text-on-surface-variant"><span class="material-symbols-outlined text-[14px] text-secondary">hub</span><span>SCADA: 99,8%</span><span class="text-secondary">(0 RETARD TRAME)</span></div></div></div></footer></body></html>

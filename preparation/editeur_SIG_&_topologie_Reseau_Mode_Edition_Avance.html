@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}
+/* Ensure Leaflet map fills its container */
+#gis-editor-map { width: 100% !important; height: 100% !important; min-height: 400px; }
+.leaflet-container { background: #031427 !important; }
+</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-container-low":"#0b1c30","on-primary-fixed-variant":"#3c475b","on-tertiary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","secondary-fixed":"#d7e2ff","on-secondary-fixed-variant":"#004591","primary":"#bbc7df","on-background":"#d3e4fe","surface-container-high":"#1b2b3f","surface-variant":"#26364a","tertiary-container":"#231200","on-error":"#690005","primary-fixed-dim":"#bbc7df","surface-dim":"#031427","secondary-fixed-dim":"#acc7ff","tertiary-fixed-dim":"#ffb95f","surface-tint":"#bbc7df","secondary-container":"#0365cf","error":"#ffb4ab","on-secondary-fixed":"#001a40","on-secondary":"#002f67","on-primary-fixed":"#101c2e","on-error-container":"#ffdad6","error-container":"#93000a","on-primary":"#253144","surface-container":"#102034","outline-variant":"#45474c","background":"#031427","on-surface":"#d3e4fe","primary-container":"#0a1628","inverse-on-surface":"#213145","tertiary-fixed":"#ffddb8","outline":"#8f9097","on-tertiary":"#472a00","secondary":"#acc7ff","on-surface-variant":"#c5c6cd","on-tertiary-container":"#b37100","surface-container-highest":"#26364a","inverse-surface":"#d3e4fe","on-primary-container":"#758096","surface-bright":"#2a3a4f","surface":"#031427","tertiary":"#ffb95f","on-tertiary-fixed":"#2a1700","primary-fixed":"#d7e3fc","on-secondary-container":"#e0e8ff","inverse-primary":"#535f74"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{gutter:"0.5rem","space-sm":"0.25rem","space-xl":"1rem",margin:"0.75rem","space-xs":"0.125rem","space-lg":"0.75rem","space-md":"0.5rem"},fontFamily:{"headline-md":["IBM Plex Sans"],"label-telemetry-sm":["JetBrains Mono"],"body-sm":["IBM Plex Sans"],"body-lg":["IBM Plex Sans"],"label-telemetry-md":["JetBrains Mono"],"label-telemetry-lg":["JetBrains Mono"],"body-md":["IBM Plex Sans"],"headline-lg":["IBM Plex Sans"],"headline-sm":["IBM Plex Sans"],"label-caps":["IBM Plex Sans"]},fontSize:{"headline-md":["1.25rem",{lineHeight:"1.75rem",fontWeight:"600"}],"label-telemetry-sm":["0.6875rem",{lineHeight:"0.875rem",fontWeight:"500"}],"body-sm":["0.75rem",{lineHeight:"1rem",fontWeight:"400"}],"body-lg":["0.9375rem",{lineHeight:"1.375rem",fontWeight:"400"}],"label-telemetry-md":["0.8125rem",{lineHeight:"1rem",fontWeight:"500"}],"label-telemetry-lg":["1.125rem",{lineHeight:"1.25rem",fontWeight:"600"}],"body-md":["0.8125rem",{lineHeight:"1.125rem",fontWeight:"400"}],"headline-lg":["1.75rem",{lineHeight:"2.25rem",fontWeight:"600"}],"headline-sm":["1rem",{lineHeight:"1.5rem",fontWeight:"600"}],"label-caps":["0.6875rem",{lineHeight:"0.875rem",fontWeight:"600"}]}}}};</script></head><body class="bg-background text-on-surface font-body-md text-body-md min-h-screen"><header class="fixed top-0 left-0 right-0 h-14 bg-surface-container-low/95 backdrop-blur-md z-50 shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="h-14 w-full px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg shrink-0"><img alt="STEG Dispatching National Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VXWnD-FH0ODFvq3ztyXT8mgWrEPIrjyk5gcvRSlLehiOUhsELd9EaDFIEFPioRn4ELqmkwkvibpTHR_1f_EUBKaqaXjy5tFExDvm_uJNJ3hxoCWu2-GVlmeZtM1c5GzocoIKqujRH9GFHZhqCR9CFDF-pXTLQDWzzeEKMgt2OgWlbgnIB0FZ3PiXN6s6-BB0pgO1psy57vl11s4O7NTm4rAWgDCQWiGRCpK2YuJn5nlAxXUB28jvszJ9I"/><div class="flex flex-col"><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm text-primary tracking-wide uppercase">STEG CONDUITE</span><span class="px-space-sm py-space-xs rounded bg-surface-container-highest text-on-surface-variant font-label-caps text-label-caps tracking-wider">PROD 225/150/90/30 kV</span></div><div class="flex items-center gap-space-sm font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span><span>RÉSEAU INTERCONNECTÉ</span></div></div><div class="hidden xl:flex items-center bg-surface-container px-space-md py-space-xs rounded gap-space-md"><div class="flex flex-col"><span class="font-label-caps text-label-caps text-on-surface-variant">FRÉQUENCE RÉSEAU</span><span class="font-label-telemetry-md text-label-telemetry-md text-secondary">50,02 Hz</span></div><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-high"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface">NOMINALE</span></div></div></div><nav class="flex items-center bg-surface-container-lowest p-space-xs rounded" data-active-classes="bg-surface-container-high text-on-surface font-headline-sm"><a aria-current="page" class="px-space-lg py-space-xs rounded transition-colors bg-surface-container-high text-on-surface font-headline-sm" data-path="supervision-dn" href="#">Tableau de bord</a><a class="px-space-lg py-space-xs rounded font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors" data-path="editeur-sig-topologie" href="#">Cartographie SIG</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="hidden lg:flex flex-col items-end bg-surface-container px-space-md py-space-xs rounded font-label-telemetry-sm text-label-telemetry-sm"><span class="text-primary">14:32:18 UTC+1</span><span class="text-on-surface-variant">TU 13:32:18</span></div><div class="hidden md:flex items-center gap-space-md pl-space-md"><div class="flex flex-col items-end leading-tight"><span class="font-headline-sm text-body-sm text-on-surface font-semibold">Ing. K. Ben Salem</span><span class="font-label-caps text-label-caps text-on-surface-variant">OPÉRATEUR NATIONAL DN • TUNIS</span></div></div><button class="relative p-space-sm rounded bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface flex items-center justify-center" title="Alarmes actives" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute -top-1 -right-1 px-space-xs bg-error-container text-on-error-container rounded-full font-label-telemetry-sm text-[10px] leading-none py-0.5">4</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><a class="p-space-sm rounded bg-surface-container hover:bg-error-container hover:text-on-error-container transition-colors text-on-surface-variant flex items-center justify-center" data-path="login" href="#" title="Déconnexion sécurisée"><span class="material-symbols-outlined text-[20px]">power_settings_new</span></a></div></div></header><aside class="fixed left-0 top-14 bottom-8 w-64 bg-surface-container-low z-40 flex flex-col justify-between shadow-[1px_0_8px_rgba(0,0,0,0.3)]"><div class="flex flex-col py-space-md"><div class="px-space-lg py-space-xs font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-space-xs">Architecture Téléconduite</div><nav class="flex flex-col px-space-sm gap-space-xs" data-active-classes="bg-surface-container-high text-secondary"><a aria-current="page" class="flex items-center gap-space-md px-space-md py-space-sm rounded transition-all bg-surface-container-high text-secondary" data-path="supervision-dn" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-body-md text-body-md">Supervision DN</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="conduite-regionale" href="#"><span class="material-symbols-outlined text-[20px]">alt_route</span><span class="font-body-md text-body-md">Conduite Régionale</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="postes-locaux" href="#"><span class="material-symbols-outlined text-[20px]">domain</span><span class="font-body-md text-body-md">Postes Locaux (7 BCCs)</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="analyse-historique-ens" href="#"><span class="material-symbols-outlined text-[20px]">query_stats</span><span class="font-body-md text-body-md">Analyse &amp; Historique ENS</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="editeur-sig-topologie" href="#"><span class="material-symbols-outlined text-[20px]">map</span><span class="font-body-md text-body-md">Éditeur SIG &amp; Topologie</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="parametres-systeme" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span class="font-body-md text-body-md">Paramètres &amp; Seuils</span></a></nav></div><div class="p-space-sm"><div class="bg-surface-container-lowest p-space-sm rounded mb-space-sm"><div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant mb-space-xs"><span>CYCLE AUTOMATE</span><span class="font-label-telemetry-sm text-secondary">20 ms</span></div><div class="w-full bg-surface-container-high h-1 rounded"><div class="bg-secondary h-1 rounded" style="width: 92%"></div></div></div><button class="w-full flex items-center justify-center gap-space-sm px-space-md py-space-sm rounded bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-body-sm text-body-sm" type="button"><span class="material-symbols-outlined text-[18px]">keyboard_double_arrow_left</span><span>Réduire Pupitre</span></button></div></aside><div class="pl-64"><main class="w-full pt-14 pb-8 min-h-screen bg-background"><div class="flex flex-col w-full h-[calc(100vh-5.5rem)] overflow-hidden bg-surface-container-lowest text-on-surface select-none">
+<!-- TOP BANNER: ÉDITION TOPOLOGIQUE ACTIVE -->
+<div class="shrink-0 flex items-center justify-between px-space-lg py-space-sm bg-tertiary-container/80 backdrop-blur-md shadow-md">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-tertiary text-on-tertiary font-label-caps text-label-caps font-bold animate-pulse">
+<span class="material-symbols-outlined text-[16px]">edit_road</span>
+<span>MODE ÉDITION TOPOLOGIE ACTIF</span>
+</div>
+<div class="h-4 w-px bg-tertiary/30"></div>
+<div class="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface">
+<span class="text-on-surface-variant">Secteur BCC 5 (Kairouan / Centre)</span>
+<span class="material-symbols-outlined text-[14px] text-tertiary">chevron_right</span>
+<span class="font-semibold text-tertiary">Feeder F19 Oueslatia</span>
+<span class="px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-telemetry-sm text-[10px]">ZONE GÉO-ÉLECTRIQUE #419</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="hidden xl:inline text-on-surface-variant font-label-caps text-label-caps tracking-wider">MODIFICATIONS SOUMISES À VALIDATION CHEF DE QUART DN</span>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-space-xs rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">undo</span>
+<span>Annuler</span>
+</button>
+<button class="px-space-md py-space-xs rounded bg-surface-container-high hover:bg-surface-bright text-secondary font-body-sm text-body-sm flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">rule</span>
+<span>Contrôle Cohérence</span>
+</button>
+<button id="save-submit-btn" onclick="saveSIGData()" class="px-space-md py-space-xs rounded bg-tertiary hover:bg-tertiary-fixed text-on-tertiary font-headline-sm text-body-sm flex items-center gap-space-xs transition-all shadow-md" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Enregistrer &amp; Soumettre au DN</span>
+</button>
+<button class="p-space-xs rounded bg-surface-container hover:bg-error-container text-on-surface-variant hover:text-on-error-container transition-colors" title="Quitter l'éditeur" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- MAIN GIS WORKSPACE -->
+<div class="relative flex-1 flex w-full overflow-hidden bg-[#000a17]">
+<!-- LEFT PALETTE: BIBLIOTHÈQUE & COUCHES SIG -->
+<div class="shrink-0 w-72 h-full bg-surface-container-low flex flex-col z-20 shadow-xl">
+<!-- Tab Header -->
+<div class="flex items-center justify-between px-space-md py-space-sm bg-surface-container">
+<div class="flex items-center gap-space-xs font-label-caps text-label-caps text-on-surface uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px] text-secondary">layers</span>
+<span>Gestionnaire de Couches SIG</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface" title="Options de filtrage">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+</button>
+</div>
+<!-- Scrollable Layer Tree -->
+<div class="flex-1 overflow-y-auto p-space-sm space-y-space-md">
+<!-- Section: Infrastructure Transport & Répartition -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between px-space-xs text-on-surface-variant font-label-caps text-[10px] tracking-wider uppercase">
+<span>Réseau HTB &amp; Postes Sources</span>
+<span class="text-secondary font-label-telemetry-sm">3 ACTIFS</span>
+</div>
+<!-- Layer Item: 225 kV -->
+<div class="flex items-center justify-between px-space-sm py-space-xs rounded bg-surface-container/60 hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-primary cursor-pointer">visibility</span>
+<span class="w-3 h-1 bg-[#4ade80] rounded-full"></span>
+<span class="font-body-sm text-body-sm text-on-surface">Lignes 225 kV Interco</span>
+</div>
+<span class="font-label-telemetry-sm text-on-surface-variant text-[11px]">89 km</span>
+</div>
+<!-- Layer Item: 150 kV -->
+<div class="flex items-center justify-between px-space-sm py-space-xs rounded bg-surface-container/60 hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-primary cursor-pointer">visibility</span>
+<span class="w-3 h-1 bg-[#ffb95f] rounded-full"></span>
+<span class="font-body-sm text-body-sm text-on-surface">Lignes 150 kV Radiales</span>
+</div>
+<span class="font-label-telemetry-sm text-on-surface-variant text-[11px]">142 km</span>
+</div>
+<!-- Layer Item: Postes HTB/HTA -->
+<div class="flex items-center justify-between px-space-sm py-space-xs rounded bg-surface-container/60 hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-primary cursor-pointer">visibility</span>
+<span class="material-symbols-outlined text-[14px] text-secondary">domain</span>
+<span class="font-body-sm text-body-sm text-on-surface">Postes 90/30 kV Kairouan</span>
+</div>
+<span class="font-label-telemetry-sm text-on-surface-variant text-[11px]">4 PS</span>
+</div>
+</div>
+<!-- Section: Réseau HTA (Moyenne Tension 30 kV) -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between px-space-xs text-on-surface-variant font-label-caps text-[10px] tracking-wider uppercase">
+<span>Départs HTA 30 kV (BCC 5)</span>
+<span class="text-tertiary font-label-telemetry-sm">ÉDITION</span>
+</div>
+<!-- Layer Active Feeder -->
+<div class="flex items-center justify-between px-space-sm py-space-xs rounded bg-surface-container-high text-on-surface">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-tertiary cursor-pointer">visibility</span>
+<span class="w-3 h-1 bg-[#acc7ff] rounded-full shadow-[0_0_8px_#acc7ff]"></span>
+<span class="font-body-sm text-body-sm font-semibold text-secondary">F19 Oueslatia (Cible)</span>
+</div>
+<span class="px-space-xs py-0.2 rounded bg-tertiary-container text-tertiary font-label-caps text-[9px]">EN COURS</span>
+</div>
+<!-- Other Feeders -->
+<div class="flex items-center justify-between px-space-sm py-space-xs rounded bg-surface-container/30 hover:bg-surface-container/60 transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant cursor-pointer">visibility</span>
+<span class="w-3 h-1 bg-[#6c7d93] rounded-full"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">F04 Haffouz Centre</span>
+</div>
+<span class="font-label-telemetry-sm text-on-surface-variant text-[11px]">31 km</span>
+</div>
+<div class="flex items-center justify-between px-space-sm py-space-xs rounded bg-surface-container/30 hover:bg-surface-container/60 transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant cursor-pointer">visibility</span>
+<span class="w-3 h-1 bg-[#6c7d93] rounded-full"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">F12 Sbikha Nord</span>
+</div>
+<span class="font-label-telemetry-sm text-on-surface-variant text-[11px]">47 km</span>
+</div>
+</div>
+<!-- Section: Établissements Critiques & Contraintes P0 -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between px-space-xs text-on-surface-variant font-label-caps text-[10px] tracking-wider uppercase">
+<span>Contraintes Stratégiques P0</span>
+<span class="text-error font-label-telemetry-sm">VIGILANCE</span>
+</div>
+<div class="flex items-center justify-between px-space-sm py-space-xs rounded bg-surface-container/60 hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-error cursor-pointer">visibility</span>
+<span class="w-2.5 h-2.5 rounded-full bg-error animate-ping"></span>
+<span class="font-body-sm text-body-sm text-on-surface">Périmètres P0 (Hôpitaux/SONEDE)</span>
+</div>
+<span class="font-label-telemetry-sm text-error font-bold text-[11px]">8 sites</span>
+</div>
+<div class="flex items-center justify-between px-space-sm py-space-xs rounded bg-surface-container/60 hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-primary cursor-pointer">visibility</span>
+<span class="material-symbols-outlined text-[14px] text-tertiary">water_drop</span>
+<span class="font-body-sm text-body-sm text-on-surface">Stations Pompage Eaux</span>
+</div>
+<span class="font-label-telemetry-sm text-on-surface-variant text-[11px]">5 sites</span>
+</div>
+</div>
+<!-- Section: Fond Cartographique & Cadastre -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between px-space-xs text-on-surface-variant font-label-caps text-[10px] tracking-wider uppercase">
+<span>Données Cadastrales &amp; Voirie</span>
+</div>
+<div class="flex items-center justify-between px-space-sm py-space-xs rounded bg-surface-container/60 hover:bg-surface-container">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span>
+<span class="font-body-sm text-body-sm text-on-surface">Voirie Urbaine &amp; Pistes</span>
+</div>
+<span class="font-label-telemetry-sm text-secondary font-semibold text-[10px] bg-surface-container-high px-1 rounded">SNAP ON</span>
+</div>
+<div class="flex items-center justify-between px-space-sm py-space-xs rounded bg-surface-container/60 hover:bg-surface-container">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">visibility_off</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Orthophoto Satellite HD</span>
+</div>
+<span class="font-label-telemetry-sm text-on-surface-variant text-[10px]">0.2m</span>
+</div>
+</div>
+</div>
+<!-- Quick Add Element Component Shelf -->
+<div class="p-space-sm bg-surface-container border-t-0 space-y-space-xs">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider mb-space-xs">Insérer un ouvrage topologique</div>
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="flex items-center gap-space-xs p-space-xs rounded bg-surface-container-high hover:bg-surface-bright text-on-surface font-body-sm text-[11px] transition-colors">
+<span class="material-symbols-outlined text-[16px] text-secondary">power_input</span>
+<span>Tronçon 30kV</span>
+</button>
+<button class="flex items-center gap-space-xs p-space-xs rounded bg-surface-container-high hover:bg-surface-bright text-on-surface font-body-sm text-[11px] transition-colors">
+<span class="material-symbols-outlined text-[16px] text-tertiary">toggle_on</span>
+<span>Interrupteur IACM</span>
+</button>
+<button class="flex items-center gap-space-xs p-space-xs rounded bg-surface-container-high hover:bg-surface-bright text-on-surface font-body-sm text-[11px] transition-colors">
+<span class="material-symbols-outlined text-[16px] text-primary">electrical_services</span>
+<span>Poste MT/BT</span>
+</button>
+<button class="flex items-center gap-space-xs p-space-xs rounded bg-surface-container-high hover:bg-surface-bright text-on-surface font-body-sm text-[11px] transition-colors">
+<span class="material-symbols-outlined text-[16px] text-error">shield</span>
+<span>Balise P0 Sensible</span>
+</button>
+</div>
+</div>
+
+<!-- Dynamic drawn layer lists — populated by Leaflet JS -->
+<div class="border-t border-[#26364a] pt-2 pb-1 px-2 mt-1">
+  <div class="flex items-center justify-between px-1 mb-1">
+    <span style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#8fa8c8;letter-spacing:.1em;text-transform:uppercase">Zones dessinées</span>
+    <span id="badge-zones" style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#ffb95f;font-weight:700">0</span>
+  </div>
+  <div id="layer-list-zones">
+    <div class="layer-placeholder" style="padding:3px 12px;font-size:10px;color:#3d5a7a;font-family:'JetBrains Mono',monospace;font-style:italic">Aucune zone</div>
+  </div>
+</div>
+<div class="border-t border-[#26364a] pt-2 pb-1 px-2">
+  <div class="flex items-center justify-between px-1 mb-1">
+    <span style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#8fa8c8;letter-spacing:.1em;text-transform:uppercase">Feeders dessinés</span>
+    <span id="badge-feeders" style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#acc7ff;font-weight:700">0</span>
+  </div>
+  <div id="layer-list-feeders">
+    <div class="layer-placeholder" style="padding:3px 12px;font-size:10px;color:#3d5a7a;font-family:'JetBrains Mono',monospace;font-style:italic">Aucun feeder</div>
+  </div>
+</div>
+<div class="border-t border-[#26364a] pt-2 pb-3 px-2">
+  <div class="flex items-center justify-between px-1 mb-1">
+    <span style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#8fa8c8;letter-spacing:.1em;text-transform:uppercase">Points P0</span>
+    <span id="badge-p0" style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#ffb4ab;font-weight:700">0</span>
+  </div>
+  <div id="layer-list-p0">
+    <div class="layer-placeholder" style="padding:3px 12px;font-size:10px;color:#3d5a7a;font-family:'JetBrains Mono',monospace;font-style:italic">Aucun point P0</div>
+  </div>
+</div>
+
+</div>
+<!-- CENTER: REAL LEAFLET MAP -->
+<div class="relative flex-1 overflow-hidden" style="height:calc(100vh - 96px);">
+
+  <!-- Leaflet CSS + Draw CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css"/>
+  <style>
+    #gis-editor-map { position:absolute; top:0; left:0; right:0; bottom:0; background:#0d1f35; }
+    .leaflet-container { background:#0d1f35 !important; }
+  </style>
+
+  <!-- Coordinate display bar -->
+  <div id="coord-bar" style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(16,32,52,0.92);padding:3px 14px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#8fa8c8;pointer-events:none;">
+    Lat: — &nbsp;|&nbsp; Lng: —
+  </div>
+
+  <!-- P0 proximity alert banner -->
+  <div id="p0-alert" style="display:none;position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:600;background:#93000a;border:2px solid #ffb4ab;border-radius:4px;padding:7px 18px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#ffdad6;font-weight:700;">
+    ⚠ FEEDER PROCHE D'UNE INFRASTRUCTURE P0 — Classé INVIOLABLE automatiquement
+  </div>
+
+  <!-- Active tool indicator -->
+  <div id="tool-indicator" style="position:absolute;top:12px;left:12px;z-index:500;background:rgba(245,158,11,0.92);color:#0a1628;padding:4px 12px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;display:none;">
+    ✏ Outil actif
+  </div>
+
+  <!-- Map div (absolute fill, no MapLibre) -->
+  <div id="gis-editor-map"></div>
+
+  <!-- Leaflet JS + Draw JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+  <script>
+  (function() {
+    // ── MAP INIT — pure Leaflet, no external tiles ──────────────────
+    const map = L.map('gis-editor-map', {
+      minZoom: 5, maxZoom: 12,
+      zoomControl: false, attributionControl: false,
+      maxBounds: [[29.0,6.5],[38.5,13.0]],
+      maxBoundsViscosity: 1.0
+    });
+
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    // Tunisia accurate outline — verified [lat, lng]
+    var tn = [
+      [37.095,8.341],[37.191,8.577],[37.340,8.619],[37.493,8.708],
+      [37.534,9.075],[37.496,9.073],[37.251,9.533],[37.349,9.744],
+      [37.493,9.760],[37.539,10.011],[37.341,10.311],[37.271,10.424],
+      [37.241,10.661],[37.074,10.845],[36.903,11.130],
+      [36.774,10.963],[36.660,10.730],[36.500,10.457],
+      [36.025,10.179],[36.406,10.227],[36.499,10.528],[36.605,10.595],
+      [36.721,10.575],[36.896,10.349],[37.049,10.178],
+      [36.024,10.178],[35.832,10.634],[35.709,10.761],
+      [35.503,10.652],[35.322,10.494],[35.203,10.211],
+      [35.025,9.965],[34.743,10.760],[34.534,10.971],
+      [34.378,11.070],[33.882,10.096],[33.503,10.702],
+      [33.362,11.109],[33.170,11.463],[33.097,11.562],
+      [32.689,11.578],[32.291,11.562],[32.103,11.492],
+      [31.973,11.287],[31.751,11.008],[31.500,10.316],
+      [31.130,10.226],[30.721,9.975],[30.508,9.863],
+      [30.252,9.541],[30.174,9.183],[30.101,8.851],
+      [30.001,8.501],[30.086,7.821],
+      [30.492,7.502],[31.196,7.552],[31.851,8.013],
+      [32.283,8.313],[32.535,8.373],[32.949,8.232],
+      [33.563,8.455],[34.030,8.195],[34.328,8.087],
+      [34.794,7.501],[35.103,7.501],[35.282,8.205],
+      [35.613,8.386],[35.831,8.377],[36.005,8.186],
+      [36.220,8.399],[36.509,8.400],[37.097,8.341]
+    ];
+    var tunisiaPoly = L.polygon(tn, {
+      fillColor:'#0f2340', fillOpacity:0.88,
+      color:'#f59e0b', weight:1.8, opacity:0.8
+    }).addTo(map);
+
+    // Fit full country in view
+    map.fitBounds(tunisiaPoly.getBounds(), { padding: [20, 20] });
+
+    // Force size recalculation
+    setTimeout(function(){
+      map.invalidateSize();
+      map.fitBounds(tunisiaPoly.getBounds(), { padding: [20, 20] });
+    }, 150);
+    map.on(L.Draw.Event.DRAWSTART, () => {
+      const el = document.getElementById('gis-editor-overlay');
+      if (el) el.style.pointerEvents = 'auto';
+    });
+    map.on(L.Draw.Event.DRAWSTOP, () => {
+      const el = document.getElementById('gis-editor-overlay');
+      if (el) el.style.pointerEvents = 'none';
+    });
+
+    // ── LAYER GROUPS ─────────────────────────────────────────────────
+    const layerZones   = L.featureGroup().addTo(map);
+    const layerFeeders = L.featureGroup().addTo(map);
+    const layerP0      = L.featureGroup().addTo(map);
+
+    // ── DRAW CONTROL ─────────────────────────────────────────────────
+    const drawControl = new L.Control.Draw({
+      position: 'topright',
+      draw: {
+        polygon:   { shapeOptions: { color: '#ffb95f', fillColor: '#ffb95f', fillOpacity: 0.12, weight: 2, dashArray: '6 3' } },
+        polyline:  { shapeOptions: { color: '#acc7ff', weight: 2.5 } },
+        marker:    true,
+        rectangle: false, circle: false, circlemarker: false
+      },
+      edit: {
+        featureGroup: L.featureGroup([layerZones, layerFeeders, layerP0]),
+        remove: true
+      }
+    });
+    map.addControl(drawControl);
+
+    // ── COUNTERS ─────────────────────────────────────────────────────
+    let zoneCount = 0, feederCount = 0, p0Count = 0;
+
+    function priorityColor(p) {
+      return { P0:'#ff4444', P1:'#ff8800', P2:'#ffb95f', P3:'#acc7ff', P4:'#8fa8c8', P5:'#6b8aad' }[p] || '#acc7ff';
+    }
+
+    function makeP0Icon() {
+      return L.divIcon({
+        html: '<div style="width:22px;height:22px;background:#93000a;border:2px solid #ff4444;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 0 8px rgba(255,68,68,0.5)">✚</div>',
+        iconSize: [22,22], iconAnchor: [11,11], className: ''
+      });
+    }
+
+    // ── DRAW CREATED ─────────────────────────────────────────────────
+    map.on(L.Draw.Event.CREATED, function(e) {
+      const layer = e.layer;
+      const type  = e.layerType;
+
+      if (type === 'polygon') {
+        zoneCount++;
+        layer._sigType = 'zone';
+        layer._sigId   = 'zone-' + zoneCount;
+        layer._sigData = { name: 'Zone ' + zoneCount, bcc: '', type: 'Résidentiel' };
+        layer.bindTooltip(layer._sigData.name, { sticky: true });
+        layerZones.addLayer(layer);
+        addLayerListItem('zone', layer._sigId, 'Zone ' + zoneCount);
+
+      } else if (type === 'polyline') {
+        feederCount++;
+        layer._sigType = 'feeder';
+        layer._sigId   = 'feeder-' + feederCount;
+        layer._sigData = { ref: 'F' + String(feederCount).padStart(2,'0'), priority: 'P3', mw: '' };
+        layer.setStyle({ color: '#acc7ff', weight: 2.5 });
+        layer.bindTooltip(layer._sigData.ref + ' [P3]', { sticky: true });
+        layerFeeders.addLayer(layer);
+        addLayerListItem('feeder', layer._sigId, layer._sigData.ref + ' [P3]');
+        checkP0Proximity(layer);
+
+      } else if (type === 'marker') {
+        p0Count++;
+        layer._sigType = 'p0';
+        layer._sigId   = 'p0-' + p0Count;
+        layer._sigData = { name: 'Infrastructure P0 #' + p0Count, type: 'Hôpital / Clinique' };
+        layer.setIcon(makeP0Icon());
+        layer.bindTooltip('🔒 P0: ' + layer._sigData.name, { sticky: true });
+        layerP0.addLayer(layer);
+        addLayerListItem('p0', layer._sigId, '🔒 P0 #' + p0Count);
+        showP0Alert();
+      }
+
+      updateCountBadges();
+      document.getElementById('tool-indicator').style.display = 'none';
+    });
+
+    // ── P0 PROXIMITY CHECK ────────────────────────────────────────────
+    function checkP0Proximity(feederLayer) {
+      let nearby = false;
+      layerP0.eachLayer(p0 => {
+        const pts = feederLayer.getLatLngs ? feederLayer.getLatLngs().flat(2) : [];
+        pts.forEach(pt => {
+          if (map.distance(p0.getLatLng(), pt) < 300) nearby = true;
+        });
+      });
+      if (nearby) {
+        feederLayer._sigData.priority = 'P0';
+        feederLayer.setStyle({ color: '#ff4444', weight: 3.5 });
+        showP0Alert();
+      }
+    }
+
+    function showP0Alert() {
+      const a = document.getElementById('p0-alert');
+      a.style.display = 'block';
+      setTimeout(() => { a.style.display = 'none'; }, 4000);
+    }
+
+    // ── LAYER LIST (feeds left panel) ─────────────────────────────────
+    function addLayerListItem(type, id, label) {
+      const containers = { zone: 'layer-list-zones', feeder: 'layer-list-feeders', p0: 'layer-list-p0' };
+      const container  = document.getElementById(containers[type]);
+      if (!container) return;
+      // Remove placeholder
+      const ph = container.querySelector('.layer-placeholder');
+      if (ph) ph.remove();
+      const colors = { zone: '#ffb95f', feeder: '#acc7ff', p0: '#ffb4ab' };
+      const li = document.createElement('div');
+      li.id = 'li-' + id;
+      li.style.cssText = 'display:flex;align-items:center;gap:6px;padding:4px 12px;cursor:pointer;font-size:11px;color:#d3e4fe;border-radius:3px;';
+      li.onmouseover = () => li.style.background = '#1b2b3f';
+      li.onmouseout  = () => li.style.background = '';
+      li.innerHTML = `<span style="width:8px;height:8px;background:${colors[type]};border-radius:2px;flex-shrink:0"></span><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</span>`;
+      container.appendChild(li);
+    }
+
+    // ── UPDATE COUNT BADGES ───────────────────────────────────────────
+    function updateCountBadges() {
+      const zb = document.getElementById('badge-zones');
+      const fb = document.getElementById('badge-feeders');
+      const pb = document.getElementById('badge-p0');
+      if (zb) zb.textContent = layerZones.getLayers().length;
+      if (fb) fb.textContent = layerFeeders.getLayers().length;
+      if (pb) pb.textContent = layerP0.getLayers().length;
+    }
+
+    // ── COORDINATE DISPLAY ────────────────────────────────────────────
+    map.on('mousemove', function(e) {
+      const bar = document.getElementById('coord-bar');
+      if (bar) bar.innerHTML = 'Lat: ' + e.latlng.lat.toFixed(5) + ' &nbsp;|&nbsp; Lng: ' + e.latlng.lng.toFixed(5);
+    });
+
+    // ── DEMO: pre-load BCC 5 zone ─────────────────────────────────────
+    const demoZone = L.polygon([
+      [35.7,8.8],[36.1,8.8],[36.3,9.5],[36.0,10.1],[35.3,9.8],[35.2,9.2]
+    ], {
+      color: '#ffb95f', fillColor: '#ffb95f', fillOpacity: 0.1, weight: 2, dashArray: '6 3'
+    });
+    demoZone._sigType = 'zone'; demoZone._sigId = 'zone-demo-1';
+    demoZone._sigData = { name: 'BCC 5 — Centre (Kairouan/Sidi Bouzid)', bcc: 'BCC 5', type: 'Mixte' };
+    demoZone.bindTooltip('BCC 5 — Centre (Kairouan/Sidi Bouzid)', { sticky: true });
+    layerZones.addLayer(demoZone);
+    addLayerListItem('zone', 'zone-demo-1', 'BCC 5 — Centre');
+
+    // Demo feeder F19
+    const demoFeeder = L.polyline([
+      [35.67,9.93],[35.5,9.7],[35.3,9.5],[35.1,9.6]
+    ], { color: '#acc7ff', weight: 2.5 });
+    demoFeeder._sigType = 'feeder'; demoFeeder._sigId = 'feeder-demo-1';
+    demoFeeder._sigData = { ref: 'F19 - Oueslatia Agro', priority: 'P3', mw: '7.5' };
+    demoFeeder.bindTooltip('F19 - Oueslatia Agro [P3]', { sticky: true });
+    layerFeeders.addLayer(demoFeeder);
+    addLayerListItem('feeder', 'feeder-demo-1', 'F19 - Oueslatia Agro [P3]');
+
+    // Demo P0: Ibn El Jazzar hospital
+    const demoP0 = L.marker([35.67, 9.92], { icon: makeP0Icon() });
+    demoP0._sigType = 'p0'; demoP0._sigId = 'p0-demo-1';
+    demoP0._sigData = { name: 'CHU Ibn El Jazzar — Kairouan', type: 'Hôpital / Clinique' };
+    demoP0.bindTooltip('🔒 P0: CHU Ibn El Jazzar — Kairouan', { sticky: true });
+    layerP0.addLayer(demoP0);
+    addLayerListItem('p0', 'p0-demo-1', '🔒 CHU Ibn El Jazzar');
+
+    updateCountBadges();
+
+    // ── EXPORT GeoJSON (global) ───────────────────────────────────────
+    window.exportSIGData = function() {
+      const features = [];
+      [layerZones, layerFeeders, layerP0].forEach(grp => {
+        grp.eachLayer(l => {
+          if (l.toGeoJSON) {
+            const f = l.toGeoJSON();
+            f.properties = { ...(l._sigData || {}), sigType: l._sigType };
+            features.push(f);
+          }
+        });
+      });
+      const blob = new Blob([JSON.stringify({ type:'FeatureCollection', features }, null, 2)], { type:'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'steg-sig-' + new Date().toISOString().slice(0,10) + '.geojson';
+      a.click();
+    };
+
+    // ── IMPORT GeoJSON (global) ───────────────────────────────────────
+    window.importSIGFile = function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const gj = JSON.parse(e.target.result);
+          L.geoJSON(gj, {
+            style: f => {
+              const t = f.properties.sigType;
+              if (t === 'zone')   return { color:'#ffb95f', fillColor:'#ffb95f', fillOpacity:0.1, weight:2 };
+              if (t === 'feeder') return { color: priorityColor(f.properties.priority), weight:2.5 };
+              return {};
+            },
+            onEachFeature: (feature, layer) => {
+              const p = feature.properties;
+              layer._sigType = p.sigType;
+              layer._sigData = { ...p };
+              if (p.sigType === 'zone')   { zoneCount++;   layer._sigId = 'zone-i-'+zoneCount;   layerZones.addLayer(layer);   addLayerListItem('zone',   layer._sigId, p.name||'Zone');   }
+              if (p.sigType === 'feeder') { feederCount++; layer._sigId = 'feeder-i-'+feederCount; layerFeeders.addLayer(layer); addLayerListItem('feeder', layer._sigId, p.ref||'Feeder'); }
+              if (p.sigType === 'p0')     { p0Count++;     layer._sigId = 'p0-i-'+p0Count;       layerP0.addLayer(layer);     addLayerListItem('p0',     layer._sigId, '🔒 '+p.name);    }
+            }
+          });
+          updateCountBadges();
+          const all = [...layerZones.getLayers(), ...layerFeeders.getLayers()];
+          if (all.length) map.fitBounds(L.featureGroup(all).getBounds().pad(0.1));
+        } catch(err) { alert('Erreur GeoJSON: ' + err.message); }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    };
+
+    // ── SAVE to localStorage (global) ─────────────────────────────────
+    window.saveSIGData = function() {
+      window.exportSIGData();
+      const btn = document.getElementById('save-submit-btn');
+      if (btn) {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span><span>Sauvegardé ✓</span>';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      }
+    };
+
+    // Expose map globally
+    window.sigEditorMap = map;
+
+    // ── DARK THEME for Leaflet Draw toolbar ──────────────────────────
+    const style = document.createElement('style');
+    style.textContent = `
+      .leaflet-draw-toolbar a { background-color:#102034!important; border-color:#26364a!important; }
+      .leaflet-draw-toolbar a:hover { background-color:#1b2b3f!important; }
+      .leaflet-bar { border:1px solid #26364a!important; box-shadow:none!important; }
+      .leaflet-control-zoom a { background:#102034!important; color:#d3e4fe!important; border-color:#26364a!important; }
+      .leaflet-control-zoom a:hover { background:#1b2b3f!important; color:#acc7ff!important; }
+      .leaflet-tooltip { background:#102034; border:1px solid #26364a; color:#d3e4fe; font-family:'JetBrains Mono',monospace; font-size:11px; box-shadow:none; }
+      .leaflet-tooltip::before { border-top-color:#26364a!important; }
+    `;
+    document.head.appendChild(style);
+  })();
+  </script>
+<!-- INTERACTIVE VECTOR GIS MAP SVG CANVAS -->
+</div>
+<!-- RIGHT INSPECTION DRAWER: PROPRIÉTÉS DE L'ÉLÉMENT SÉLECTIONNÉ -->
+<div class="shrink-0 w-84 w-[340px] h-full bg-surface-container-low flex flex-col z-20 shadow-2xl overflow-y-auto">
+<!-- Drawer Header -->
+<div class="px-space-md py-space-sm bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-space-xs font-label-caps text-label-caps text-on-surface uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px] text-tertiary">tune</span>
+<span>Inspecteur d'Objet Géo-Électrique</span>
+</div>
+<span class="px-space-xs py-0.5 rounded bg-surface-container-highest text-secondary font-label-telemetry-sm text-[10px]">ID #Z19-B</span>
+</div>
+<div class="p-space-md space-y-space-md">
+<!-- Identification Card -->
+<div class="p-space-sm rounded bg-surface-container space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">Type d'entité</span>
+<span class="font-label-caps text-[10px] px-space-xs py-0.2 rounded bg-tertiary-container text-tertiary font-bold">ZONE DÉLESTABLE HTA</span>
+</div>
+<div class="font-headline-sm text-body-md text-on-surface font-semibold">
+            Périmètre Feeder F19 - Oueslatia Agro
+          </div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-[11px]">
+<span class="material-symbols-outlined text-[14px]">account_tree</span>
+<span>Rattachement : PS Kairouan Ouest (90/30 kV)</span>
+</div>
+</div>
+<!-- Telemetry & Impact Metrics Grid -->
+<div class="space-y-space-xs">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">Télémétrie &amp; Énergie Estimée</div>
+<div class="grid grid-cols-2 gap-space-xs">
+<!-- Metric 1: Power -->
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant">PUISSANCE SOUS POLYGONE</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-label-telemetry-lg text-tertiary font-bold text-[18px]">7,52</span>
+<span class="font-label-telemetry-sm text-on-surface-variant">MW</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant mt-1">Pic estival : 8,8 MW</span>
+</div>
+<!-- Metric 2: Customers -->
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant">ABONNÉS COUPÉS</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-label-telemetry-lg text-primary font-bold text-[18px]">4 228</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant mt-1">4 210 BT • 18 MT Agro</span>
+</div>
+</div>
+<!-- Secondary Impact Row -->
+<div class="grid grid-cols-2 gap-space-xs">
+<!-- Metric 3: Equity -->
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant">ROTATION MOYENNE</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-label-telemetry-md text-secondary font-bold text-[15px]">18,2</span>
+<span class="font-label-telemetry-sm text-on-surface-variant">jours</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-[#4ade80] mt-1">Équitable (seuil &gt; 14j)</span>
+</div>
+<!-- Metric 4: SAIDI -->
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant">SAIDI PRÉVISIONNEL</span>
+<div class="flex items-baseline gap-space-xs mt-0.5">
+<span class="font-label-telemetry-md text-on-surface font-bold text-[15px]">0,08</span>
+<span class="font-label-telemetry-sm text-on-surface-variant">min</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant mt-1">BCC 5 Centre</span>
+</div>
+</div>
+</div>
+<!-- Automated Safety & Priority Check (P0) -->
+<div class="p-space-sm rounded bg-surface-container space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">Audit de Conformité P0</span>
+<span class="material-symbols-outlined text-[16px] text-[#4ade80]">check_circle</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-lowest font-label-telemetry-sm text-[11px] text-[#4ade80] flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-[#4ade80]"></span>
+<span>AUCUN CLIENT P0 DANS LE PÉRIMÈTRE</span>
+</div>
+<div class="text-on-surface-variant font-body-sm text-[11px] leading-relaxed">
+            Tampon de sécurité de 500m respecté par rapport à l'Hôpital Régional Ibn El Jazzar (distance mesurée : <span class="text-on-surface font-semibold">380 m de la frontière</span>).
+          </div>
+</div>
+<!-- Editable Geographic Properties -->
+<div class="p-space-sm rounded bg-surface-container space-y-space-sm">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">Géométrie du Polygone</div>
+<div class="space-y-space-xs font-label-telemetry-sm text-[11px]">
+<div class="flex justify-between py-space-xs bg-surface-container-lowest px-space-xs rounded">
+<span class="text-on-surface-variant">Superficie calculée</span>
+<span class="text-on-surface">14,38 km²</span>
+</div>
+<div class="flex justify-between py-space-xs bg-surface-container-lowest px-space-xs rounded">
+<span class="text-on-surface-variant">Périmètre linéaire</span>
+<span class="text-on-surface">16,24 km</span>
+</div>
+<div class="flex justify-between py-space-xs bg-surface-container-lowest px-space-xs rounded">
+<span class="text-on-surface-variant">Nombre de sommets (nodes)</span>
+<span class="text-tertiary font-bold">6 points</span>
+</div>
+<div class="flex justify-between py-space-xs bg-surface-container-lowest px-space-xs rounded">
+<span class="text-on-surface-variant">Système de projection</span>
+<span class="text-secondary">EPSG:32632</span>
+</div>
+</div>
+</div>
+<!-- Audit & Versioning History -->
+<div class="space-y-space-xs">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">Historique &amp; Traçabilité DN</div>
+<div class="space-y-space-xs">
+<div class="p-space-xs rounded bg-surface-container text-body-sm text-[11px] space-y-0.5">
+<div class="flex justify-between font-label-telemetry-sm text-[10px]">
+<span class="text-tertiary font-semibold">v2.4 (Brouillon en cours)</span>
+<span class="text-on-surface-variant">Aujourd'hui 14:28</span>
+</div>
+<div class="text-on-surface font-body-sm">Redéfinition contour ouest pour exclure forage SONEDE</div>
+<div class="text-on-surface-variant font-label-telemetry-sm text-[10px]">Opérateur: Ing. K. Ben Salem</div>
+</div>
+<div class="p-space-xs rounded bg-surface-container/50 text-body-sm text-[11px] space-y-0.5">
+<div class="flex justify-between font-label-telemetry-sm text-[10px]">
+<span class="text-on-surface font-semibold">v2.3 (Validée DN)</span>
+<span class="text-on-surface-variant">12/08/2025</span>
+</div>
+<div class="text-on-surface-variant font-body-sm">Validation manœuvre estivale délestage cyclique</div>
+<div class="text-on-surface-variant font-label-telemetry-sm text-[10px]">Approbateur: Chef de quart DN Tunis</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons inside Inspector -->
+<div class="pt-space-xs space-y-space-xs">
+<button class="w-full py-space-sm px-space-md rounded bg-surface-container-high hover:bg-surface-bright text-on-surface font-body-sm text-body-sm flex items-center justify-center gap-space-xs transition-colors">
+<span class="material-symbols-outlined text-[16px] text-secondary">file_download</span>
+<span>Exporter GeoJSON / Shapefile</span>
+</button>
+<button class="w-full py-space-sm px-space-md rounded bg-surface-container-high hover:bg-error-container hover:text-on-error-container text-on-surface-variant font-body-sm text-body-sm flex items-center justify-center gap-space-xs transition-colors">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+<span>Supprimer ce périmètre</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- BOTTOM STATUS & TELEMETRY BAR -->
+<div class="shrink-0 h-8 bg-surface-container-lowest px-space-lg flex items-center justify-between font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant shadow-inner">
+<!-- Left: GPS & Geo Coordinates -->
+<div class="flex items-center gap-space-lg">
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-secondary">near_me</span>
+<span class="text-secondary font-semibold">35°40'42.18" N</span>
+<span>•</span>
+<span class="text-secondary font-semibold">10°05'58.44" E</span>
+</div>
+<div class="hidden sm:flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Élévation :</span>
+<span class="text-on-surface">68 m NGF</span>
+</div>
+<div class="hidden md:flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Échelle :</span>
+<span class="text-on-surface font-semibold">1:25 000 (Zoom 14.5x)</span>
+</div>
+</div>
+<!-- Center: Projection & Precision -->
+<div class="hidden lg:flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[14px] text-primary">public</span>
+<span>EPSG:32632 (UTM zone 32N / WGS84)</span>
+</div>
+<span>•</span>
+<div>
+<span>Tolérance d'accrochage : </span>
+<span class="text-secondary font-semibold">&lt; 0,5 m</span>
+</div>
+</div>
+<!-- Right: SCADA Sync State -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs px-space-sm py-0.5 rounded bg-surface-container text-on-surface">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>
+<span>SIG ↔ SCADA TEMPS RÉEL : CONNECTÉ</span>
+</div>
+<div class="hidden xl:flex items-center gap-space-xs text-[10px]">
+<span>LATENCE RÉSEAU : </span>
+<span class="text-secondary font-bold">14 ms</span>
+</div>
+</div>
+</div>
+</div></main></div><footer class="fixed bottom-0 left-0 right-0 h-8 bg-surface-container-lowest z-50 shadow-[0_-1px_6px_rgba(0,0,0,0.5)]"><div class="h-8 w-full px-space-lg flex items-center justify-between font-label-telemetry-sm text-label-telemetry-sm"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm text-on-surface-variant"><span class="material-symbols-outlined text-[16px] text-primary">schedule</span><span>03/09/2025 • 14:32:18</span></div><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim animate-ping"></span><span class="text-tertiary-fixed-dim">4 DÉLESTAGES EN COURS</span></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-surface-container"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="text-on-surface">TENSION RÉSEAU : ÉQUILIBRÉ</span><span class="text-on-surface-variant">(RÉSERVE 185 MW)</span></div><div class="hidden md:flex items-center gap-space-xs text-on-surface-variant"><span class="material-symbols-outlined text-[14px] text-secondary">hub</span><span>SCADA: 99,8%</span><span class="text-secondary">(0 RETARD TRAME)</span></div></div></div></footer></body></html>

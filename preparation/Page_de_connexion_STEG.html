@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STEG — Connexion Opérateur</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "bg-deep":       "#0a1628",
+            "bg-card":       "#0f1e33",
+            "bg-input":      "#0d1a2e",
+            "border-subtle": "#1e3352",
+            "accent-blue":   "#1e6fd9",
+            "accent-blue-h": "#1a5fba",
+            "text-primary":  "#d3e4fe",
+            "text-muted":    "#6b8aad",
+            "text-label":    "#8fa8c8",
+          },
+          fontFamily: {
+            sans: ["IBM Plex Sans", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"],
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "IBM Plex Sans", sans-serif; }
+
+    /* Tunisia silhouette watermark */
+    .tunisia-watermark {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .tunisia-watermark svg {
+      width: 480px;
+      height: 580px;
+      opacity: 0.055;
+      fill: #bbc7df;
+    }
+
+    /* Animated grid background */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(30,111,217,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,111,217,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* Scan line animation */
+    @keyframes scanline {
+      0%   { transform: translateY(-100%); }
+      100% { transform: translateY(100vh); }
+    }
+    .scanline {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(30,111,217,0.15), transparent);
+      animation: scanline 6s linear infinite;
+      pointer-events: none;
+    }
+
+    /* Input focus glow */
+    .steg-input:focus {
+      outline: none;
+      border-color: #1e6fd9;
+      box-shadow: 0 0 0 2px rgba(30,111,217,0.2);
+    }
+
+    /* Button shine animation */
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    .btn-auth {
+      background: #1e6fd9;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-auth:hover {
+      background: #1a5fba;
+    }
+    .btn-auth:active {
+      transform: scale(0.98);
+    }
+
+    /* Corner accent */
+    .corner-tl { border-top: 2px solid #1e6fd9; border-left: 2px solid #1e6fd9; }
+    .corner-tr { border-top: 2px solid #1e6fd9; border-right: 2px solid #1e6fd9; }
+    .corner-bl { border-bottom: 2px solid #1e6fd9; border-left: 2px solid #1e6fd9; }
+    .corner-br { border-bottom: 2px solid #1e6fd9; border-right: 2px solid #1e6fd9; }
+
+    /* Blink cursor */
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .cursor { animation: blink 1s step-end infinite; }
+
+    /* Pulse ring on logo */
+    @keyframes ring-pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(30,111,217,0.4); }
+      70%  { box-shadow: 0 0 0 12px rgba(30,111,217,0); }
+      100% { box-shadow: 0 0 0 0 rgba(30,111,217,0); }
+    }
+    .logo-ring { animation: ring-pulse 2.5s ease-out infinite; }
+  </style>
+</head>
+
+<body class="min-h-screen bg-[#0a1628] text-[#d3e4fe] flex flex-col grid-bg relative overflow-hidden">
+
+  <!-- Scan line -->
+  <div class="scanline"></div>
+
+  <!-- Tunisia watermark SVG (simplified silhouette) -->
+  <div class="tunisia-watermark">
+    <svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+      <!-- Simplified Tunisia silhouette path -->
+      <path d="
+        M 95 10
+        L 110 12
+        L 125 18
+        L 140 28
+        L 148 40
+        L 152 55
+        L 148 65
+        L 155 72
+        L 158 82
+        L 155 90
+        L 148 95
+        L 150 105
+        L 145 115
+        L 140 120
+        L 142 130
+        L 138 140
+        L 132 148
+        L 128 160
+        L 125 172
+        L 120 182
+        L 115 195
+        L 110 210
+        L 105 225
+        L 100 240
+        L 96 255
+        L 92 265
+        L 88 270
+        L 85 265
+        L 82 255
+        L 80 240
+        L 78 225
+        L 75 210
+        L 73 195
+        L 70 182
+        L 68 168
+        L 65 155
+        L 62 142
+        L 58 130
+        L 55 118
+        L 52 108
+        L 48 98
+        L 45 88
+        L 42 78
+        L 40 68
+        L 38 58
+        L 40 45
+        L 45 35
+        L 55 24
+        L 68 15
+        L 82 11
+        Z
+      "/>
+    </svg>
+  </div>
+
+  <!-- Top status bar -->
+  <div class="relative z-10 h-8 flex items-center justify-between px-6 bg-[#06101e]/80 border-b border-[#1e3352] font-mono text-[10px] text-[#6b8aad]">
+    <div class="flex items-center gap-4">
+      <span class="flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#16a34a] animate-pulse"></span>
+        SYSTÈME EN LIGNE
+      </span>
+      <span>RÉSEAU INTERCONNECTÉ — 225/150/90/30 kV</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <span id="clock" class="text-[#8fa8c8]">--:--:-- UTC+1</span>
+      <span>v5.4.1-build-88</span>
+      <span class="text-[#1e6fd9]">SECURE_TRANSMISSION AES-256</span>
+    </div>
+  </div>
+
+  <!-- Main centered content -->
+  <div class="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-sm flex flex-col gap-6">
+
+      <!-- Card with corner accents -->
+      <div class="relative bg-[#0f1e33]/95 border border-[#1e3352] rounded-sm p-8 backdrop-blur-sm shadow-2xl">
+
+        <!-- Corner accents -->
+        <div class="absolute top-0 left-0 w-5 h-5 corner-tl"></div>
+        <div class="absolute top-0 right-0 w-5 h-5 corner-tr"></div>
+        <div class="absolute bottom-0 left-0 w-5 h-5 corner-bl"></div>
+        <div class="absolute bottom-0 right-0 w-5 h-5 corner-br"></div>
+
+        <!-- Logo & Identity -->
+        <div class="flex flex-col items-center gap-3 mb-8">
+          <!-- Logo badge -->
+          <div class="w-14 h-14 rounded-lg bg-[#1e6fd9] flex items-center justify-center logo-ring shadow-lg">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Lightning bolt -->
+              <path d="M18 4L8 18H16L14 28L24 14H16L18 4Z" fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <!-- STEG Label -->
+          <div class="flex flex-col items-center">
+            <div class="flex items-center gap-2">
+              <span class="text-xl font-bold text-[#d3e4fe] tracking-widest">STEG</span>
+              <span class="text-xs font-mono text-[#6b8aad] tracking-wider border border-[#1e3352] px-1.5 py-0.5 rounded-sm">DÉLESTAGE NATIONAL</span>
+            </div>
+          </div>
+
+          <!-- Title -->
+          <div class="text-center mt-1">
+            <h1 class="text-base font-semibold text-[#d3e4fe]">Connexion Opérateur</h1>
+            <p class="text-xs text-[#6b8aad] mt-0.5">Accès réservé au personnel de contrôle STEG</p>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <form onsubmit="handleLogin(event)" class="flex flex-col gap-4">
+
+          <!-- Identifiant field -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[10px] font-mono text-[#8fa8c8] tracking-widest uppercase">Identifiant / Matricule</label>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 text-[16px] text-[#6b8aad]">person</span>
+              <input
+                id="username"
+                type="text"
+                placeholder="Ex: OP-8842"
+                autocomplete="username"
+                class="steg-input w-full bg-[#0d1a2e] border border-[#1e3352] rounded-sm pl-9 pr-4 py-2.5 text-sm text-[#d3e4fe] placeholder:text-[#3d5a7a] font-mono transition-all"
+              />
+            </div>
+          </div>
+
+          <!-- Password field -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[10px] font-mono text-[#8fa8c8] tracking-widest uppercase">Mot de Passe</label>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 text-[16px] text-[#6b8aad]">lock</span>
+              <input
+                id="password"
+                type="password"
+                placeholder="••••••••••••"
+                autocomplete="current-password"
+                class="steg-input w-full bg-[#0d1a2e] border border-[#1e3352] rounded-sm pl-9 pr-10 py-2.5 text-sm text-[#d3e4fe] placeholder:text-[#3d5a7a] font-mono transition-all"
+              />
+              <button
+                type="button"
+                onclick="togglePassword()"
+                class="absolute right-3 text-[#6b8aad] hover:text-[#d3e4fe] transition-colors"
+                tabindex="-1"
+              >
+                <span id="eye-icon" class="material-symbols-outlined text-[16px]">visibility_off</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Error message (hidden by default) -->
+          <div id="error-msg" class="hidden flex items-center gap-2 px-3 py-2 bg-[#93000a]/30 border border-[#93000a] rounded-sm text-[11px] text-[#ffb4ab] font-mono">
+            <span class="material-symbols-outlined text-[14px]">error</span>
+            <span>Identifiant ou mot de passe incorrect.</span>
+          </div>
+
+          <!-- Submit button -->
+          <button
+            type="submit"
+            id="login-btn"
+            class="btn-auth mt-2 w-full py-3 rounded-sm text-white font-semibold text-sm tracking-widest uppercase flex items-center justify-center gap-2"
+          >
+            <span id="btn-text">S'authentifier</span>
+            <span id="btn-spinner" class="hidden">
+              <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 12 0 12 4.418A8 8 0 014 12z"></path>
+              </svg>
+            </span>
+          </button>
+
+        </form>
+
+        <!-- Security note -->
+        <div class="mt-5 flex items-center justify-center gap-1.5 text-[10px] font-mono text-[#3d5a7a]">
+          <span class="material-symbols-outlined text-[12px] text-[#1e6fd9]">lock</span>
+          <span>Connexion chiffrée TLS 1.3 · Session AES-256</span>
+        </div>
+      </div>
+
+      <!-- Citizen portal link -->
+      <div class="text-center">
+        <a href="Portail_citoyen/Suivi_du_delestage_en temps_reel.html" class="text-xs text-[#6b8aad] hover:text-[#1e6fd9] transition-colors font-mono">
+          Accéder au portail citoyen public →
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom footer -->
+  <div class="relative z-10 h-10 flex flex-col items-center justify-center border-t border-[#1e3352] bg-[#06101e]/80">
+    <p class="text-[10px] font-mono text-[#3d5a7a] tracking-wide">
+      Plateforme Nationale de Gestion du Délestage — Usage interne STEG
+    </p>
+    <p class="text-[9px] font-mono text-[#2a3f5a] tracking-widest mt-0.5">
+      v5.4.1-build-88 &nbsp;//&nbsp; SECURE_TRANSMISSION AES-256
+    </p>
+  </div>
+
+  <script>
+    // Live clock
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2,'0');
+      const m = String(now.getMinutes()).padStart(2,'0');
+      const s = String(now.getSeconds()).padStart(2,'0');
+      const el = document.getElementById('clock');
+      if (el) el.textContent = `${h}:${m}:${s} UTC+1`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Toggle password visibility
+    function togglePassword() {
+      const input = document.getElementById('password');
+      const icon  = document.getElementById('eye-icon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility_off';
+      }
+    }
+
+    // Login handler (demo — no real auth)
+    function handleLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value;
+      const errMsg   = document.getElementById('error-msg');
+      const btnText  = document.getElementById('btn-text');
+      const spinner  = document.getElementById('btn-spinner');
+      const btn      = document.getElementById('login-btn');
+
+      if (!user || !pass) {
+        errMsg.classList.remove('hidden');
+        return;
+      }
+
+      // Show loading state
+      errMsg.classList.add('hidden');
+      btnText.textContent = 'Authentification...';
+      spinner.classList.remove('hidden');
+      btn.disabled = true;
+
+      // Simulate auth delay then redirect to DN dashboard
+      setTimeout(() => {
+        // Demo: any credentials work — redirect to DN dashboard
+        window.location.href = 'DN/Poste_de_conduite_nationale_tableau_de_bord.html';
+      }, 1500);
+    }
+  </script>
+
+</body>
+</html>

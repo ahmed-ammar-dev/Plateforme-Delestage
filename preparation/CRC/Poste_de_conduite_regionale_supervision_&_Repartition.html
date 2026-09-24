@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Poste de Conduite Régionale (CRC Nord) — Tableau de Bord</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "background": "#031427",
+            "surface-container-lowest": "#000f21",
+            "surface-container-low": "#0b1c30",
+            "surface-container": "#102034",
+            "surface-container-high": "#1b2b3f",
+            "surface-container-highest": "#26364a",
+            "primary": "#bbc7df",
+            "on-surface": "#d3e4fe",
+            "on-surface-variant": "#c5c6cd",
+            "outline": "#8f9097",
+            "secondary": "#acc7ff",
+            "secondary-container": "#0365cf",
+            "on-secondary-container": "#e0e8ff",
+            "tertiary": "#ffb95f",
+            "tertiary-container": "#231200",
+            "on-tertiary-container": "#ffddb8",
+            "error": "#ffb4ab",
+            "error-container": "#93000a",
+            "on-error-container": "#ffdad6",
+          },
+          fontFamily: {
+            sans: ["IBM Plex Sans", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"],
+          },
+          borderRadius: {
+            DEFAULT: "2px",
+            sm: "2px",
+            md: "2px",
+            lg: "2px",
+            xl: "2px",
+            "2xl": "2px",
+          },
+          spacing: {
+            "space-xs": "0.125rem",
+            "space-sm": "0.25rem",
+            "space-md": "0.5rem",
+            "space-lg": "0.75rem",
+            "space-xl": "1rem",
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    * {
+      border-radius: 2px !important;
+    }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: #031427;
+      color: #d3e4fe;
+      overflow-x: hidden;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Custom SCADA scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #000f21;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1b2b3f;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #26364a;
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type"/></head>
+<body class="bg-background text-on-surface font-sans text-xs min-h-screen">
+<!-- ========================================================================= -->
+<!-- FIXED TOPBAR (h-14)                                                       -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 left-0 right-0 h-14 bg-surface-container-low/95 backdrop-blur-md z-40 border-b border-surface-container-high flex items-center justify-between px-space-lg">
+<!-- Left branding & Network status -->
+<div class="flex items-center gap-space-lg">
+<div class="flex items-center gap-space-md">
+<div class="w-8 h-8 bg-surface-container-lowest border border-surface-container-high flex items-center justify-center text-secondary shadow-inner font-bold font-mono text-sm">
+          STEG
+        </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm">
+<span class="font-bold text-sm text-primary uppercase tracking-wider">STEG TÉLÉCONDUITE</span>
+<span class="px-space-xs py-0.5 bg-surface-container-highest text-on-surface-variant font-mono text-[10px] tracking-wider uppercase">POSTE DE CONDUITE RÉGIONALE (CRC)</span>
+</div>
+<div class="flex items-center gap-space-sm text-[11px] font-mono text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span>RÉSEAU INTERCONNECTÉ NORD • 225/90/30 kV</span>
+</div>
+</div>
+</div>
+<!-- Frequency block -->
+<div class="hidden xl:flex items-center bg-surface-container px-space-md py-1 border border-surface-container-high gap-space-md">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-mono text-outline">FRÉQUENCE RÉSEAU</span>
+<span class="font-mono text-xs font-bold text-secondary">50,02 Hz</span>
+</div>
+<div class="flex items-center gap-space-xs px-space-sm py-0.5 bg-surface-container-high">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>
+<span class="font-mono text-[10px] text-on-surface">NOMINALE</span>
+</div>
+</div>
+</div>
+<!-- Center Nav Tabs -->
+<nav class="hidden md:flex items-center bg-surface-container-lowest p-0.5 border border-surface-container-high">
+<a class="px-space-lg py-1 bg-surface-container-high text-on-surface font-semibold flex items-center gap-1 border border-secondary/30" href="#">
+<span class="material-symbols-outlined text-[16px] text-secondary">dashboard</span>
+<span>Tableau de bord CRC</span>
+</a>
+<a class="px-space-lg py-1 text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[16px]">alt_route</span>
+<span>Supervision BCCs</span>
+</a>
+<a class="px-space-lg py-1 text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span>Historique ENS</span>
+</a>
+<a class="px-space-lg py-1 text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[16px]">map</span>
+<span>SIG Réseau Nord</span>
+</a>
+</nav>
+<!-- Right Telemetry & User block -->
+<div class="flex items-center gap-space-md">
+<!-- Time block -->
+<div class="hidden sm:flex flex-col items-end bg-surface-container px-space-md py-0.5 border border-surface-container-high font-mono text-[11px]">
+<span class="text-primary font-semibold" id="clockUTC">14:47:32 UTC+1</span>
+<span class="text-outline text-[9px]">TU 13:47:32 • SCADA SYNC</span>
+</div>
+<!-- Chef de quart badge -->
+<div class="hidden lg:flex flex-col items-end leading-tight">
+<span class="text-xs font-semibold text-on-surface">Ing. M. Trabelsi</span>
+<span class="text-[10px] font-mono text-secondary">CHEF DE QUART • CRC NORD</span>
+</div>
+<!-- Alarm bell -->
+<button class="relative p-1.5 bg-surface-container hover:bg-surface-container-high border border-surface-container-high text-on-surface transition-colors" title="Alarmes actives">
+<span class="material-symbols-outlined text-[20px] text-error">notifications_active</span>
+<span class="absolute -top-1 -right-1 px-1 bg-error-container text-on-error-container font-mono text-[10px] font-bold border border-error">1</span>
+</button>
+<!-- AI Assistant toggle button in Topbar -->
+<button class="flex items-center gap-1 px-space-md py-1 bg-secondary-container/30 hover:bg-secondary-container/50 text-secondary border border-secondary/40 font-mono text-xs transition-colors" onclick="toggleAiDrawer()">
+<span class="material-symbols-outlined text-[18px]">smart_toy</span>
+<span class="hidden sm:inline font-semibold">Assistant IA</span>
+</button>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- FIXED SIDEBAR (w-64)                                                      -->
+<!-- ========================================================================= -->
+<aside class="fixed left-0 top-14 bottom-8 w-64 bg-surface-container-low border-r border-surface-container-high z-30 flex flex-col justify-between overflow-y-auto">
+<div class="py-space-md flex flex-col">
+<div class="px-space-lg py-1 font-mono text-[10px] text-outline uppercase tracking-wider mb-space-xs">
+        Architecture Conduite Régionale
+      </div>
+<nav class="flex flex-col px-space-sm gap-space-xs font-sans text-xs">
+<a class="flex items-center gap-space-md px-space-md py-2 bg-surface-container-high text-secondary border-l-2 border-secondary font-semibold" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span>Tableau de Bord CRC Nord</span>
+</a>
+<a class="flex items-center gap-space-md px-space-md py-2 text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">domain</span>
+<span>BCC 1 — Grand Tunis Nord</span>
+</a>
+<a class="flex items-center gap-space-md px-space-md py-2 text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">domain</span>
+<span>BCC 2 — Tunis Sud / Ben Arous</span>
+</a>
+<a class="flex items-center gap-space-md px-space-md py-2 text-tertiary bg-tertiary-container/20 border-l-2 border-tertiary font-semibold" href="#">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span>BCC 3 — Nord-Ouest (Béja)</span>
+<span class="ml-auto font-mono text-[10px] px-1 bg-error-container text-on-error-container">-12 MW</span>
+</a>
+<a class="flex items-center gap-space-md px-space-md py-2 text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">domain</span>
+<span>BCC 4 — Bizerte / Mateur</span>
+</a>
+<div class="my-space-sm border-t border-surface-container-high"></div>
+<a class="flex items-center gap-space-md px-space-md py-2 text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">query_stats</span>
+<span>Analyse &amp; Historique ENS</span>
+</a>
+<a class="flex items-center gap-space-md px-space-md py-2 text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">map</span>
+<span>Éditeur SIG &amp; Topologie</span>
+</a>
+<a class="flex items-center gap-space-md px-space-md py-2 text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>Paramètres &amp; Seuils Région</span>
+</a>
+</nav>
+</div>
+<!-- Telemetry Heartbeat footer in sidebar -->
+<div class="p-space-md border-t border-surface-container-high bg-surface-container-lowest">
+<div class="bg-surface-container-low p-space-sm border border-surface-container-high flex flex-col gap-1 mb-space-sm">
+<div class="flex justify-between font-mono text-[10px] text-outline">
+<span>PROTOCOLE 104</span>
+<span class="text-secondary font-bold">18 ms</span>
+</div>
+<div class="w-full bg-surface-container h-1 overflow-hidden">
+<div class="bg-secondary h-full" style="width: 96%"></div>
+</div>
+<div class="flex justify-between font-mono text-[9px] text-on-surface-variant mt-0.5">
+<span>TRAMES BCC: 4/4 OK</span>
+<span class="text-[#4ade80]">EN LIGNE</span>
+</div>
+</div>
+<div class="text-[10px] font-mono text-outline text-center">
+        CRC NORD • POSTE SOURCE RADÈS II
+      </div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- MAIN SCROLLABLE CONTAINER (pl-64 pt-14 pb-8)                              -->
+<!-- ========================================================================= -->
+<main class="pl-64 pt-14 pb-8 min-h-screen bg-background"><div class="flex flex-col w-full text-on-surface font-body-md select-none">
+<!-- ========================================================================= -->
+<!-- SECTION 1: TOP CONTEXT & OPERATIONAL COMMS BAR                            -->
+<!-- ========================================================================= -->
+<div class="flex flex-col gap-space-xs mb-space-md">
+<!-- Top contextual row -->
+<div class="bg-surface-container-low p-space-md flex flex-wrap items-center justify-between gap-space-md shadow-md">
+<!-- Left: CRC Ident & Status -->
+<div class="flex items-center gap-space-lg flex-wrap">
+<div class="flex items-center gap-space-sm bg-surface-container-lowest px-space-md py-1">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-ping"></span>
+<span class="font-headline-sm text-headline-sm text-secondary tracking-wide uppercase">CRC NORD</span>
+<span class="text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">/ GRAND TUNIS &amp; NORD</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-telemetry-md text-label-telemetry-md text-primary">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span id="liveClockInner">14:47:32</span>
+<span class="text-outline text-label-telemetry-sm">UTC+1 • POSTE SOURCE RADÈS II</span>
+</div>
+<div class="flex items-center gap-space-xs px-space-sm py-0.5 bg-surface-container text-on-surface font-label-telemetry-sm text-label-telemetry-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>
+<span>SCADA IEC-60870-5-104 OPÉRATIONNEL</span>
+</div>
+</div>
+<!-- Right: Action Triggers -->
+<div class="flex items-center gap-space-md">
+<button class="px-space-md py-1.5 bg-surface-container-high hover:bg-surface-container-highest text-secondary hover:text-on-surface font-label-telemetry-md text-label-telemetry-md flex items-center gap-space-xs transition-colors shadow-sm" onclick="openProgrammeModal()">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+<span>Programme J+1</span>
+</button>
+<button class="relative px-space-md py-1.5 bg-error-container hover:bg-[#b0101a] text-on-error-container font-label-telemetry-md text-label-telemetry-md font-bold flex items-center gap-space-xs shadow-md animate-pulse" onclick="openUrgenceModal()">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span>Délestage d'Urgence</span>
+<span class="w-2 h-2 rounded-full bg-error ml-1"></span>
+</button>
+</div>
+</div>
+<!-- Comms Strip -->
+<div class="bg-surface-container-lowest px-space-md py-1 flex flex-wrap items-center justify-between text-label-telemetry-sm font-label-telemetry-sm text-on-surface-variant gap-space-md">
+<div class="flex items-center gap-space-lg flex-wrap">
+<div class="flex items-center gap-1">
+<span class="text-outline uppercase">Chef de quart :</span>
+<span class="text-on-surface font-semibold">Ing. M. Trabelsi (Matr. 48821)</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary">radio</span>
+<span class="text-outline uppercase">VHF Conduite :</span>
+<span class="text-secondary font-semibold">Canal 04-Nord (168.450 MHz)</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-tertiary">call</span>
+<span class="text-outline uppercase">Ligne directe DN :</span>
+<span class="text-tertiary font-semibold">+216 71 340 102 (Radès Direct)</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-1">
+<span class="text-outline">SCADA Synchro :</span>
+<span class="text-[#4ade80] font-bold">18 ms</span>
+<span class="text-outline">(BCCs 100% connectés)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- SECTION 2: 4 CRITICAL REGIONAL TELEMETRY KPIS                             -->
+<!-- ========================================================================= -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-md">
+<!-- KPI 1: Cible reçue du DN -->
+<div class="bg-surface-container-low p-space-md flex flex-col justify-between shadow-md relative overflow-hidden">
+<div class="flex justify-between items-start mb-space-xs">
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Cible Reçue du DN</span>
+<span class="px-space-xs py-0.5 bg-surface-container-highest text-secondary font-label-telemetry-sm text-label-telemetry-sm">DISP. NAT.</span>
+</div>
+<div class="flex items-baseline gap-space-xs my-space-xs">
+<span class="font-label-telemetry-lg text-headline-lg font-bold text-secondary tracking-tight">300,0</span>
+<span class="font-label-telemetry-md text-label-telemetry-md text-outline">MW</span>
+</div>
+<div class="flex items-center justify-between text-label-telemetry-sm font-label-telemetry-sm text-on-surface-variant pt-space-xs bg-surface-container-lowest/50 px-space-sm mt-space-xs">
+<span>Quota fixe CRC Nord</span>
+<span class="text-secondary font-semibold">100,0 % Cible</span>
+</div>
+</div>
+<!-- KPI 2: Réalisé Régional -->
+<div class="bg-surface-container-low p-space-md flex flex-col justify-between shadow-md relative overflow-hidden">
+<div class="flex justify-between items-start mb-space-xs">
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Réalisé Régional Actuel</span>
+<span class="px-space-xs py-0.5 bg-tertiary-container text-tertiary font-label-telemetry-sm text-label-telemetry-sm font-bold">DÉFICIT -18,0 MW</span>
+</div>
+<div class="flex items-baseline gap-space-xs my-space-xs">
+<span class="font-label-telemetry-lg text-headline-lg font-bold text-tertiary tracking-tight">282,0</span>
+<span class="font-label-telemetry-md text-label-telemetry-md text-outline">MW</span>
+</div>
+<div class="flex items-center justify-between text-label-telemetry-sm font-label-telemetry-sm text-on-surface-variant pt-space-xs bg-surface-container-lowest/50 px-space-sm mt-space-xs">
+<span>Taux d'exécution</span>
+<span class="text-tertiary font-bold">94,0 % (Avarie D22 Béja)</span>
+</div>
+</div>
+<!-- KPI 3: Départs HTA actifs -->
+<div class="bg-surface-container-low p-space-md flex flex-col justify-between shadow-md relative overflow-hidden">
+<div class="flex justify-between items-start mb-space-xs">
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Départs HTA en Coupure</span>
+<span class="px-space-xs py-0.5 bg-error-container text-on-error-container font-label-telemetry-sm text-label-telemetry-sm font-bold animate-pulse">1 &gt; 45 MIN</span>
+</div>
+<div class="flex items-baseline gap-space-xs my-space-xs">
+<span class="font-label-telemetry-lg text-headline-lg font-bold text-error tracking-tight">42</span>
+<span class="font-label-telemetry-md text-label-telemetry-md text-outline">Feeders</span>
+</div>
+<div class="flex items-center justify-between text-label-telemetry-sm font-label-telemetry-sm text-on-surface-variant pt-space-xs bg-surface-container-lowest/50 px-space-sm mt-space-xs">
+<span>Charge délestée</span>
+<span class="text-error font-semibold">18 420 Clients coupés</span>
+</div>
+</div>
+<!-- KPI 4: Réserve Disponible -->
+<div class="bg-surface-container-low p-space-md flex flex-col justify-between shadow-md relative overflow-hidden">
+<div class="flex justify-between items-start mb-space-xs">
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Réserve Déclenchable</span>
+<span class="px-space-xs py-0.5 bg-surface-container-highest text-[#4ade80] font-label-telemetry-sm text-label-telemetry-sm font-bold">DISPONIBLE</span>
+</div>
+<div class="flex items-baseline gap-space-xs my-space-xs">
+<span class="font-label-telemetry-lg text-headline-lg font-bold text-[#4ade80] tracking-tight">35,0</span>
+<span class="font-label-telemetry-md text-label-telemetry-md text-outline">MW</span>
+</div>
+<div class="flex items-center justify-between text-label-telemetry-sm font-label-telemetry-sm text-on-surface-variant pt-space-xs bg-surface-container-lowest/50 px-space-sm mt-space-xs">
+<span>Mobilisables immédiatement</span>
+<span class="text-on-surface font-semibold">18 Départs HTA</span>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- SECTION 3: 60/40 SPLIT (REGIONAL 24H SCADA CHART & LIVE SHEDDING TREE)     -->
+<!-- ========================================================================= -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md mb-space-md">
+<!-- LEFT COLUMN (60% -> 7 COLS ON LG): REGIONAL SCADA CHART & 4 BCC CARDS -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<!-- Chart Card -->
+<div class="bg-surface-container-low p-space-md shadow-md flex flex-col justify-between">
+<div class="flex flex-wrap items-center justify-between gap-space-sm mb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">show_chart</span>
+<span class="font-headline-sm text-headline-sm text-on-surface uppercase tracking-wide">Suivi d'Exécution Régional — CRC Nord</span>
+</div>
+<div class="flex items-center gap-space-md font-label-telemetry-sm text-label-telemetry-sm">
+<div class="flex items-center gap-1">
+<span class="w-3 h-0.5 bg-secondary inline-block border-b border-dashed border-secondary"></span>
+<span class="text-outline">Consigne DN (300 MW)</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-3 h-1 bg-[#4ade80] inline-block"></span>
+<span class="text-on-surface">Réalisé Région</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-2.5 h-2.5 bg-error/30 inline-block"></span>
+<span class="text-error">Déficit</span>
+</div>
+</div>
+</div>
+<!-- Inline SCADA Graphic Chart (Pure SVG) -->
+<div class="w-full bg-surface-container-lowest p-space-sm relative">
+<svg class="w-full h-auto text-on-surface" preserveaspectratio="none" viewbox="0 0 700 240">
+<!-- Grid lines -->
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="40" x2="680" y1="30" y2="30"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="40" x2="680" y1="80" y2="80"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="40" x2="680" y1="130" y2="130"></line>
+<line stroke="#1b2b3f" stroke-dasharray="2,2" stroke-width="1" x1="40" x2="680" y1="180" y2="180"></line>
+<!-- Y Axis Labels -->
+<text fill="#8f9097" font-family="JetBrains Mono" font-size="9" text-anchor="end" x="32" y="34">350 MW</text>
+<text fill="#8f9097" font-family="JetBrains Mono" font-size="9" text-anchor="end" x="32" y="84">300 MW</text>
+<text fill="#8f9097" font-family="JetBrains Mono" font-size="9" text-anchor="end" x="32" y="134">250 MW</text>
+<text fill="#8f9097" font-family="JetBrains Mono" font-size="9" text-anchor="end" x="32" y="184">200 MW</text>
+<!-- X Axis Labels (Time) -->
+<text fill="#8f9097" font-family="JetBrains Mono" font-size="9" x="45" y="225">08:00</text>
+<text fill="#8f9097" font-family="JetBrains Mono" font-size="9" x="170" y="225">10:00</text>
+<text fill="#8f9097" font-family="JetBrains Mono" font-size="9" x="295" y="225">12:00</text>
+<text fill="#8f9097" font-family="JetBrains Mono" font-size="9" x="420" y="225">14:00</text>
+<text fill="#8f9097" font-family="JetBrains Mono" font-size="9" x="545" y="225">16:00</text>
+<text fill="#8f9097" font-family="JetBrains Mono" font-size="9" x="660" y="225">18:00</text>
+<!-- Planned Consigne Line (300 MW flat, y = 80) -->
+<line stroke="#acc7ff" stroke-dasharray="4,4" stroke-width="2" x1="45" x2="680" y1="80" y2="80"></line>
+<!-- Deficit Polygon (Béja breaker dip around 14:00-14:47) -->
+<polygon fill="rgba(220, 38, 38, 0.25)" points="400,80 430,95 470,105 480,105 480,80"></polygon>
+<!-- Realized Historical Curve (up to current time at x=480) -->
+<path d="M 45 82 Q 100 80, 160 79 T 280 80 T 380 81 L 410 88 L 435 96 L 470 104 L 480 104" fill="none" stroke="#ffb95f" stroke-width="2.5"></path>
+<!-- Current Time NOW Indicator (14:47 at x = 480) -->
+<line stroke="#ffb95f" stroke-dasharray="3,3" stroke-width="1.5" x1="480" x2="480" y1="20" y2="210"></line>
+<circle cx="480" cy="104" fill="#ffb4ab" r="4" stroke="#93000a" stroke-width="2"></circle>
+<text fill="#ffb95f" font-family="JetBrains Mono" font-size="10" font-weight="bold" x="485" y="45">NOW 14:47</text>
+<text fill="#ffb4ab" font-family="JetBrains Mono" font-size="9" x="485" y="58">282,0 MW (-18)</text>
+<!-- Future projection tentative line -->
+<path d="M 480 104 L 540 85 L 670 80" fill="none" stroke="#8f9097" stroke-dasharray="2,4" stroke-width="1.5"></path>
+</svg>
+</div>
+<!-- 4 Subordinate BCC Status Cards -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm mt-space-sm">
+<!-- BCC 1 -->
+<div class="bg-surface-container p-space-sm flex flex-col justify-between">
+<div class="flex justify-between items-center text-label-telemetry-sm font-label-telemetry-sm">
+<span class="text-on-surface font-semibold">BCC 1 Tunis N.</span>
+<span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>
+</div>
+<div class="flex items-baseline justify-between my-1">
+<span class="font-label-telemetry-md font-bold text-secondary">110 / 110</span>
+<span class="text-outline text-label-telemetry-sm">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden">
+<div class="bg-secondary h-full" style="width: 100%"></div>
+</div>
+<div class="flex justify-between text-label-telemetry-sm text-outline mt-1 font-label-telemetry-sm">
+<span>Postes 90kV: 8</span>
+<span class="text-[#4ade80]">100%</span>
+</div>
+</div>
+<!-- BCC 2 -->
+<div class="bg-surface-container p-space-sm flex flex-col justify-between">
+<div class="flex justify-between items-center text-label-telemetry-sm font-label-telemetry-sm">
+<span class="text-on-surface font-semibold">BCC 2 Tunis S.</span>
+<span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>
+</div>
+<div class="flex items-baseline justify-between my-1">
+<span class="font-label-telemetry-md font-bold text-secondary">90 / 90</span>
+<span class="text-outline text-label-telemetry-sm">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden">
+<div class="bg-secondary h-full" style="width: 100%"></div>
+</div>
+<div class="flex justify-between text-label-telemetry-sm text-outline mt-1 font-label-telemetry-sm">
+<span>Postes 90kV: 6</span>
+<span class="text-[#4ade80]">100%</span>
+</div>
+</div>
+<!-- BCC 3 (Déficitaire) -->
+<div class="bg-tertiary-container/30 p-space-sm flex flex-col justify-between">
+<div class="flex justify-between items-center text-label-telemetry-sm font-label-telemetry-sm">
+<span class="text-tertiary font-bold">BCC 3 Béja</span>
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
+</div>
+<div class="flex items-baseline justify-between my-1">
+<span class="font-label-telemetry-md font-bold text-error">40 / 58</span>
+<span class="text-outline text-label-telemetry-sm">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden">
+<div class="bg-error h-full" style="width: 68.9%"></div>
+</div>
+<div class="flex justify-between text-label-telemetry-sm text-tertiary mt-1 font-label-telemetry-sm">
+<span>D22 HS Béja</span>
+<span class="font-bold text-error">-18 MW</span>
+</div>
+</div>
+<!-- BCC 4 -->
+<div class="bg-surface-container p-space-sm flex flex-col justify-between">
+<div class="flex justify-between items-center text-label-telemetry-sm font-label-telemetry-sm">
+<span class="text-on-surface font-semibold">BCC 4 Bizerte</span>
+<span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>
+</div>
+<div class="flex items-baseline justify-between my-1">
+<span class="font-label-telemetry-md font-bold text-secondary">42 / 42</span>
+<span class="text-outline text-label-telemetry-sm">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden">
+<div class="bg-secondary h-full" style="width: 100%"></div>
+</div>
+<div class="flex justify-between text-label-telemetry-sm text-outline mt-1 font-label-telemetry-sm">
+<span>Postes 90kV: 5</span>
+<span class="text-[#4ade80]">100%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN (40% -> 5 COLS ON LG): LIVE SHEDDING TREE ACCORDION -->
+<div class="lg:col-span-5 flex flex-col bg-surface-container-low p-space-md shadow-md">
+<div class="flex items-center justify-between pb-space-sm mb-space-sm bg-surface-container-lowest p-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-tertiary text-[20px]">account_tree</span>
+<span class="font-headline-sm text-headline-sm text-on-surface uppercase tracking-wide">Délestages en Cours (Arbre BCC)</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm px-space-xs py-0.5 bg-error-container text-on-error-container font-bold">
+          42 DÉPARTS
+        </span>
+</div>
+<!-- Accordion Container -->
+<div class="flex-1 flex flex-col gap-space-sm overflow-y-auto max-h-[380px] pr-1">
+<!-- BCC 1 Accordion Item -->
+<div class="bg-surface-container overflow-hidden">
+<button class="w-full p-space-sm flex items-center justify-between text-left hover:bg-surface-container-high transition-colors" onclick="toggleAccordion('accBcc1')">
+<div class="flex items-center gap-space-sm font-label-telemetry-md text-label-telemetry-md font-bold">
+<span class="material-symbols-outlined text-[16px] text-secondary transition-transform" id="icon_accBcc1">expand_more</span>
+<span>BCC 1 — Grand Tunis Nord</span>
+</div>
+<div class="flex items-center gap-space-md text-label-telemetry-sm font-label-telemetry-sm">
+<span class="text-on-surface-variant">14 Départs</span>
+<span class="text-secondary font-bold">110,0 MW</span>
+</div>
+</button>
+<div class="hidden p-space-sm bg-surface-container-lowest text-label-telemetry-sm font-label-telemetry-sm flex flex-col gap-1" id="accBcc1">
+<div class="flex justify-between py-1 bg-surface-container-low px-space-sm">
+<span class="text-secondary">F03 — Charguia Tertiaire</span>
+<span>8,4 MW</span>
+<span class="text-outline">28 min</span>
+<span class="text-[#4ade80]">EN COURS</span>
+</div>
+<div class="flex justify-between py-1 bg-surface-container px-space-sm">
+<span class="text-secondary">F12 — Ariana Riadh</span>
+<span>6,2 MW</span>
+<span class="text-outline">19 min</span>
+<span class="text-[#4ade80]">EN COURS</span>
+</div>
+</div>
+</div>
+<!-- BCC 2 Accordion Item -->
+<div class="bg-surface-container overflow-hidden">
+<button class="w-full p-space-sm flex items-center justify-between text-left hover:bg-surface-container-high transition-colors" onclick="toggleAccordion('accBcc2')">
+<div class="flex items-center gap-space-sm font-label-telemetry-md text-label-telemetry-md font-bold">
+<span class="material-symbols-outlined text-[16px] text-secondary transition-transform" id="icon_accBcc2">expand_more</span>
+<span>BCC 2 — Tunis Sud &amp; Ben Arous</span>
+</div>
+<div class="flex items-center gap-space-md text-label-telemetry-sm font-label-telemetry-sm">
+<span class="text-on-surface-variant">12 Départs</span>
+<span class="text-secondary font-bold">90,0 MW</span>
+</div>
+</button>
+<div class="hidden p-space-sm bg-surface-container-lowest text-label-telemetry-sm font-label-telemetry-sm flex flex-col gap-1" id="accBcc2">
+<div class="flex justify-between py-1 bg-surface-container-low px-space-sm">
+<span class="text-secondary">F08 — Ben Arous Industriel</span>
+<span>9,1 MW</span>
+<span class="text-outline">34 min</span>
+<span class="text-[#4ade80]">EN COURS</span>
+</div>
+<div class="flex justify-between py-1 bg-surface-container px-space-sm">
+<span class="text-secondary">F15 — Mégrine Sud</span>
+<span>5,5 MW</span>
+<span class="text-outline">22 min</span>
+<span class="text-[#4ade80]">EN COURS</span>
+</div>
+</div>
+</div>
+<!-- BCC 3 Accordion Item (With Overdue Highlighting) -->
+<div class="bg-surface-container overflow-hidden ring-1 ring-error">
+<button class="w-full p-space-sm flex items-center justify-between text-left bg-tertiary-container/30 hover:bg-tertiary-container/50 transition-colors" onclick="toggleAccordion('accBcc3')">
+<div class="flex items-center gap-space-sm font-label-telemetry-md text-label-telemetry-md font-bold text-tertiary">
+<span class="material-symbols-outlined text-[16px] text-error transition-transform" id="icon_accBcc3">expand_more</span>
+<span>BCC 3 — Nord-Ouest (Béja)</span>
+</div>
+<div class="flex items-center gap-space-md text-label-telemetry-sm font-label-telemetry-sm">
+<span class="text-error font-bold">1 OVERDUE</span>
+<span class="text-error font-bold">40,0 / 58 MW</span>
+</div>
+</button>
+<div class="p-space-sm bg-surface-container-lowest text-label-telemetry-sm font-label-telemetry-sm flex flex-col gap-1" id="accBcc3">
+<!-- Overdue Row -->
+<div class="flex items-center justify-between py-1 bg-error-container/40 px-space-sm text-on-error-container font-semibold animate-pulse">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-error">timer_off</span>
+<span>F18 — Nefza Rural (Poste Béja 90kV)</span>
+</div>
+<span>4,8 MW</span>
+<span class="font-bold">52 min (&gt;45m)</span>
+<span class="px-1 bg-error text-surface-container-lowest text-[10px] uppercase font-bold">ROTATION REQUISE</span>
+</div>
+<div class="flex justify-between py-1 bg-surface-container-low px-space-sm text-on-surface-variant">
+<span>F04 — Medjez El Bab Centre</span>
+<span>7,2 MW</span>
+<span class="text-outline">31 min</span>
+<span class="text-[#4ade80]">EN COURS</span>
+</div>
+<div class="flex justify-between py-1 bg-surface-container px-space-sm text-on-surface-variant">
+<span>F09 — Tabarka Urbain</span>
+<span>6,0 MW</span>
+<span class="text-outline">18 min</span>
+<span class="text-[#4ade80]">EN COURS</span>
+</div>
+</div>
+</div>
+<!-- BCC 4 Accordion Item -->
+<div class="bg-surface-container overflow-hidden">
+<button class="w-full p-space-sm flex items-center justify-between text-left hover:bg-surface-container-high transition-colors" onclick="toggleAccordion('accBcc4')">
+<div class="flex items-center gap-space-sm font-label-telemetry-md text-label-telemetry-md font-bold">
+<span class="material-symbols-outlined text-[16px] text-secondary transition-transform" id="icon_accBcc4">expand_more</span>
+<span>BCC 4 — Bizerte / Mateur</span>
+</div>
+<div class="flex items-center gap-space-md text-label-telemetry-sm font-label-telemetry-sm">
+<span class="text-on-surface-variant">8 Départs</span>
+<span class="text-secondary font-bold">42,0 MW</span>
+</div>
+</button>
+<div class="hidden p-space-sm bg-surface-container-lowest text-label-telemetry-sm font-label-telemetry-sm flex flex-col gap-1" id="accBcc4">
+<div class="flex justify-between py-1 bg-surface-container-low px-space-sm">
+<span class="text-secondary">F02 — Menzel Bourguiba Acier</span>
+<span>11,0 MW</span>
+<span class="text-outline">39 min</span>
+<span class="text-[#4ade80]">EN COURS</span>
+</div>
+<div class="flex justify-between py-1 bg-surface-container px-space-sm">
+<span class="text-secondary">F07 — Ras Jebel Nord</span>
+<span>5,2 MW</span>
+<span class="text-outline">14 min</span>
+<span class="text-[#4ade80]">EN COURS</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- SECTION 4: FULL-WIDTH LIVE SHEDDING TABLE WITH FILTERING & SORTING       -->
+<!-- ========================================================================= -->
+<div class="bg-surface-container-low p-space-md shadow-md flex flex-col gap-space-sm mb-space-md">
+<div class="flex flex-wrap items-center justify-between gap-space-sm pb-space-xs bg-surface-container-lowest p-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">table_rows</span>
+<span class="font-headline-sm text-headline-sm text-on-surface uppercase tracking-wide">Journal Opérationnel des Coupures HTA en Cours</span>
+</div>
+<!-- Filters & Sorters -->
+<div class="flex items-center gap-space-md flex-wrap font-label-telemetry-sm text-label-telemetry-sm">
+<div class="flex items-center gap-space-xs">
+<span class="text-outline">Filtrer par BCC:</span>
+<select class="bg-surface-container px-space-sm py-1 text-on-surface border-none focus:outline-none focus:bg-surface-container-high" id="bccFilter" onchange="filterCutsTable()">
+<option value="all">Tous les BCCs (4)</option>
+<option value="BCC 1">BCC 1 — Grand Tunis Nord</option>
+<option value="BCC 2">BCC 2 — Tunis Sud</option>
+<option value="BCC 3">BCC 3 — Béja (Nord-Ouest)</option>
+<option value="BCC 4">BCC 4 — Bizerte / Mateur</option>
+</select>
+</div>
+<button class="flex items-center gap-1 px-space-sm py-1 bg-surface-container hover:bg-surface-container-high text-secondary" onclick="toggleSortDuration()">
+<span class="material-symbols-outlined text-[14px]">swap_vert</span>
+<span id="sortDurationText">Trier par durée (Décroissant)</span>
+</button>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left font-label-telemetry-sm text-label-telemetry-sm">
+<thead class="bg-surface-container font-label-caps text-label-caps text-outline uppercase tracking-wider">
+<tr>
+<th class="py-2 px-space-md">BCC Responsable</th>
+<th class="py-2 px-space-md">Réf Départ</th>
+<th class="py-2 px-space-md">Poste Source / Nom Feeder</th>
+<th class="py-2 px-space-md">Début Coupure</th>
+<th class="py-2 px-space-md">Durée Écoulée</th>
+<th class="py-2 px-space-md text-right">Puissance Délestée</th>
+<th class="py-2 px-space-md text-center">Statut Rotation</th>
+</tr>
+</thead>
+<tbody class="divide-y-0" id="cutsTableBody">
+<!-- Row 1: Overdue -->
+<tr class="cut-row bg-error-container/20 text-on-surface hover:bg-error-container/30 transition-colors" data-bcc="BCC 3" data-duration="52">
+<td class="py-2 px-space-md font-bold text-error">BCC 3 (Nord-Ouest)</td>
+<td class="py-2 px-space-md font-bold text-on-surface">D30-F18</td>
+<td class="py-2 px-space-md">BÉJA 90kV / Nefza Rural</td>
+<td class="py-2 px-space-md text-outline">13:55:10</td>
+<td class="py-2 px-space-md font-bold text-error flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error animate-ping"></span>
+<span>52 min</span>
+</td>
+<td class="py-2 px-space-md font-bold text-right text-error">4,8 MW</td>
+<td class="py-2 px-space-md text-center">
+<span class="px-1.5 py-0.5 bg-error text-surface-container-lowest font-bold text-[10px] uppercase">DÉPASSEMENT (&gt;45M)</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="cut-row bg-surface-container-low hover:bg-surface-container transition-colors" data-bcc="BCC 4" data-duration="39">
+<td class="py-2 px-space-md text-secondary">BCC 4 (Bizerte)</td>
+<td class="py-2 px-space-md font-semibold text-on-surface">D30-F02</td>
+<td class="py-2 px-space-md">MATEUR 90kV / Menzel Bourguiba Z.I.</td>
+<td class="py-2 px-space-md text-outline">14:08:44</td>
+<td class="py-2 px-space-md text-on-surface font-mono">39 min</td>
+<td class="py-2 px-space-md font-bold text-right text-secondary">11,0 MW</td>
+<td class="py-2 px-space-md text-center">
+<span class="px-1.5 py-0.5 bg-[#4ade80]/10 text-[#4ade80] font-bold text-[10px]">CONFORME</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="cut-row bg-surface-container hover:bg-surface-container-high transition-colors" data-bcc="BCC 2" data-duration="34">
+<td class="py-2 px-space-md text-secondary">BCC 2 (Tunis Sud)</td>
+<td class="py-2 px-space-md font-semibold text-on-surface">D30-F08</td>
+<td class="py-2 px-space-md">NAASSEN 90kV / Ben Arous Industriel</td>
+<td class="py-2 px-space-md text-outline">14:13:20</td>
+<td class="py-2 px-space-md text-on-surface font-mono">34 min</td>
+<td class="py-2 px-space-md font-bold text-right text-secondary">9,1 MW</td>
+<td class="py-2 px-space-md text-center">
+<span class="px-1.5 py-0.5 bg-[#4ade80]/10 text-[#4ade80] font-bold text-[10px]">CONFORME</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="cut-row bg-surface-container-low hover:bg-surface-container transition-colors" data-bcc="BCC 3" data-duration="31">
+<td class="py-2 px-space-md text-secondary">BCC 3 (Nord-Ouest)</td>
+<td class="py-2 px-space-md font-semibold text-on-surface">D30-F04</td>
+<td class="py-2 px-space-md">BÉJA 90kV / Medjez El Bab Centre</td>
+<td class="py-2 px-space-md text-outline">14:16:02</td>
+<td class="py-2 px-space-md text-on-surface font-mono">31 min</td>
+<td class="py-2 px-space-md font-bold text-right text-secondary">7,2 MW</td>
+<td class="py-2 px-space-md text-center">
+<span class="px-1.5 py-0.5 bg-[#4ade80]/10 text-[#4ade80] font-bold text-[10px]">CONFORME</span>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="cut-row bg-surface-container hover:bg-surface-container-high transition-colors" data-bcc="BCC 1" data-duration="28">
+<td class="py-2 px-space-md text-secondary">BCC 1 (Tunis Nord)</td>
+<td class="py-2 px-space-md font-semibold text-on-surface">D30-F03</td>
+<td class="py-2 px-space-md">EL MENZAH 90kV / Charguia Tertiaire</td>
+<td class="py-2 px-space-md text-outline">14:19:15</td>
+<td class="py-2 px-space-md text-on-surface font-mono">28 min</td>
+<td class="py-2 px-space-md font-bold text-right text-secondary">8,4 MW</td>
+<td class="py-2 px-space-md text-center">
+<span class="px-1.5 py-0.5 bg-[#4ade80]/10 text-[#4ade80] font-bold text-[10px]">CONFORME</span>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="cut-row bg-surface-container-low hover:bg-surface-container transition-colors" data-bcc="BCC 2" data-duration="22">
+<td class="py-2 px-space-md text-secondary">BCC 2 (Tunis Sud)</td>
+<td class="py-2 px-space-md font-semibold text-on-surface">D30-F15</td>
+<td class="py-2 px-space-md">MGHIRA 90kV / Mégrine Sud Feeder 2</td>
+<td class="py-2 px-space-md text-outline">14:25:00</td>
+<td class="py-2 px-space-md text-on-surface font-mono">22 min</td>
+<td class="py-2 px-space-md font-bold text-right text-secondary">5,5 MW</td>
+<td class="py-2 px-space-md text-center">
+<span class="px-1.5 py-0.5 bg-[#4ade80]/10 text-[#4ade80] font-bold text-[10px]">CONFORME</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Pagination -->
+<div class="flex items-center justify-between pt-space-xs font-label-telemetry-sm text-label-telemetry-sm text-outline px-space-sm bg-surface-container-lowest">
+<span>Affichage de 6 départs sur 42 actifs</span>
+<div class="flex items-center gap-space-sm">
+<button class="px-2 py-0.5 bg-surface-container text-on-surface opacity-50 cursor-not-allowed">Précédent</button>
+<span class="text-secondary font-bold">1 / 7</span>
+<button class="px-2 py-0.5 bg-surface-container hover:bg-surface-container-high text-on-surface">Suivant</button>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODAL: ORDRE D'URGENCE DN REÇU (BLOCKING SCADA OVERLAY)                   -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-space-md" id="urgenceModal">
+<div class="bg-surface-container-low w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden ring-2 ring-error">
+<!-- Modal Header (Red Warning Pulse) -->
+<div class="p-space-md bg-error-container text-on-error-container flex items-center justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-9 h-9 bg-surface-container-lowest flex items-center justify-center text-error animate-bounce">
+<span class="material-symbols-outlined text-[24px]">crisis_alert</span>
+</div>
+<div>
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-sm text-headline-sm font-bold uppercase tracking-wider">ORDRE D'URGENCE DN REÇU</span>
+<span class="px-space-xs py-0.5 bg-surface-container-lowest text-error font-label-telemetry-sm text-label-telemetry-sm font-bold">NIVEAU 2 CRITIQUE</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-error-container/80">Réf : URG-2025-0903-001 • Horodatage récepteur : 14h47 • Dispatching National Radès</span>
+</div>
+</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-right">
+<span class="text-outline uppercase block">DÉLAI EXECUTION</span>
+<span class="font-bold text-on-error-container text-headline-sm">&lt; 03:00 MIN</span>
+</div>
+</div>
+<!-- Modal Body (Scrollable) -->
+<div class="p-space-lg overflow-y-auto flex-1 space-y-space-md bg-surface-container-lowest">
+<!-- Urgence Specs Bar -->
+<div class="bg-surface-container p-space-md flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-outline uppercase">Consigne Additionnelle Requise (CRC Nord)</span>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-label-telemetry-lg text-headline-lg font-bold text-error">+54,0</span>
+<span class="font-label-telemetry-md text-label-telemetry-md text-outline">MW d'effacement immédiat</span>
+</div>
+</div>
+<div class="flex flex-col text-right">
+<span class="font-label-caps text-label-caps text-outline uppercase">Nouvelle Consigne Globale CRC</span>
+<div class="flex items-baseline gap-space-xs justify-end">
+<span class="font-label-telemetry-lg text-headline-lg font-bold text-secondary">354,0</span>
+<span class="font-label-telemetry-md text-label-telemetry-md text-outline">MW (300 + 54)</span>
+</div>
+</div>
+</div>
+<!-- AI Suggestion Reasoning Accordion / Info Box -->
+<div class="bg-surface-container-low p-space-md space-y-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="px-space-xs py-0.5 bg-secondary-container/40 text-secondary font-label-telemetry-sm text-label-telemetry-sm font-bold uppercase">ALGORITHME OP-LLM 2.5</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Proposition de Répartition Optimisée par BCC</span>
+</div>
+<button class="px-space-md py-1 bg-secondary-container hover:bg-secondary-container/80 text-on-secondary-container font-label-telemetry-sm text-label-telemetry-sm font-bold uppercase flex items-center gap-1" onclick="applyAiUrgenceSuggestion()">
+<span class="material-symbols-outlined text-[14px]">auto_fix_high</span>
+<span>Appliquer la suggestion IA (+54 MW)</span>
+</button>
+</div>
+<p class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant leading-relaxed">
+            Contrainte d'évacuation thermique détectée sur Béja suite au déclenchement du D22 (capacité résiduelle plafonnée à 8 MW). L'IA maximise les reports sur BCC 1 (+18 MW tertiaire) et BCC 2 (+14 MW zone industrielle Ben Arous) sans dépassement de transit HTB.
+          </p>
+</div>
+<!-- BCC 4-Way Distribution Tool -->
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between font-label-caps text-label-caps text-outline uppercase">
+<span>Ventilation Opérationnelle par BCC</span>
+<span>Objectif : Somme = +54,0 MW</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<!-- BCC 1 Input -->
+<div class="bg-surface-container p-space-sm flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-bold text-on-surface text-label-telemetry-md">BCC 1 — Tunis Ville &amp; Nord</span>
+<span class="text-secondary font-label-telemetry-sm">Suggéré : +18 MW</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-telemetry-md text-outline">+</span>
+<input class="w-full bg-surface-container-lowest px-space-sm py-1 font-label-telemetry-md text-on-surface text-secondary font-bold focus:outline-none focus:bg-surface-container-high" id="urg_bcc1" oninput="recalcUrgenceModal()" step="0.5" type="number" value="18.0"/>
+<span class="font-label-telemetry-sm text-outline">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden mt-1">
+<div class="bg-secondary h-full" id="bar_urg_bcc1" style="width: 33.3%"></div>
+</div>
+</div>
+<!-- BCC 2 Input -->
+<div class="bg-surface-container p-space-sm flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-bold text-on-surface text-label-telemetry-md">BCC 2 — Tunis Sud / Ben Arous</span>
+<span class="text-secondary font-label-telemetry-sm">Suggéré : +14 MW</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-telemetry-md text-outline">+</span>
+<input class="w-full bg-surface-container-lowest px-space-sm py-1 font-label-telemetry-md text-on-surface text-secondary font-bold focus:outline-none focus:bg-surface-container-high" id="urg_bcc2" oninput="recalcUrgenceModal()" step="0.5" type="number" value="14.0"/>
+<span class="font-label-telemetry-sm text-outline">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden mt-1">
+<div class="bg-secondary h-full" id="bar_urg_bcc2" style="width: 25.9%"></div>
+</div>
+</div>
+<!-- BCC 3 Input (Limité) -->
+<div class="bg-surface-container p-space-sm flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-bold text-tertiary text-label-telemetry-md">BCC 3 — Béja (Plafond 8 MW)</span>
+<span class="text-error font-label-telemetry-sm">Suggéré : +8 MW</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-telemetry-md text-outline">+</span>
+<input class="w-full bg-surface-container-lowest px-space-sm py-1 font-label-telemetry-md text-on-surface text-tertiary font-bold focus:outline-none focus:bg-surface-container-high" id="urg_bcc3" oninput="recalcUrgenceModal()" step="0.5" type="number" value="8.0"/>
+<span class="font-label-telemetry-sm text-outline">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden mt-1">
+<div class="bg-tertiary h-full" id="bar_urg_bcc3" style="width: 14.8%"></div>
+</div>
+</div>
+<!-- BCC 4 Input -->
+<div class="bg-surface-container p-space-sm flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-bold text-on-surface text-label-telemetry-md">BCC 4 — Bizerte / Mateur</span>
+<span class="text-secondary font-label-telemetry-sm">Suggéré : +14 MW</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-telemetry-md text-outline">+</span>
+<input class="w-full bg-surface-container-lowest px-space-sm py-1 font-label-telemetry-md text-on-surface text-secondary font-bold focus:outline-none focus:bg-surface-container-high" id="urg_bcc4" oninput="recalcUrgenceModal()" step="0.5" type="number" value="14.0"/>
+<span class="font-label-telemetry-sm text-outline">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden mt-1">
+<div class="bg-secondary h-full" id="bar_urg_bcc4" style="width: 25.9%"></div>
+</div>
+</div>
+</div>
+<!-- Total Balance Verification Bar -->
+<div class="p-space-sm bg-surface-container flex items-center justify-between font-label-telemetry-sm text-label-telemetry-sm mt-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="text-outline uppercase">Total Ventilé :</span>
+<strong class="text-secondary text-headline-sm" id="urgTotalMW">54,0 MW</strong>
+<span class="text-outline">/ Requis DN : +54,0 MW</span>
+</div>
+<div class="px-2 py-0.5 bg-[#4ade80]/20 text-[#4ade80] font-bold text-[10px]" id="urgStatusBadge">
+              CONFORME (+54,0 MW)
+            </div>
+</div>
+</div>
+</div>
+<!-- Modal Footer (No Cancel, Only Send) -->
+<div class="p-space-md bg-surface-container flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-xs text-outline font-label-telemetry-sm text-label-telemetry-sm">
+<span class="material-symbols-outlined text-[16px] text-tertiary">lock</span>
+<span>Ordre horodaté et enregistré dans l'audit CRC • Action irréversible</span>
+</div>
+<div class="flex items-center gap-space-md">
+<button class="px-space-md py-2 bg-surface-container-highest hover:bg-surface-container-high text-secondary font-label-telemetry-sm text-label-telemetry-sm flex items-center gap-1" onclick="openAiDrawer('Analyse d\'impact sur le transit 90kV pour l\'ordre URG-2025-0903-001 (+54 MW)')">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+<span>Analyser avec l'IA</span>
+</button>
+<button class="px-space-xl py-2 bg-error text-surface-container-lowest hover:bg-[#b0101a] font-label-telemetry-md text-label-telemetry-md font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg" id="btnConfirmUrgence" onclick="confirmAndDispatchUrgence()">
+<span class="material-symbols-outlined text-[18px]">broadcast_on_personal</span>
+<span>Reçu — Envoyer aux 4 BCCs</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- COMPONENT JAVASCRIPT: ACCORDION, URGENCY LOGIC & MODAL HANDLING           -->
+<!-- ========================================================================= -->
+<script>
+  // Accordion Toggle
+  function toggleAccordion(id) {
+    const el = document.getElementById(id);
+    const icon = document.getElementById('icon_' + id);
+    if (el) {
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        if (icon) icon.style.transform = 'rotate(180deg)';
+      } else {
+        el.classList.add('hidden');
+        if (icon) icon.style.transform = 'rotate(0deg)';
+      }
+    }
+  }
+
+  // Urgence Modal Open / Dismiss
+  function openUrgenceModal() {
+    const modal = document.getElementById('urgenceModal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  }
+
+  function applyAiUrgenceSuggestion() {
+    document.getElementById('urg_bcc1').value = "18.0";
+    document.getElementById('urg_bcc2').value = "14.0";
+    document.getElementById('urg_bcc3').value = "8.0";
+    document.getElementById('urg_bcc4').value = "14.0";
+    recalcUrgenceModal();
+    if (typeof showToast === 'function') {
+      showToast("Suggestion IA appliquée : 18 / 14 / 8 / 14 MW");
+    }
+  }
+
+  function recalcUrgenceModal() {
+    const b1 = parseFloat(document.getElementById('urg_bcc1').value) || 0;
+    const b2 = parseFloat(document.getElementById('urg_bcc2').value) || 0;
+    const b3 = parseFloat(document.getElementById('urg_bcc3').value) || 0;
+    const b4 = parseFloat(document.getElementById('urg_bcc4').value) || 0;
+    const total = b1 + b2 + b3 + b4;
+
+    const totalEl = document.getElementById('urgTotalMW');
+    const badgeEl = document.getElementById('urgStatusBadge');
+    const btn = document.getElementById('btnConfirmUrgence');
+
+    if (totalEl) totalEl.textContent = `${total.toFixed(1)} MW`;
+
+    const pct1 = Math.min(100, Math.max(0, (b1 / 54) * 100));
+    const pct2 = Math.min(100, Math.max(0, (b2 / 54) * 100));
+    const pct3 = Math.min(100, Math.max(0, (b3 / 54) * 100));
+    const pct4 = Math.min(100, Math.max(0, (b4 / 54) * 100));
+
+    document.getElementById('bar_urg_bcc1').style.width = pct1 + '%';
+    document.getElementById('bar_urg_bcc2').style.width = pct2 + '%';
+    document.getElementById('bar_urg_bcc3').style.width = pct3 + '%';
+    document.getElementById('bar_urg_bcc4').style.width = pct4 + '%';
+
+    if (Math.abs(total - 54.0) < 0.2) {
+      badgeEl.className = "px-2 py-0.5 bg-[#4ade80]/20 text-[#4ade80] font-bold text-[10px]";
+      badgeEl.textContent = "CONFORME (+54,0 MW)";
+      btn.disabled = false;
+      btn.classList.remove('opacity-40', 'cursor-not-allowed');
+    } else {
+      const diff = total - 54.0;
+      badgeEl.className = "px-2 py-0.5 bg-error text-surface-container-lowest font-bold text-[10px]";
+      badgeEl.textContent = `ÉCART ${diff > 0 ? '+' : ''}${diff.toFixed(1)} MW`;
+      btn.disabled = true;
+      btn.classList.add('opacity-40', 'cursor-not-allowed');
+    }
+  }
+
+  function confirmAndDispatchUrgence() {
+    const modal = document.getElementById('urgenceModal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+    if (typeof showToast === 'function') {
+      showToast("Ordre URG-2025-0903-001 diffusé aux 4 BCCs avec succès (+54 MW).");
+    }
+  }
+</script></main>
+<!-- ========================================================================= -->
+<!-- FIXED STATUSBAR (h-8)                                                     -->
+<!-- ========================================================================= -->
+<footer class="fixed bottom-0 left-0 right-0 h-8 bg-surface-container-lowest border-t border-surface-container-high z-40 flex items-center justify-between px-space-lg font-mono text-[11px]">
+<div class="flex items-center gap-space-lg">
+<div class="flex items-center gap-space-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px] text-secondary">schedule</span>
+<span>03/09/2025 • 14:47:32</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="text-tertiary font-semibold">DÉFICIT ACTIF: -18,0 MW (BCC 3 AVARIE D22)</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs px-space-md py-0.5 bg-surface-container border border-surface-container-high">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="text-on-surface">TÉLÉMESURE IEC 104 : 100% OK</span>
+</div>
+<div class="hidden sm:flex items-center gap-space-xs text-outline text-[10px]">
+<span>SERVEUR SCADA PRIMAIRE RADÈS</span>
+</div>
+</div>
+</footer>
+<!-- ========================================================================= -->
+<!-- MODAL: PROGRAMME J+1 (TRIGGERED BY BUTTON IN SECTION 1)                   -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-space-md" id="programmeModal">
+<div class="bg-surface-container-low border border-surface-container-high w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+<!-- Modal Header -->
+<div class="p-space-md bg-surface-container-lowest border-b border-surface-container-high flex items-center justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-8 h-8 rounded bg-surface-container border border-surface-container-high flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+</div>
+<div>
+<h3 class="text-sm font-bold text-on-surface uppercase tracking-wide">
+              Programme J+1 — CRC Nord
+            </h3>
+<span class="font-mono text-[10px] text-outline">Date d'application : 04/09/2025 • Granularité 30 min</span>
+</div>
+</div>
+<button class="p-1 hover:bg-surface-container text-outline hover:text-on-surface transition-colors" onclick="closeProgrammeModal()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Tabs -->
+<div class="bg-surface-container px-space-md pt-space-xs flex gap-space-sm border-b border-surface-container-high font-mono text-xs">
+<button class="px-space-md py-2 text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors" id="tabBtnImport" onclick="switchProgrammeTab('import')">
+          Importer fichier (CSV/Excel)
+        </button>
+<button class="px-space-md py-2 text-secondary border-b-2 border-secondary font-bold" id="tabBtnManual" onclick="switchProgrammeTab('manual')">
+          Saisie manuelle par BCC
+        </button>
+</div>
+<!-- Modal Body (Scrollable) -->
+<div class="p-space-lg overflow-y-auto flex-1 space-y-space-md">
+<!-- TAB 1: IMPORT CSV/EXCEL -->
+<div class="hidden space-y-space-md" id="tabContentImport">
+<div class="border-2 border-dashed border-surface-container-highest hover:border-secondary/60 p-space-xl text-center bg-surface-container-lowest transition-colors cursor-pointer flex flex-col items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[36px] text-secondary">cloud_upload</span>
+<span class="font-sans font-semibold text-xs text-on-surface">Glissez-déposez votre fichier de programme prévisionnel</span>
+<span class="font-mono text-[10px] text-outline">Formats acceptés : .CSV, .XLSX (Granularité 48 créneaux)</span>
+</div>
+<div class="bg-surface-container p-space-sm border border-surface-container-high">
+<div class="font-mono text-[10px] text-outline uppercase mb-1">Format attendu CSV :</div>
+<pre class="bg-surface-container-lowest p-2 font-mono text-[11px] text-secondary overflow-x-auto border border-surface-container-high">bcc_id,heure,mw_planifie
+bcc1,12:00,110.0
+bcc2,12:00,90.0
+bcc3,12:00,58.0
+bcc4,12:00,42.0</pre>
+</div>
+</div>
+<!-- TAB 2: MANUAL ENTRY -->
+<div class="space-y-space-md" id="tabContentManual">
+<!-- AI Suggestion Collapsible Panel -->
+<div class="bg-surface-container-lowest border border-surface-container-high p-space-sm">
+<div class="flex items-center justify-between cursor-pointer" onclick="toggleAiSuggestionCollapse()">
+<div class="flex items-center gap-space-sm">
+<span class="px-1 py-0.5 bg-secondary-container/30 text-secondary border border-secondary/30 font-mono text-[9px] font-bold uppercase">
+                  IA ANALYSE
+                </span>
+<span class="font-sans text-xs font-semibold text-on-surface">Recommandation prédictive J+1 (Canicule anticipée 42°C)</span>
+</div>
+<button class="font-mono text-[10px] text-secondary hover:underline" id="aiSuggestToggleText" type="button">
+                Voir analyse ▼
+              </button>
+</div>
+<!-- Collapsible content -->
+<div class="hidden mt-space-sm pt-space-sm border-t border-surface-container-high font-mono text-xs text-on-surface-variant space-y-2" id="aiSuggestContent">
+<p class="text-[11px]">
+                Modèle de charge thermique STEG : Hausse prévue de 12% sur BCC 1 (climatisation tertiaire Tunis) et contrainte d'acheminement sur Béja. Répartition optimale suggérée :
+              </p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] text-on-surface">
+<div class="bg-surface-container p-1 border border-surface-container-high">BCC 1: <strong>115 MW</strong></div>
+<div class="bg-surface-container p-1 border border-surface-container-high">BCC 2: <strong>88 MW</strong></div>
+<div class="bg-surface-container p-1 border border-surface-container-high">BCC 3: <strong>52 MW</strong></div>
+<div class="bg-surface-container p-1 border border-surface-container-high">BCC 4: <strong>45 MW</strong></div>
+</div>
+<button class="px-space-md py-1 bg-secondary-container hover:bg-secondary-container/90 text-on-secondary-container font-mono text-[10px] font-bold uppercase flex items-center gap-1" onclick="applyAiProgrammeSuggestion()">
+<span class="material-symbols-outlined text-[14px]">auto_fix_high</span>
+<span>Appliquer la suggestion IA</span>
+</button>
+</div>
+</div>
+<!-- 4 BCC Input Cards in 2x2 Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<!-- BCC 1 -->
+<div class="bg-surface-container p-space-sm border border-surface-container-high flex flex-col gap-1.5">
+<div class="flex justify-between items-center">
+<span class="font-sans font-semibold text-xs text-on-surface">BCC 1 — Tunis Ville &amp; Nord</span>
+<span class="font-mono text-[10px] text-secondary" id="pct_j1_bcc1">36.7 %</span>
+</div>
+<div class="text-[10px] font-mono text-outline">Postes 90kV: El Menzah, Charguia</div>
+<div class="flex items-center gap-2 mt-1">
+<input class="w-full bg-surface-container-lowest border border-surface-container-high px-space-sm py-1 font-mono text-xs text-on-surface focus:border-secondary focus:outline-none" id="input_j1_bcc1" oninput="recalcProgrammeModal()" type="number" value="110"/>
+<span class="font-mono text-xs text-outline">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden mt-1">
+<div class="bg-secondary h-full" id="bar_j1_bcc1" style="width: 36.7%"></div>
+</div>
+</div>
+<!-- BCC 2 -->
+<div class="bg-surface-container p-space-sm border border-surface-container-high flex flex-col gap-1.5">
+<div class="flex justify-between items-center">
+<span class="font-sans font-semibold text-on-surface">BCC 2 — Tunis Sud</span>
+<span class="font-mono text-[10px] text-secondary" id="pct_j1_bcc2">30.0 %</span>
+</div>
+<div class="text-[10px] font-mono text-outline">Postes 90kV: Naassen, Mghira</div>
+<div class="flex items-center gap-2 mt-1">
+<input class="w-full bg-surface-container-lowest border border-surface-container-high px-space-sm py-1 font-mono text-xs text-on-surface focus:border-secondary focus:outline-none" id="input_j1_bcc2" oninput="recalcProgrammeModal()" type="number" value="90"/>
+<span class="font-mono text-xs text-outline">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden mt-1">
+<div class="bg-secondary h-full" id="bar_j1_bcc2" style="width: 30%"></div>
+</div>
+</div>
+<!-- BCC 3 -->
+<div class="bg-surface-container p-space-sm border border-surface-container-high flex flex-col gap-1.5">
+<div class="flex justify-between items-center">
+<span class="font-sans font-semibold text-on-surface">BCC 3 — Nord-Ouest</span>
+<span class="font-mono text-[10px] text-secondary" id="pct_j1_bcc3">19.3 %</span>
+</div>
+<div class="text-[10px] font-mono text-outline">Postes 90kV: Béja, Jendouba</div>
+<div class="flex items-center gap-2 mt-1">
+<input class="w-full bg-surface-container-lowest border border-surface-container-high px-space-sm py-1 font-mono text-xs text-on-surface focus:border-secondary focus:outline-none" id="input_j1_bcc3" oninput="recalcProgrammeModal()" type="number" value="58"/>
+<span class="font-mono text-xs text-outline">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden mt-1">
+<div class="bg-secondary h-full" id="bar_j1_bcc3" style="width: 19.3%"></div>
+</div>
+</div>
+<!-- BCC 4 -->
+<div class="bg-surface-container p-space-sm border border-surface-container-high flex flex-col gap-1.5">
+<div class="flex justify-between items-center">
+<span class="font-sans font-semibold text-on-surface">BCC 4 — Bizerte / Mateur</span>
+<span class="font-mono text-[10px] text-secondary" id="pct_j1_bcc4">14.0 %</span>
+</div>
+<div class="text-[10px] font-mono text-outline">Postes 90kV: Bizerte, Mateur</div>
+<div class="flex items-center gap-2 mt-1">
+<input class="w-full bg-surface-container-lowest border border-surface-container-high px-space-sm py-1 font-mono text-xs text-on-surface focus:border-secondary focus:outline-none" id="input_j1_bcc4" oninput="recalcProgrammeModal()" type="number" value="42"/>
+<span class="font-mono text-xs text-outline">MW</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 overflow-hidden mt-1">
+<div class="bg-secondary h-full" id="bar_j1_bcc4" style="width: 14%"></div>
+</div>
+</div>
+</div>
+<!-- Total Balance Row -->
+<div class="p-space-sm bg-surface-container-lowest border border-surface-container-high flex items-center justify-between font-mono text-xs">
+<div class="flex items-center gap-space-sm">
+<span class="text-outline uppercase">Total Programme J+1:</span>
+<strong class="text-secondary text-sm" id="modalTotalMW">300,0 MW</strong>
+<span class="text-outline">/ Cible DN: 300,0 MW</span>
+</div>
+<div class="px-2 py-0.5 bg-[#16a34a]/20 text-[#4ade80] border border-[#16a34a]/40 text-[10px] font-bold" id="modalBalanceStatus">
+              CONFORME (100%)
+            </div>
+</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="p-space-md bg-surface-container-lowest border-t border-surface-container-high flex items-center justify-between">
+<button class="px-space-md py-1.5 text-on-surface-variant hover:text-on-surface font-mono text-xs" onclick="closeProgrammeModal()">
+          Annuler
+        </button>
+<button class="px-space-lg py-1.5 bg-secondary-container hover:bg-secondary-container/90 text-on-secondary-container font-mono text-xs font-bold uppercase flex items-center gap-1.5 border border-secondary transition-all" id="modalSubmitBtn" onclick="submitProgrammeJ1()">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Valider et envoyer aux BCCs</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- SLIDE-IN AI PANEL (FIXED RIGHT, IDENTICAL STYLE TO DN DASHBOARD)          -->
+<!-- ========================================================================= -->
+<div class="fixed top-14 right-0 bottom-8 w-96 bg-surface-container-low border-l border-surface-container-high shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col" id="aiSlidePanel">
+<!-- AI Header -->
+<div class="p-space-md bg-surface-container-lowest border-b border-surface-container-high flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded bg-secondary-container/30 border border-secondary/40 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[18px]">smart_toy</span>
+</div>
+<div class="flex flex-col">
+<span class="font-sans font-bold text-xs text-on-surface uppercase">Analyse IA — CRC Nord</span>
+<span class="font-mono text-[9px] text-secondary">MODÈLE ÉNERGÉTIQUE OP-LLM 2.5</span>
+</div>
+</div>
+<button class="p-1 hover:bg-surface-container text-outline hover:text-on-surface transition-colors" onclick="toggleAiDrawer()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- AI Chat Messages Area -->
+<div class="flex-1 p-space-md overflow-y-auto space-y-space-md font-mono text-xs" id="aiChatArea">
+<!-- System Message -->
+<div class="bg-surface-container-lowest p-space-sm border border-surface-container-high text-on-surface-variant leading-relaxed text-[11px]">
+<div class="text-secondary font-bold uppercase text-[9px] mb-1">Rapport de téléconduite 14:47</div>
+<p>Avarie constatée sur le disjoncteur D22 (Poste Béja 90kV). Capacité d'écrêtage locale réduite à 38 MW au lieu des 58 MW requis.</p>
+<div class="mt-2 text-outline text-[10px]">Recommandation : Bascule de 12 MW vers BCC 2 et 6 MW vers BCC 4.</div>
+</div>
+<!-- User prompt message (demo) -->
+<div class="bg-secondary-container/20 border border-secondary/30 p-space-sm ml-6 text-on-surface text-[11px]">
+        Quelle est la marge thermique sur les départs HTA de Menzel Bourguiba ?
+      </div>
+<!-- AI reply -->
+<div class="bg-surface-container-lowest p-space-sm border border-surface-container-high text-on-surface-variant leading-relaxed text-[11px]">
+<span class="text-tertiary font-bold text-[9px] block mb-0.5">RÉPONSE MODÈLE</span>
+<p>Le feeder F05 (Z.I. Menzel Bourguiba) opère à 64% de sa capacité nominale. Mobilisation additionnelle de 8 MW réalisable sans risque de surcharge sur le transformateur 150/30 kV.</p>
+</div>
+</div>
+<!-- AI Input Bar -->
+<div class="p-space-sm bg-surface-container-lowest border-t border-surface-container-high flex flex-col gap-1.5">
+<div class="flex items-center gap-1">
+<input class="flex-1 bg-surface-container border border-surface-container-high px-space-sm py-1.5 font-mono text-xs text-on-surface focus:border-secondary focus:outline-none" id="aiInputText" onkeydown="if(event.key==='Enter') sendAiMessage()" placeholder="Poser une question opérationnelle..." type="text"/>
+<button class="p-1.5 bg-secondary-container hover:bg-secondary-container/90 text-on-secondary-container border border-secondary flex items-center justify-center" onclick="sendAiMessage()">
+<span class="material-symbols-outlined text-[16px]">send</span>
+</button>
+</div>
+<div class="text-[9px] font-mono text-outline text-center">
+        Suggestions IA indicatives. Décisions à l'opérateur CRC.
+      </div>
+</div>
+</div>
+<!-- Toast Notification (hidden by default) -->
+<div class="fixed bottom-12 right-6 bg-surface-container border border-secondary px-space-md py-2 shadow-xl z-50 hidden items-center gap-space-sm font-mono text-xs text-on-surface" id="toastNotification">
+<span class="material-symbols-outlined text-secondary text-[18px]">verified</span>
+<span id="toastMessage">Consignes transmises aux 4 BCCs avec succès.</span>
+</div>
+<!-- ========================================================================= -->
+<!-- JAVASCRIPT LOGIC & INTERACTIONS                                           -->
+<!-- ========================================================================= -->
+<script>
+    // Live Clock Simulation
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      const timeStr = `${h}:${m}:${s}`;
+      const elUTC = document.getElementById('clockUTC');
+      const elInner = document.getElementById('liveClockInner');
+      if (elUTC) elUTC.textContent = `${timeStr} UTC+1`;
+      if (elInner) elInner.textContent = timeStr;
+    }
+    setInterval(updateClock, 1000);
+
+    // Emergency Order Dismiss
+    function dismissEmergencyOrder() {
+      const banner = document.getElementById('emergencyBanner');
+      if (banner) {
+        banner.style.transition = 'all 0.5s ease-out';
+        banner.style.opacity = '0';
+        banner.style.transform = 'translateY(-100%)';
+        setTimeout(() => {
+          banner.style.display = 'none';
+        }, 500);
+      }
+      showToast("Ordre d'urgence URG-2025-0903-001 diffusé aux 4 BCCs (+54 MW).");
+    }
+
+    // AI Drawer Slide Toggle
+    function toggleAiDrawer() {
+      const drawer = document.getElementById('aiSlidePanel');
+      if (drawer) {
+        drawer.classList.toggle('translate-x-full');
+      }
+    }
+
+    function openAiDrawer(prefillContext) {
+      const drawer = document.getElementById('aiSlidePanel');
+      if (drawer) {
+        drawer.classList.remove('translate-x-full');
+      }
+      if (prefillContext) {
+        const input = document.getElementById('aiInputText');
+        if (input) input.value = prefillContext;
+      }
+    }
+
+    function sendAiMessage() {
+      const input = document.getElementById('aiInputText');
+      const chatArea = document.getElementById('aiChatArea');
+      if (!input || !chatArea || !input.value.trim()) return;
+
+      const userMsg = input.value.trim();
+      input.value = '';
+
+      const userBubble = document.createElement('div');
+      userBubble.className = 'bg-secondary-container/20 border border-secondary/30 p-space-sm ml-6 text-on-surface text-[11px]';
+      userBubble.textContent = userMsg;
+      chatArea.appendChild(userBubble);
+      chatArea.scrollTop = chatArea.scrollHeight;
+
+      setTimeout(() => {
+        const aiBubble = document.createElement('div');
+        aiBubble.className = 'bg-surface-container-lowest p-space-sm border border-surface-container-high text-on-surface-variant leading-relaxed text-[11px]';
+        aiBubble.innerHTML = `<span class="text-secondary font-bold text-[9px] block mb-0.5">ANALYSE SCADA TEMPS RÉEL</span>
+        <p>Calcul validé sur réseau Nord. Transit HTB admissible sur ligne 225kV Radès-Mornaguia. Aucun goulot d'étranglement signalé.</p>`;
+        chatArea.appendChild(aiBubble);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }, 700);
+    }
+
+    // Matrix Dispatch Recalculation
+    function recalcMatrix() {
+      const bcc1 = parseFloat(document.getElementById('consigne_bcc1').value) || 0;
+      const bcc2 = parseFloat(document.getElementById('consigne_bcc2').value) || 0;
+      const bcc3 = parseFloat(document.getElementById('consigne_bcc3').value) || 0;
+      const bcc4 = parseFloat(document.getElementById('consigne_bcc4').value) || 0;
+      const total = bcc1 + bcc2 + bcc3 + bcc4;
+
+      const totalEl = document.getElementById('matrixTotalConsigne');
+      const sumInd = document.getElementById('matrixSumIndicator');
+      const badge = document.getElementById('matrixConformityBadge');
+      const sendBtn = document.getElementById('btnSendMatrix');
+
+      if (totalEl) totalEl.textContent = `${total.toFixed(0)} MW`;
+      if (sumInd) sumInd.textContent = `${total.toFixed(1)} MW`;
+
+      if (Math.abs(total - 300) < 0.1) {
+        badge.className = "ml-space-sm px-1.5 py-0.5 bg-[#16a34a]/20 text-[#4ade80] border border-[#16a34a]/40 text-[10px] font-bold";
+        badge.textContent = "ÉQUILIBRÉ";
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        const diff = total - 300;
+        badge.className = "ml-space-sm px-1.5 py-0.5 bg-error-container text-on-error-container border border-error/50 text-[10px] font-bold";
+        badge.textContent = `DÉSÉQUILIBRE (${diff > 0 ? '+' : ''}${diff.toFixed(1)} MW)`;
+        sendBtn.disabled = true;
+        sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function sendMatrixToBCCs() {
+      showToast("Nouvelles consignes transmises aux BCCs 1, 2, 3 et 4.");
+    }
+
+    // Live Shedding Table Filtering & Sorting
+    let isDurationDesc = true;
+    function filterCutsTable() {
+      const filterVal = document.getElementById('bccFilter').value;
+      const rows = document.querySelectorAll('.cut-row');
+      rows.forEach(r => {
+        const bcc = r.getAttribute('data-bcc');
+        if (filterVal === 'all' || bcc === filterVal) {
+          r.style.display = '';
+        } else {
+          r.style.display = 'none';
+        }
+      });
+    }
+
+    function toggleSortDuration() {
+      isDurationDesc = !isDurationDesc;
+      document.getElementById('sortDurationText').textContent = isDurationDesc ? 'Plus long en premier' : 'Plus récent en premier';
+      
+      const tbody = document.getElementById('cutsTableBody');
+      const rows = Array.from(document.querySelectorAll('.cut-row'));
+      rows.sort((a, b) => {
+        const durA = parseInt(a.getAttribute('data-duration') || '0', 10);
+        const durB = parseInt(b.getAttribute('data-duration') || '0', 10);
+        return isDurationDesc ? (durB - durA) : (durA - durB);
+      });
+      rows.forEach(r => tbody.appendChild(r));
+    }
+
+    // Programme J+1 Modal Interactions
+    function openProgrammeModal() {
+      const modal = document.getElementById('programmeModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeProgrammeModal() {
+      const modal = document.getElementById('programmeModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function switchProgrammeTab(tab) {
+      const tabImport = document.getElementById('tabContentImport');
+      const tabManual = document.getElementById('tabContentManual');
+      const btnImport = document.getElementById('tabBtnImport');
+      const btnManual = document.getElementById('tabBtnManual');
+
+      if (tab === 'import') {
+        tabImport.classList.remove('hidden');
+        tabManual.classList.add('hidden');
+        btnImport.className = "px-space-md py-2 text-secondary border-b-2 border-secondary font-bold";
+        btnManual.className = "px-space-md py-2 text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors";
+      } else {
+        tabImport.classList.add('hidden');
+        tabManual.classList.remove('hidden');
+        btnManual.className = "px-space-md py-2 text-secondary border-b-2 border-secondary font-bold";
+        btnImport.className = "px-space-md py-2 text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors";
+      }
+    }
+
+    function toggleAiSuggestionCollapse() {
+      const content = document.getElementById('aiSuggestContent');
+      const toggleTxt = document.getElementById('aiSuggestToggleText');
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        toggleTxt.textContent = 'Masquer analyse ▲';
+      } else {
+        content.classList.add('hidden');
+        toggleTxt.textContent = 'Voir analyse ▼';
+      }
+    }
+
+    function applyAiProgrammeSuggestion() {
+      document.getElementById('input_j1_bcc1').value = 115;
+      document.getElementById('input_j1_bcc2').value = 88;
+      document.getElementById('input_j1_bcc3').value = 52;
+      document.getElementById('input_j1_bcc4').value = 45;
+      recalcProgrammeModal();
+      showToast("Suggestion IA appliquée à la grille J+1.");
+    }
+
+    function recalcProgrammeModal() {
+      const bcc1 = parseFloat(document.getElementById('input_j1_bcc1').value) || 0;
+      const bcc2 = parseFloat(document.getElementById('input_j1_bcc2').value) || 0;
+      const bcc3 = parseFloat(document.getElementById('input_j1_bcc3').value) || 0;
+      const bcc4 = parseFloat(document.getElementById('input_j1_bcc4').value) || 0;
+      const total = bcc1 + bcc2 + bcc3 + bcc4;
+
+      const totalEl = document.getElementById('modalTotalMW');
+      const statusEl = document.getElementById('modalBalanceStatus');
+      const submitBtn = document.getElementById('modalSubmitBtn');
+
+      // Update % and bars
+      const pct1 = ((bcc1 / (total || 1)) * 100).toFixed(1);
+      const pct2 = ((bcc2 / (total || 1)) * 100).toFixed(1);
+      const pct3 = ((bcc3 / (total || 1)) * 100).toFixed(1);
+      const pct4 = ((bcc4 / (total || 1)) * 100).toFixed(1);
+
+      document.getElementById('pct_j1_bcc1').textContent = `${pct1} %`;
+      document.getElementById('pct_j1_bcc2').textContent = `${pct2} %`;
+      document.getElementById('pct_j1_bcc3').textContent = `${pct3} %`;
+      document.getElementById('pct_j1_bcc4').textContent = `${pct4} %`;
+
+      document.getElementById('bar_j1_bcc1').style.width = `${pct1}%`;
+      document.getElementById('bar_j1_bcc2').style.width = `${pct2}%`;
+      document.getElementById('bar_j1_bcc3').style.width = `${pct3}%`;
+      document.getElementById('bar_j1_bcc4').style.width = `${pct4}%`;
+
+      totalEl.textContent = `${total.toFixed(1)} MW`;
+
+      if (Math.abs(total - 300) < 0.5) {
+        statusEl.className = "px-2 py-0.5 bg-[#16a34a]/20 text-[#4ade80] border border-[#16a34a]/40 text-[10px] font-bold";
+        statusEl.textContent = "CONFORME (100%)";
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        const diff = total - 300;
+        statusEl.className = "px-2 py-0.5 bg-error-container text-on-error-container border border-error/50 text-[10px] font-bold";
+        statusEl.textContent = `ÉCART ${diff > 0 ? '+' : ''}${diff.toFixed(1)} MW`;
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function submitProgrammeJ1() {
+      closeProgrammeModal();
+      showToast("Programme J+1 validé et transmis aux 4 BCCs.");
+    }
+
+    // Toast Notification helper
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      const toastMsg = document.getElementById('toastMessage');
+      if (toast && toastMsg) {
+        toastMsg.textContent = msg;
+        toast.classList.remove('hidden');
+        toast.classList.add('flex');
+        setTimeout(() => {
+          toast.classList.add('hidden');
+          toast.classList.remove('flex');
+        }, 3500);
+      }
+    }
+  </script>
+</body></html>
