@@ -19,7 +19,6 @@ const NAV_DN =
     ,{ label: 'Analyse & Historique ENS',path: '/dn/historique', icon: 'query_stats'  }
     ,{ label: 'Éditeur SIG & Topologie', path: '/dn/sig',        icon: 'map',         matchPaths: ['/dn/sig'] }
     ,{ label: 'Paramètres & Seuils',     path: '/dn/parametres', icon: 'tune'         }
-    ,{ label: 'Simulateur Réseau',       path: '/dn/simulateur', icon: 'science'      }
 ]
 
 const NAV_CRC =

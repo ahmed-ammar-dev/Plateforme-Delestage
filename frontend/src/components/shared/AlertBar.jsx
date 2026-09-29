@@ -349,11 +349,13 @@ function AlertsCenterPanel({ isOpen, onClose })
 // ── The thin alert bar (rendered in InternalLayout) ───────────────────────────
 export default function AlertBar({ showBar = true })
 {
-    const { activeAlerts, newAlertCount, panelOpened, openPanel, isPanelOpen, closePanel } = useAlertStore()
+    const { activeAlerts, unreadCount, openPanel, isPanelOpen, closePanel } = useAlertStore()
 
     const alerts   = activeAlerts()
-    const hasNew   = newAlertCount > 0
-    const glowing  = !panelOpened && alerts.length > 0
+    const hasNew   = unreadCount() > 0
+    const newCount = unreadCount()
+    // Glow while there are active alerts and the panel is closed
+    const glowing  = !isPanelOpen && alerts.length > 0
 
     // Always render the panel portal so the bell button works even with 0 alerts
     if (!showBar || alerts.length === 0)
@@ -445,7 +447,7 @@ export default function AlertBar({ showBar = true })
 
                     {hasNew && (
                         <span className="px-space-xs py-0.5 rounded bg-error-container text-on-error-container font-mono text-[9px] font-bold animate-pulse shrink-0">
-                            +{newAlertCount} NOUVEAU{newAlertCount > 1 ? 'X' : ''}
+                            +{newCount} NOUVEAU{newCount > 1 ? 'X' : ''}
                         </span>
                     )}
                 </div>

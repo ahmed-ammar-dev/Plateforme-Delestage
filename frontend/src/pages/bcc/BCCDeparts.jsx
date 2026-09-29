@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import api from '../../lib/api'
 import { useAuthStore } from '../../stores/authStore'
 
@@ -36,8 +36,8 @@ const INITIAL_FEEDERS =
     ,{ id: 20, ref: 'F46', nom: 'Aïn Snoussi',                    poste: 'Tabarka TR1',     mw: 2.8, priority: 'P5', zone: 'Aïn Snoussi',   statut: 'Inactif'  }
 ]
 
-const POSTES    = ['Béja Centre TR1', 'Béja Est TR2', 'Jendouba N. TR1', 'Jendouba S. TR2', 'Tabarka TR1']
 const PRIORITIES = ['P0', 'P1', 'P2', 'P3', 'P4', 'P5']
+const NEW_POSTE_SENTINEL = '__new__'
 
 function priCls(p)
 {
@@ -115,17 +115,59 @@ function ConfirmerModal({ message, onConfirm, onCancel })
 }
 
 // ── Add feeder modal ──────────────────────────────────────────────────────────
-const EMPTY_FEEDER = { ref: '', nom: '', poste: POSTES[0], mw: '', priority: 'P3', zone: '', statut: 'Actif' }
+const EMPTY_FEEDER = { ref: '', nom: '', poste: '', mw: '', priority: 'P3', zone: '', statut: 'Actif' }
 
-function AddFeederModal({ onSave, onCancel, nextId })
+function AddFeederModal({ onSave, onCancel, nextId, postes })
 {
-    const [form,    setForm]    = useState({ ...EMPTY_FEEDER })
-    const [confirm, setConfirm] = useState(false)
+    const [form,        setForm]        = useState({ ...EMPTY_FEEDER, poste: postes[0] ?? '' })
+    const [confirm,     setConfirm]     = useState(false)
+    const [newPosteTxt, setNewPosteTxt] = useState('')
+    const [addingNew,   setAddingNew]   = useState(false)
+    const [extraPostes, setExtraPostes] = useState([])   // new postes added this session
+    const newPosteRef                   = useRef(null)
+
+    // Full list = existing postes + any newly created ones this session
+    const allPostes = [...postes, ...extraPostes]
 
     const isP0    = form.priority === 'P0'
-    const isValid = form.ref.trim() && form.nom.trim() && form.mw && Number(form.mw) > 0
+    const isValid = form.ref.trim() && form.nom.trim() && form.mw && Number(form.mw) > 0 && form.poste.trim()
 
     const set = (k, v) => setForm((f) => ({ ...f, [k]: v }))
+
+    const handlePosteChange = (v) =>
+    {
+        if (v === NEW_POSTE_SENTINEL)
+        {
+            setAddingNew(true)
+            setNewPosteTxt('')
+            setTimeout(() => newPosteRef.current?.focus(), 50)
+        }
+        else
+        {
+            setAddingNew(false)
+            set('poste', v)
+        }
+    }
+
+    const confirmNewPoste = () =>
+    {
+        const trimmed = newPosteTxt.trim()
+        if (!trimmed) return
+        // Add to local extra list so the select can show it
+        if (!allPostes.includes(trimmed)) {
+            setExtraPostes((prev) => [...prev, trimmed])
+        }
+        set('poste', trimmed)
+        setAddingNew(false)
+        setNewPosteTxt('')
+    }
+
+    const cancelNewPoste = () =>
+    {
+        setAddingNew(false)
+        setNewPosteTxt('')
+        set('poste', postes[0] ?? '')
+    }
 
     const handleSave = () =>
     {
@@ -191,14 +233,77 @@ function AddFeederModal({ onSave, onCancel, nextId })
                             </div>
                             {/* Poste source */}
                             <div className="flex flex-col gap-space-xs">
-                                <label className="font-mono text-[10px] text-on-surface-variant uppercase">Poste source</label>
-                                <select
-                                    value={form.poste}
-                                    onChange={(e) => set('poste', e.target.value)}
-                                    className="bg-surface-container-lowest border border-surface-container-high focus:border-secondary text-on-surface font-mono text-xs px-space-sm py-space-xs focus:outline-none transition-colors"
-                                >
-                                    {POSTES.map((p) => <option key={p} value={p}>{p}</option>)}
-                                </select>
+                                <label className="font-mono text-[10px] text-on-surface-variant uppercase">Poste source *</label>
+                                {addingNew
+                                    ? (
+                                        <div className="flex flex-col gap-1">
+                                            <div className="flex items-center gap-1">
+                                                <input
+                                                    ref={newPosteRef}
+                                                    value={newPosteTxt}
+                                                    onChange={(e) => setNewPosteTxt(e.target.value)}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter') confirmNewPoste()
+                                                        if (e.key === 'Escape') cancelNewPoste()
+                                                    }}
+                                                    placeholder="Nom du nouveau poste (ex: Aïn TR3)"
+                                                    className="flex-1 bg-surface-container-lowest border border-secondary/60 focus:border-secondary text-on-surface font-mono text-xs px-space-sm py-space-xs focus:outline-none transition-colors"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onMouseDown={(e) => {
+                                                        e.preventDefault()
+                                                        const trimmed = newPosteTxt.trim()
+                                                        if (!trimmed) return
+                                                        if (!allPostes.includes(trimmed)) {
+                                                            setExtraPostes((prev) => [...prev, trimmed])
+                                                        }
+                                                        set('poste', trimmed)
+                                                        setAddingNew(false)
+                                                        setNewPosteTxt('')
+                                                    }}
+                                                    title="Valider le nouveau poste"
+                                                    className="p-space-xs bg-secondary-container hover:bg-secondary text-on-secondary-container transition-colors"
+                                                >
+                                                    <Icon name="check" size={14} />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onMouseDown={(e) => {
+                                                        e.preventDefault()
+                                                        cancelNewPoste()
+                                                    }}
+                                                    title="Annuler"
+                                                    className="p-space-xs bg-surface-container hover:bg-surface-container-high text-on-surface-variant border border-surface-container-high transition-colors"
+                                                >
+                                                    <Icon name="close" size={14} />
+                                                </button>
+                                            </div>
+                                            <span className="font-mono text-[9px] text-secondary">
+                                                Appuyez sur Entrée pour valider · Échap pour annuler
+                                            </span>
+                                        </div>
+                                    )
+                                    : (
+                                        <div className="flex items-center gap-1">
+                                            <select
+                                                value={form.poste}
+                                                onChange={(e) => handlePosteChange(e.target.value)}
+                                                className="flex-1 bg-surface-container-lowest border border-surface-container-high focus:border-secondary text-on-surface font-mono text-xs px-space-sm py-space-xs focus:outline-none transition-colors"
+                                            >
+                                                {allPostes.map((p) => <option key={p} value={p}>{p}</option>)}
+                                                <option disabled>──────────</option>
+                                                <option value={NEW_POSTE_SENTINEL}>+ Ajouter un nouveau poste...</option>
+                                            </select>
+                                        </div>
+                                    )
+                                }
+                                {!addingNew && form.poste && !allPostes.includes(form.poste) && (
+                                    <div className="flex items-center gap-1 font-mono text-[9px] text-secondary mt-0.5">
+                                        <Icon name="fiber_new" size={11} />
+                                        <span>Nouveau poste : <strong>{form.poste}</strong></span>
+                                    </div>
+                                )}
                             </div>
                             {/* Zone */}
                             <div className="flex flex-col gap-space-xs">
@@ -258,7 +363,7 @@ function AddFeederModal({ onSave, onCancel, nextId })
                             </button>
                             <button
                                 onClick={handleSave}
-                                disabled={!isValid}
+                                disabled={!isValid || addingNew}
                                 className="px-space-md py-space-xs bg-secondary-container hover:bg-secondary text-on-secondary-container font-mono text-xs font-bold uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                                 type="button"
                             >
@@ -290,7 +395,10 @@ function EditCell({ value, type = 'text', options, onChange, mono = true })
     {
         return (
             <select value={value} onChange={(e) => onChange(e.target.value)} className={base}>
-                {options.map((o) => <option key={o} value={o}>{o}</option>)}
+                {options.map((o) => o === NEW_POSTE_SENTINEL
+                    ? <option key={o} value={o}>+ Ajouter un nouveau poste...</option>
+                    : <option key={o} value={o}>{o}</option>
+                )}
             </select>
         )
     }
@@ -519,6 +627,12 @@ export default function BCCDeparts()
     const p0count = feeders.filter((f) => f.priority === 'P0').length
     const actif   = feeders.filter((f) => f.statut === 'Actif').length
 
+    // Dynamic postes list — derived from loaded feeders, deduplicated and sorted
+    const postes = useMemo(
+        () => [...new Set(feeders.map((f) => f.poste).filter(Boolean))].sort()
+        ,[feeders]
+    )
+
     return (
         <div className="w-full text-on-surface flex flex-col gap-space-md p-space-md">
 
@@ -534,7 +648,7 @@ export default function BCCDeparts()
                                 Gestion des Départs HTA — BCC 3
                             </h1>
                             <span className="px-space-sm py-0.5 bg-surface-container text-on-surface-variant font-mono text-[10px] border border-surface-container-high">
-                                Béja &amp; Jendouba · 5 postes sources
+                                Béja &amp; Jendouba · {postes.length} poste{postes.length !== 1 ? 's' : ''} source{postes.length !== 1 ? 's' : ''}
                             </span>
                         </div>
                         <p className="font-mono text-[10px] text-on-surface-variant mt-space-xs">
@@ -697,7 +811,14 @@ export default function BCCDeparts()
                                             {/* Poste */}
                                             <td className="py-space-sm px-space-md text-on-surface-variant">
                                                 {isEditing
-                                                    ? <EditCell value={editBuf.poste} options={POSTES} onChange={(v) => setEditBuf((b) => ({ ...b, poste: v }))} />
+                                                    ? <EditCell value={editBuf.poste} options={[...postes, NEW_POSTE_SENTINEL]} onChange={(v) => {
+                                                        if (v === NEW_POSTE_SENTINEL) {
+                                                            const n = window.prompt('Nom du nouveau poste source :')
+                                                            if (n?.trim()) setEditBuf((b) => ({ ...b, poste: n.trim() }))
+                                                        } else {
+                                                            setEditBuf((b) => ({ ...b, poste: v }))
+                                                        }
+                                                    }} />
                                                     : f.poste
                                                 }
                                             </td>
@@ -934,7 +1055,8 @@ export default function BCCDeparts()
                 <AddFeederModal
                     onSave={handleAdd}
                     onCancel={() => setShowAdd(false)}
-                    nextId={Math.max(...feeders.map((f) => f.id)) + 1}
+                    nextId={Math.max(...feeders.map((f) => f.id), 0) + 1}
+                    postes={postes}
                 />
             )}
 

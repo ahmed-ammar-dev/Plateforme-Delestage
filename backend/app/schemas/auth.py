@@ -24,6 +24,8 @@ class UserOut(BaseModel):
     role: str
     zone: str | None
     bcc_id: int | None
+    bcc_name: str | None   # e.g. "BCC 3"
+    bcc_zone: str | None   # e.g. "Nord-Ouest / Béja & Jendouba"
     is_active: bool
 
     model_config = {"from_attributes": True}

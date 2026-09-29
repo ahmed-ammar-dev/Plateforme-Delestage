@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, Field
 
 
@@ -27,5 +28,8 @@ class FeederUpdate(BaseModel):
 class FeederOut(FeederBase):
     id: int
     bcc_id: int
+    # Cooldown fields — computed from executions table in list_feeders
+    last_cut_at:          datetime | None = None   # UTC timestamp of most recent cut start
+    hours_since_last_cut: float    | None = None   # hours elapsed since last cut (None = never cut)
 
     model_config = {"from_attributes": True}

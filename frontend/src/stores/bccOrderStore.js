@@ -101,41 +101,10 @@ export const useBccOrderStore = create
 
             ,setModalOpen: (val) => set({ modalOpen: val })
 
-            // Seed demo — one urgence cut + one réalimentation, both pending
-            ,seedDemo: () =>
-            {
-                set
-                (
-                    {
-                        modalOpen: false
-                        ,orders:
-                        [
-                            {
-                                id:              800001
-                                ,orderRef:       'URG-BCC3-001'
-                                ,issuedAt:       new Date(Date.now() - 5 * 60 * 1000).toISOString()
-                                ,time:           '14h52'
-                                ,type:           'urgence'
-                                ,mwTarget:       8
-                                ,targetBCC:      'BCC 3'
-                                ,status:         'pending'
-                                ,acknowledgedAt: null
-                            }
-                            ,{
-                                id:              800002
-                                ,orderRef:       'REA-BCC3-001'
-                                ,issuedAt:       new Date(Date.now() - 2 * 60 * 1000).toISOString()
-                                ,time:           '14h55'
-                                ,type:           'realim'
-                                ,mwTarget:       6
-                                ,targetBCC:      'BCC 3'
-                                ,status:         'pending'
-                                ,acknowledgedAt: null
-                            }
-                        ]
-                    }
-                )
-            }
+            // seedDemo is intentionally disabled — the app now receives real DB
+            // orders via liveStore + WebSocket.  Injecting hardcoded fake orders
+            // here caused duplicate banners that multiplied on every login.
+            ,seedDemo: () => {}      // no-op
         })
         ,{ name: 'steg-bcc-orders' }
     )

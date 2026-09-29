@@ -36,7 +36,7 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
     user.last_login = datetime.now(timezone.utc)
     db.commit()
 
-    token_data = {"sub": str(user.id), "role": user.role, "zone": user.zone, "bcc_id": user.bcc_id}
+    token_data = {"sub": str(user.id), "role": user.role, "zone": user.zone, "bcc_id": user.bcc_id, "bcc_name": user.bcc_name, "bcc_zone": user.bcc_zone}
     return TokenResponse(
         access_token=create_access_token(token_data),
         refresh_token=create_refresh_token(token_data),
@@ -58,7 +58,7 @@ def refresh_token(body: RefreshRequest, db: Session = Depends(get_db)):
     if not user or not user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Utilisateur introuvable")
 
-    token_data = {"sub": str(user.id), "role": user.role, "zone": user.zone, "bcc_id": user.bcc_id}
+    token_data = {"sub": str(user.id), "role": user.role, "zone": user.zone, "bcc_id": user.bcc_id, "bcc_name": user.bcc_name, "bcc_zone": user.bcc_zone}
     return TokenResponse(
         access_token=create_access_token(token_data),
         refresh_token=create_refresh_token(token_data),

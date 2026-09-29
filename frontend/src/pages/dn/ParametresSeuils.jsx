@@ -1,4 +1,6 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
+import api from '../../lib/api'
+import { useProgrammesStore } from '../../stores/programmesStore'
 
 // ── Icon helper ───────────────────────────────────────────────────────────────
 function Icon({ name, size = 18, className = '' })
@@ -19,8 +21,11 @@ const DEFAULTS =
     seuilDeficit:    25
     ,seuilPct:       10
     ,dureeMax:       45
+    ,intervalleRepos: 8
     ,pasTemps:       30
     ,heureLimite:    '06:00'
+    ,rappelHeure:    '20:00'
+    ,rappelActif:    true
     ,splitNord:      67
     ,crcNordIngenieur:  'Ing. M. Trabelsi'
     ,crcNordTel:        '+216 71 340 102'
@@ -31,15 +36,6 @@ const DEFAULTS =
     ,crcSudRadio:       'VHF 07-Sud'
     ,crcSudEmail:       'crc.sud@steg.com.tn'
 }
-
-const INITIAL_ACCOUNTS =
-[
-    { id:1, initials:'KB', nom:'Ing. K. Ben Salem', role:'DN',  roleCls:'bg-secondary/15 text-secondary border-secondary/30',       zone:'National (DN Tunis)',   login:'dn.admin', matricule:'ST-84920', actif:true  }
-    ,{ id:2, initials:'MT', nom:'Ing. M. Trabelsi',  role:'CRC', roleCls:'bg-tertiary/15 text-tertiary border-tertiary/30',           zone:'CRC Nord (Rades II)',   login:'crc.nord', matricule:'ST-62145', actif:true  }
-    ,{ id:3, initials:'SD', nom:'Tech. S. Dridi',    role:'BCC', roleCls:'bg-surface-container-high text-on-surface-variant border-surface-container-highest', zone:'BCC 3 — Nord-Ouest', login:'bcc.3', matricule:'ST-91044', actif:true  }
-    ,{ id:4, initials:'RK', nom:'Ing. R. Karray',    role:'CRC', roleCls:'bg-tertiary/15 text-tertiary border-tertiary/30',           zone:'CRC Sud (Sousse Nord)', login:'crc.sud',  matricule:'ST-55891', actif:true  }
-    ,{ id:5, initials:'HJ', nom:'Tech. H. Jaziri',   role:'BCC', roleCls:'bg-surface-container text-outline border-surface-container-high',                     zone:'BCC 5 — Centre',    login:'bcc.5',  matricule:'ST-47201', actif:false }
-]
 
 // ── Section wrapper ───────────────────────────────────────────────────────────
 function Section({ icon, iconCls = 'text-secondary', title, subtitle, badge, children })
@@ -154,14 +150,18 @@ function Toast({ visible })
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function ParametresSeuils()
 {
+    const { syncRappelSettings } = useProgrammesStore()
+
     // ── Seuils d'alerte
     const [seuilDeficit, setSeuilDeficit] = useState(DEFAULTS.seuilDeficit)
     const [seuilPct,     setSeuilPct]     = useState(DEFAULTS.seuilPct)
     const [dureeMax,     setDureeMax]     = useState(DEFAULTS.dureeMax)
+    const [intervalleRepos, setIntervalleRepos] = useState(DEFAULTS.intervalleRepos)
 
     // ── Programme J-1
     const [pasTemps,    setPasTemps]    = useState(DEFAULTS.pasTemps)
-    const [heureLimite, setHeureLimite] = useState(DEFAULTS.heureLimite)
+    const [rappelHeure, setRappelHeure] = useState(DEFAULTS.rappelHeure)
+    const [rappelActif, setRappelActif] = useState(DEFAULTS.rappelActif)
 
     // ── CRC split
     const [splitNord, setSplitNord] = useState(DEFAULTS.splitNord)
@@ -184,11 +184,42 @@ export default function ParametresSeuils()
     })
 
     // ── Accounts
-    const [accounts, setAccounts] = useState(INITIAL_ACCOUNTS)
-
     // ── UI state
     const [toast,       setToast]       = useState(false)
     const [hasChanges,  setHasChanges]  = useState(false)
+
+    // Load persisted split key from backend on mount
+    useEffect(() =>
+    {
+        api.get('/api/v1/settings/crc-split')
+            .then(({ data }) =>
+            {
+                setSplitNord(data.split_nord)
+                if (data.intervalle_min_heures != null) setIntervalleRepos(data.intervalle_min_heures)
+            })
+            .catch(() => { /* keep defaults */ })
+
+        // Push current rappel settings into programmesStore so useJ1Reminder
+        // always reads the latest values even before the operator opens Paramètres.
+        syncRappelSettings(rappelActif, rappelHeure)
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Auto-save the split whenever it changes (debounced 800 ms).
+    // This ensures the value survives navigation without requiring
+    // the operator to click "Sauvegarder" for this specific field.
+    const splitAutoSaveRef = useRef(false)   // skip the very first render (initial load)
+    useEffect(() =>
+    {
+        if (!splitAutoSaveRef.current) { splitAutoSaveRef.current = true; return }
+        const timer = setTimeout(() =>
+        {
+            api.put('/api/v1/settings/crc-split', {
+                split_nord:            splitNord,
+                intervalle_min_heures: intervalleRepos,
+            }).catch((err) => console.error('[Paramètres] Auto-save split failed:', err?.response?.data ?? err.message))
+        }, 800)
+        return () => clearTimeout(timer)
+    }, [splitNord]) // eslint-disable-line react-hooks/exhaustive-deps
 
     // Mark unsaved on any change
     const touch = useCallback(() => setHasChanges(true), [])
@@ -198,24 +229,26 @@ export default function ParametresSeuils()
     const updateSeuilPct     = (v) => { setSeuilPct(v);     touch() }
     const updateDureeMax     = (v) => { setDureeMax(v);     touch() }
     const updatePasTemps     = (v) => { setPasTemps(v);     touch() }
-    const updateHeure        = (v) => { setHeureLimite(v);  touch() }
+    const updateRappelHeure  = (v) => { setRappelHeure(v);  touch(); syncRappelSettings(rappelActif, v)  }
+    const updateRappelActif  = (v) => { setRappelActif(v);  touch(); syncRappelSettings(v, rappelHeure) }
     const updateSplit        = (v) =>
     {
-        const clamped = Math.max(10, Math.min(90, Number(v)))
+        const clamped = Math.max(0, Math.min(100, Number(v)))
         setSplitNord(clamped)
         touch()
     }
     const updateCrcNord = (field, val) => { setCrcNord((c) => ({ ...c, [field]: val })); touch() }
     const updateCrcSud  = (field, val) => { setCrcSud((c)  => ({ ...c, [field]: val })); touch() }
 
-    const toggleAccount = (id) =>
-    {
-        setAccounts((prev) => prev.map((a) => a.id === id ? { ...a, actif: !a.actif } : a))
-        touch()
-    }
-
     const handleSave = () =>
     {
+        // Persist the CRC split key and cooldown threshold to the backend
+        api.put('/api/v1/settings/crc-split', {
+            split_nord:            splitNord,
+            intervalle_min_heures: intervalleRepos,
+        })
+            .catch((err) => console.error('[Paramètres] Failed to save settings:', err?.response?.data ?? err.message))
+
         setHasChanges(false)
         setToast(true)
         setTimeout(() => setToast(false), 3500)
@@ -226,8 +259,10 @@ export default function ParametresSeuils()
         setSeuilDeficit(DEFAULTS.seuilDeficit)
         setSeuilPct(DEFAULTS.seuilPct)
         setDureeMax(DEFAULTS.dureeMax)
+        setIntervalleRepos(DEFAULTS.intervalleRepos)
         setPasTemps(DEFAULTS.pasTemps)
-        setHeureLimite(DEFAULTS.heureLimite)
+        setRappelHeure(DEFAULTS.rappelHeure)
+        setRappelActif(DEFAULTS.rappelActif)
         setSplitNord(DEFAULTS.splitNord)
         setCrcNord
         ({
@@ -243,7 +278,6 @@ export default function ParametresSeuils()
             ,radio:    DEFAULTS.crcSudRadio
             ,email:    DEFAULTS.crcSudEmail
         })
-        setAccounts(INITIAL_ACCOUNTS)
         setHasChanges(false)
     }
 
@@ -369,6 +403,24 @@ export default function ParametresSeuils()
                                 unit="min"
                             />
                         </ParamField>
+
+                        {/* Intervalle minimum de repos entre coupures */}
+                        <ParamField
+                            label="Intervalle minimum de repos entre coupures"
+                            description="Duree minimale requise entre deux coupures successives sur le meme depart HTA. Garantit l'equite de la rotation entre les zones."
+                            changed={changed(intervalleRepos, DEFAULTS.intervalleRepos)}
+                            footerNote={`Plage conseillée : 4 — 48 h  |  Défaut : ${DEFAULTS.intervalleRepos} h`}
+                            footerIcon="autorenew"
+                            footerCls="text-secondary"
+                        >
+                            <NumInput
+                                id="intervalleRepos"
+                                value={intervalleRepos}
+                                onChange={(v) => { setIntervalleRepos(v); touch() }}
+                                min={1} max={168} step={1}
+                                unit="h"
+                            />
+                        </ParamField>
                     </div>
                 </Section>
 
@@ -378,7 +430,7 @@ export default function ParametresSeuils()
                     iconCls="text-secondary"
                     title="Programme J-1"
                     subtitle="Parametres de construction du programme previsionnel jour-suivant"
-                    badge="ECHEANCE J-1 06:00"
+                    badge={rappelActif ? `RAPPEL J+1 — ${rappelHeure}` : 'RAPPEL J+1 — DESACTIVE'}
                 >
                     <div className="p-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
 
@@ -418,21 +470,51 @@ export default function ParametresSeuils()
                             </div>
                         </ParamField>
 
-                        {/* Heure limite */}
+                        {/* Rappel programme J+1 */}
                         <ParamField
-                            label="Heure limite de validation J-1"
-                            description="Heure avant laquelle le programme du lendemain doit etre imperativement valide par l'operateur DN."
-                            changed={changed(heureLimite, DEFAULTS.heureLimite)}
-                            footerNote="Le programme non valide avant cette heure genere une alerte automatique d'astreinte DSI / DN"
-                            footerIcon="alarm"
-                            footerCls="text-error"
+                            label="Rappel — Programme J+1 non saisi"
+                            description="Si le programme du lendemain n'a pas encore ete saisi, le systeme envoie une notification de rappel au DN a l'heure configuree."
+                            changed={changed(rappelHeure, DEFAULTS.rappelHeure) || changed(rappelActif, DEFAULTS.rappelActif)}
                         >
-                            <input
-                                type="time"
-                                value={heureLimite}
-                                onChange={(e) => updateHeure(e.target.value)}
-                                className="w-full bg-[#0b1c30] border border-[#26364a] focus:border-secondary focus:ring-1 focus:ring-secondary/50 text-on-surface font-label-telemetry-md text-sm px-3 py-2 rounded focus:outline-none transition-all shadow-inner"
-                            />
+                            {/* Toggle activer / desactiver */}
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="font-label-caps text-[10px] text-outline uppercase tracking-wider font-semibold">
+                                    Rappel automatique
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={() => updateRappelActif(!rappelActif)}
+                                    className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 transition-colors duration-200 focus:outline-none ${rappelActif ? 'bg-secondary border-secondary/60' : 'bg-surface-container-highest border-surface-container-high'}`}
+                                    aria-pressed={rappelActif}
+                                    title={rappelActif ? 'Desactiver le rappel' : 'Activer le rappel'}
+                                >
+                                    <span
+                                        className={`inline-block h-3.5 w-3.5 rounded-full bg-background shadow-sm transition-transform duration-200 ${rappelActif ? 'translate-x-4' : 'translate-x-0.5'}`}
+                                    />
+                                </button>
+                            </div>
+
+                            {/* Time picker */}
+                            <div className={`transition-opacity duration-200 ${rappelActif ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
+                                <input
+                                    type="time"
+                                    value={rappelHeure}
+                                    onChange={(e) => updateRappelHeure(e.target.value)}
+                                    disabled={!rappelActif}
+                                    className="w-full bg-[#0b1c30] border border-[#26364a] focus:border-secondary focus:ring-1 focus:ring-secondary/50 text-on-surface font-label-telemetry-md text-sm px-3 py-2 rounded focus:outline-none transition-all shadow-inner disabled:cursor-not-allowed"
+                                />
+                            </div>
+
+                            {/* Footer note */}
+                            <div className={`mt-2 text-[10px] flex items-center gap-1 font-body-sm transition-opacity duration-200 ${rappelActif ? 'text-secondary' : 'text-on-surface-variant'}`}>
+                                <Icon name={rappelActif ? 'notifications_active' : 'notifications_off'} size={13} />
+                                <span>
+                                    {rappelActif
+                                        ? `Rappel active — notification envoyee a ${rappelHeure} si J+1 non saisi`
+                                        : 'Rappel desactive — aucune notification ne sera envoyee'
+                                    }
+                                </span>
+                            </div>
                         </ParamField>
                     </div>
                 </Section>
@@ -459,7 +541,7 @@ export default function ParametresSeuils()
                                     <div className="flex items-center gap-1">
                                         <input
                                             type="number"
-                                            min={10} max={90}
+                                            min={0} max={100}
                                             value={splitNord}
                                             onChange={(e) => updateSplit(e.target.value)}
                                             className="w-16 bg-[#000f21] border border-[#26364a] text-secondary font-label-telemetry-md font-bold text-sm text-right px-2 py-1 rounded focus:outline-none focus:border-secondary"
@@ -469,7 +551,7 @@ export default function ParametresSeuils()
                                 </div>
                                 <input
                                     type="range"
-                                    min={10} max={90}
+                                    min={0} max={100}
                                     value={splitNord}
                                     onChange={(e) => updateSplit(e.target.value)}
                                     className="w-full h-1.5 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-secondary"
@@ -492,7 +574,7 @@ export default function ParametresSeuils()
                                     <div className="flex items-center gap-1">
                                         <input
                                             type="number"
-                                            min={10} max={90}
+                                            min={0} max={100}
                                             value={splitSud}
                                             onChange={(e) => updateSplit(100 - Number(e.target.value))}
                                             className="w-16 bg-[#000f21] border border-[#26364a] text-tertiary font-label-telemetry-md font-bold text-sm text-right px-2 py-1 rounded focus:outline-none focus:border-tertiary"
@@ -502,7 +584,7 @@ export default function ParametresSeuils()
                                 </div>
                                 <input
                                     type="range"
-                                    min={10} max={90}
+                                    min={0} max={100}
                                     value={splitSud}
                                     onChange={(e) => updateSplit(100 - Number(e.target.value))}
                                     className="w-full h-1.5 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-amber-400"
@@ -628,112 +710,6 @@ export default function ParametresSeuils()
                     </div>
                 </Section>
 
-                {/* ── Section 6 — Gestion des comptes ─────────────────────── */}
-                <div className="bg-surface-container-lowest border border-surface-container rounded overflow-hidden shadow-sm">
-                    <div className="px-5 py-3.5 bg-surface-container border-b border-surface-container flex items-center justify-between flex-wrap gap-2">
-                        <div className="flex items-center gap-2.5">
-                            <Icon name="manage_accounts" size={20} className="text-secondary" />
-                            <div>
-                                <h2 className="font-headline-sm text-sm text-on-surface font-semibold uppercase tracking-wide">
-                                    Gestion des comptes operateurs
-                                </h2>
-                                <p className="font-body-sm text-[11px] text-on-surface-variant">
-                                    Comptes autorises a acceder a la plateforme. Les mots de passe et certificats PKI sont geres separement par la DSI.
-                                </p>
-                            </div>
-                        </div>
-                        <button
-                            type="button"
-                            className="px-3 py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-secondary hover:text-on-surface border border-surface-container-highest font-body-sm text-xs flex items-center gap-1.5 transition-colors"
-                            onClick={() => alert("Ouverture du formulaire d'enregistrement d'un operateur SCADA certifie (Module DSI / PKI).")}
-                        >
-                            <Icon name="person_add" size={16} />
-                            <span>+ Ajouter un compte</span>
-                        </button>
-                    </div>
-
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left font-body-sm text-xs">
-                            <thead>
-                                <tr className="border-b border-surface-container bg-surface-container-low/60 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">
-                                    <th className="py-2.5 px-4 font-semibold">Nom complet</th>
-                                    <th className="py-2.5 px-4 font-semibold text-center">Role</th>
-                                    <th className="py-2.5 px-4 font-semibold">Zone d'affectation</th>
-                                    <th className="py-2.5 px-4 font-semibold">Matricule / Login</th>
-                                    <th className="py-2.5 px-4 font-semibold text-center">Statut</th>
-                                    <th className="py-2.5 px-4 font-semibold text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-surface-container/60 font-label-telemetry-sm text-xs">
-                                {accounts.map
-                                (
-                                    (a) => (
-                                        <tr
-                                            key={a.id}
-                                            className={`hover:bg-surface-container-high/30 transition-colors ${!a.actif ? 'opacity-75' : ''}`}
-                                        >
-                                            <td className="py-3 px-4 font-body-sm font-semibold text-on-surface">
-                                                <div className="flex items-center gap-2">
-                                                    <span className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold ${a.actif ? 'bg-surface-container text-primary' : 'bg-surface-container-lowest text-outline'}`}>
-                                                        {a.initials}
-                                                    </span>
-                                                    <span className={a.actif ? '' : 'text-on-surface-variant'}>{a.nom}</span>
-                                                </div>
-                                            </td>
-                                            <td className="py-3 px-4 text-center">
-                                                <span className={`px-2 py-0.5 rounded border font-semibold text-[10px] ${a.roleCls}`}>
-                                                    {a.role}
-                                                </span>
-                                            </td>
-                                            <td className={`py-3 px-4 ${a.actif ? 'text-on-surface' : 'text-on-surface-variant'}`}>
-                                                {a.zone}
-                                            </td>
-                                            <td className="py-3 px-4 text-on-surface-variant">
-                                                {a.login}{' '}
-                                                <span className="text-[10px] text-outline font-normal">({a.matricule})</span>
-                                            </td>
-                                            <td className="py-3 px-4 text-center">
-                                                {a.actif
-                                                    ? (
-                                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#16a34a]/20 text-[#4ade80] border border-[#16a34a]/30 font-semibold text-[10px]">
-                                                            <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80]" />
-                                                            <span>Actif</span>
-                                                        </span>
-                                                    )
-                                                    : (
-                                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-high text-outline border border-surface-container-highest font-semibold text-[10px]">
-                                                            <span className="w-1.5 h-1.5 rounded-full bg-outline" />
-                                                            <span>Inactif</span>
-                                                        </span>
-                                                    )
-                                                }
-                                            </td>
-                                            <td className="py-3 px-4 text-right">
-                                                <button
-                                                    onClick={() => toggleAccount(a.id)}
-                                                    type="button"
-                                                    className={`text-xs hover:underline transition-colors font-medium ${a.actif ? 'text-error hover:text-error/80' : 'text-secondary hover:text-secondary/80'}`}
-                                                >
-                                                    {a.actif ? 'Desactiver' : 'Activer'}
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    )
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div className="px-5 py-2.5 bg-surface-container-lowest border-t border-surface-container font-label-telemetry-sm text-[11px] text-on-surface-variant flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <Icon name="shield" size={14} className="text-outline" />
-                            <span>Authentification double facteur requise (PKI USB + Mot de passe operateur)</span>
-                        </div>
-                        <span>
-                            {accounts.length} comptes repertories · {accounts.filter((a) => a.actif).length} actifs
-                        </span>
-                    </div>
-                </div>
 
             </div>
 

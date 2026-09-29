@@ -318,8 +318,6 @@ function BCCDetailModal({ bccKey, onClose, activePeriod, apiOverride })
         setPage(1)
     }
 
-    const ecartIsNeg = bcc.kpis.ecart.startsWith('-')
-
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
@@ -356,18 +354,14 @@ function BCCDetailModal({ bccKey, onClose, activePeriod, apiOverride })
                 <div className="p-4 overflow-y-auto flex flex-col gap-5">
 
                     {/* Section 1 — 4 KPIs */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 bg-[#000f21] p-3 rounded-[2px] border border-[#1b2b3f] font-mono">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 bg-[#000f21] p-3 rounded-[2px] border border-[#1b2b3f] font-mono">
                         <div className="flex flex-col">
-                            <span className="text-[10px] text-[#8f9097] uppercase">MW Planifie</span>
-                            <span className="text-base font-bold text-[#acc7ff]">{bcc.kpis.plan}</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-[10px] text-[#8f9097] uppercase">MW Realise</span>
+                            <span className="text-[10px] text-[#8f9097] uppercase">MW Realise Total</span>
                             <span className="text-base font-bold text-[#d3e4fe]">{bcc.kpis.real}</span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-[10px] text-[#8f9097] uppercase">Ecart Residuel</span>
-                            <span className={`text-base font-bold ${ecartIsNeg ? 'text-[#ffb4ab]' : 'text-[#4ade80]'}`}>
+                            <span className="text-[10px] text-[#8f9097] uppercase">Duree Totale</span>
+                            <span className="text-base font-bold text-[#acc7ff]">
                                 {bcc.kpis.ecart}
                             </span>
                         </div>
@@ -733,18 +727,21 @@ export default function HistoriqueENS()
             if (!apiData) return null
             const bcc = apiData.bccs?.find((b) => b.bcc_name === bccName)
             if (!bcc) return null
+            const totalMW = bcc.total_mw_shed ?? 0
+            const durH    = Math.floor(bcc.total_duration_h)
+            const durM    = Math.round((bcc.total_duration_h % 1) * 60)
             return {
                 label:  `${bcc.bcc_name} — ${bcc.bcc_zone}`
                 ,crc:   bcc.crc_name
                 ,kpis:
                 {
-                    plan:  '—'
-                    ,real: '—'
-                    ,ecart:'—'
+                    plan:  `${totalMW.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} MW`
+                    ,real: `${totalMW.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} MW`
+                    ,ecart:`${durH}h ${durM}min`
                     ,ens:  `${bcc.total_ens_mwh.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} MWh`
                 }
                 ,poste: `BCC ${bcc.bcc_name}`
-                ,departs: []   // no depart detail in API response — kept from mock
+                ,departs: []
                 ,cuts: bcc.cuts.map((c) => ({
                     date:  c.date
                     ,ref:  c.feeder_ref
@@ -1059,9 +1056,8 @@ export default function HistoriqueENS()
                                 <tr className="border-b border-[#1b2b3f] bg-[#000f21] font-mono text-[10px] text-[#8f9097] uppercase">
                                     <th className="py-2.5 px-3">Zone BCC</th>
                                     <th className="py-2.5 px-3 text-right">Nb Evenements</th>
-                                    <th className="py-2.5 px-3 text-right">MW Planifie Total</th>
                                     <th className="py-2.5 px-3 text-right">MW Realise Total</th>
-                                    <th className="py-2.5 px-3 text-right">Ecart Residuel</th>                                    <th className="py-2.5 px-3 text-right">ENS Cumulee</th>
+                                    <th className="py-2.5 px-3 text-right">ENS Cumulee</th>
                                     <th className="py-2.5 px-3 text-right">Duree Totale</th>
                                     <th className="py-2.5 px-3 text-center">Dernier Delestage</th>
                                     <th className="py-2.5 px-3 text-center">Jours Depuis</th>
@@ -1081,9 +1077,7 @@ export default function HistoriqueENS()
                                                     <span className="text-xs uppercase tracking-wider">CRC Nord (Grand Tunis, Bizerte, Nord-Ouest)</span>
                                                 </div>
                                             </td>
-                                            <td className="py-2.5 px-3 text-right font-bold text-[#8f9097]" title="Nécessite les données J+1">—</td>
                                             <td className="py-2.5 px-3 text-right font-bold text-[#d3e4fe]">{nord ? nord.mwShed : '—'}</td>
-                                            <td className="py-2.5 px-3 text-right font-bold text-[#8f9097]" title="Nécessite les données J+1">—</td>
                                             <td className="py-2.5 px-3 text-right font-bold text-[#acc7ff]">{nord ? nord.ens : '—'}</td>
                                             <td className="py-2.5 px-3 text-right font-bold text-[#c5c6cd]">{nord && nord.cuts > 0 ? `${nord.durH}h ${nord.durM}min` : '—'}</td>
                                             <td className="py-2.5 px-3 text-center text-[#8f9097]" colSpan={2}>Sous-total CRC Nord</td>
@@ -1108,9 +1102,7 @@ export default function HistoriqueENS()
                                                 {alert && <span className="ml-1.5 px-1 py-0.5 rounded-[2px] bg-[#231200] text-[#ffb95f] border border-[#ffb95f]/30 text-[9px] font-mono">{alert}</span>}
                                             </td>
                                             <td className="py-2 px-3 text-right text-[#c5c6cd]">{d.cuts}</td>
-                                            <td className="py-2 px-3 text-right text-[#8f9097]" title="Nécessite les données J+1">—</td>
                                             <td className="py-2 px-3 text-right text-[#d3e4fe]">{d.hasData ? d.mwShed : '—'}</td>
-                                            <td className="py-2 px-3 text-right text-[#8f9097]" title="Nécessite les données J+1">—</td>
                                             <td className={`py-2 px-3 text-right font-semibold ${d.ensCls}`}>{d.ens}</td>
                                             <td className="py-2 px-3 text-right text-[#c5c6cd]">{d.hasData ? `${d.durH}h ${d.durM}min` : '—'}</td>
                                             <td className="py-2 px-3 text-center text-[#8f9097]">{d.lastCut}</td>
@@ -1141,9 +1133,7 @@ export default function HistoriqueENS()
                                                     <span className="text-xs uppercase tracking-wider">CRC Sud (Centre, Sahel, Sud)</span>
                                                 </div>
                                             </td>
-                                            <td className="py-2.5 px-3 text-right font-bold text-[#8f9097]" title="Nécessite les données J+1">—</td>
                                             <td className="py-2.5 px-3 text-right font-bold text-[#d3e4fe]">{sud ? sud.mwShed : '—'}</td>
-                                            <td className="py-2.5 px-3 text-right font-bold text-[#8f9097]" title="Nécessite les données J+1">—</td>
                                             <td className="py-2.5 px-3 text-right font-bold text-[#ffb95f]">{sud ? sud.ens : '—'}</td>
                                             <td className="py-2.5 px-3 text-right font-bold text-[#c5c6cd]">{sud && sud.cuts > 0 ? `${sud.durH}h ${sud.durM}min` : '—'}</td>
                                             <td className="py-2.5 px-3 text-center text-[#8f9097]" colSpan={2}>Sous-total CRC Sud</td>
@@ -1166,9 +1156,7 @@ export default function HistoriqueENS()
                                                 {alert && <span className="ml-1.5 px-1 py-0.5 rounded-[2px] bg-[#231200] text-[#ffb95f] border border-[#ffb95f]/30 text-[9px] font-mono">{alert}</span>}
                                             </td>
                                             <td className="py-2 px-3 text-right text-[#c5c6cd]">{d.cuts}</td>
-                                            <td className="py-2 px-3 text-right text-[#8f9097]" title="Nécessite les données J+1">—</td>
                                             <td className="py-2 px-3 text-right text-[#d3e4fe]">{d.hasData ? d.mwShed : '—'}</td>
-                                            <td className="py-2 px-3 text-right text-[#8f9097]" title="Nécessite les données J+1">—</td>
                                             <td className={`py-2 px-3 text-right font-semibold ${d.ensCls}`}>{d.ens}</td>
                                             <td className="py-2 px-3 text-right text-[#c5c6cd]">{d.hasData ? `${d.durH}h ${d.durM}min` : '—'}</td>
                                             <td className="py-2 px-3 text-center text-[#8f9097]">{d.lastCut}</td>
@@ -1195,14 +1183,12 @@ export default function HistoriqueENS()
                                 <tr className="bg-[#000f21] border-t-2 border-[#1b2b3f] font-mono text-xs font-bold text-[#d3e4fe]">
                                     <td className="py-3 px-3 uppercase tracking-wider font-sans">Total National (7 BCCs)</td>
                                     <td className="py-3 px-3 text-right text-[#acc7ff]">{nationals.cuts} coupures</td>
-                                    <td className="py-3 px-3 text-right text-[#8f9097]" title="Nécessite les données J+1">—</td>
                                     <td className="py-3 px-3 text-right text-[#d3e4fe]">
                                         {apiData
                                             ? `${apiData.bccs.reduce((s, b) => s + (b.total_mw_shed ?? 0), 0).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} MW`
                                             : '—'
                                         }
                                     </td>
-                                    <td className="py-3 px-3 text-right text-[#8f9097]" title="Nécessite les données J+1">—</td>
                                     <td className="py-3 px-3 text-right text-[#ffb95f]">{nationals.ens}</td>
                                     <td className="py-3 px-3 text-right text-[#acc7ff]">{nationals.durH}h {nationals.durM}min</td>
                                     <td className="py-3 px-3 text-center text-[#8f9097]">—</td>

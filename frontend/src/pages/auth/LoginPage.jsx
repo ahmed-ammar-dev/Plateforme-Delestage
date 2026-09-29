@@ -77,7 +77,9 @@ export default function LoginPage()
                 ,role:                userData.role
                 ,displayName:         userData.full_name
                 ,zone:                userData.zone ?? (userData.role === 'DN' ? 'National' : null)
-                ,bcc_id:              userData.bcc_id ?? null
+                ,bcc_id:              userData.bcc_id  ?? null
+                ,bcc_name:            userData.bcc_name ?? null   // e.g. "BCC 3"
+                ,bcc_zone:            userData.bcc_zone ?? null   // e.g. "Nord-Ouest / Béja & Jendouba"
                 ,must_change_password: tokenData.must_change_password ?? false
             }
 

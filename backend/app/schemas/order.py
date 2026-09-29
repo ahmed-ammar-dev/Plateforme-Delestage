@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from pydantic import BaseModel, Field
 
 
@@ -53,5 +54,13 @@ class OrderOut(BaseModel):
     cancelled_at: datetime | None
     notes: str | None
     acks: list[OrderAckOut] = []
+
+    # Role of the user who issued this order ('DN' | 'CRC').
+    # Used by the frontend to apply the correct routing:
+    #   DN  → order is addressed to CRCs; BCCs must ignore it.
+    #   CRC → order is addressed to BCCs; CRCs do not display it as incoming.
+    # Populated explicitly in the route layer (not by from_attributes)
+    # since it lives on the related User, not directly on the Order row.
+    issued_by_role: Optional[str] = None
 
     model_config = {"from_attributes": True}

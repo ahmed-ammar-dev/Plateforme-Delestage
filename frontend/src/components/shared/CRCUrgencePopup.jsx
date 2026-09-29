@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useUrgenceStore } from '../../stores/urgenceStore'
 import { useAuthStore }    from '../../stores/authStore'
+import api                 from '../../lib/api'
 
 function Icon({ name, size = 18, className = '' })
 {
@@ -15,8 +16,8 @@ function Icon({ name, size = 18, className = '' })
 }
 
 // ── AI suggestion text ────────────────────────────────────────────────────────
-const buildAiSuggestion = (mwNord) =>
-`Analyse réseau CRC Nord (temps réel) :
+const buildAiSuggestion = (mwNord, crcName = 'CRC Nord') =>
+`Analyse réseau ${crcName} (temps réel) :
 
 Contrainte d'évacuation détectée sur Béja suite au déclenchement
 du D22 (capacité résiduelle plafonnée à 8 MW max sur BCC 3).
@@ -43,27 +44,53 @@ Aucun risque de surcharge HTB détecté sur ce scénario.
 Délai d'exécution estimé : < 3 minutes.`
 
 const BCC_CONFIG =
-[
-    { id: 1, label: 'BCC 1 — Tunis Ville & Nord',    splitPct: 0.33, cap: null, color: 'secondary' }
-    ,{ id: 2, label: 'BCC 2 — Tunis Sud & Ben Arous', splitPct: 0.26, cap: null, color: 'secondary' }
-    ,{ id: 3, label: 'BCC 3 — Béja (Plafond 8 MW)',   splitPct: 0.15, cap: 8,    color: 'tertiary'  }
-    ,{ id: 4, label: 'BCC 4 — Bizerte / Mateur',      splitPct: 0.26, cap: null, color: 'secondary' }
-]
-
-const buildSuggested = (mw) =>
 {
-    const b1 = Math.round(mw * 0.33)
-    const b2 = Math.round(mw * 0.26)
-    const b3 = Math.min(8, Math.round(mw * 0.15))
-    const b4 = mw - b1 - b2 - b3
-    return { 1: b1, 2: b2, 3: b3, 4: Math.max(0, b4) }
+    'CRC Nord':
+    [
+        { id: 1, label: 'BCC 1 — Tunis Ville & Nord',    splitPct: 0.33, cap: null, color: 'secondary' }
+        ,{ id: 2, label: 'BCC 2 — Tunis Sud & Ben Arous', splitPct: 0.26, cap: null, color: 'secondary' }
+        ,{ id: 3, label: 'BCC 3 — Béja (Plafond 8 MW)',   splitPct: 0.15, cap: 8,    color: 'tertiary'  }
+        ,{ id: 4, label: 'BCC 4 — Bizerte / Mateur',      splitPct: 0.26, cap: null, color: 'secondary' }
+    ]
+    ,'CRC Sud':
+    [
+        { id: 5, label: 'BCC 5 — Centre (Kairouan / Sidi Bouzid)', splitPct: 0.40, cap: null, color: 'secondary' }
+        ,{ id: 6, label: 'BCC 6 — Sahel (Sousse / Monastir)',       splitPct: 0.38, cap: null, color: 'secondary' }
+        ,{ id: 7, label: 'BCC 7 — Sud (Sfax / Gabès / Médenine)',   splitPct: 0.22, cap: null, color: 'secondary' }
+    ]
+}
+
+const buildSuggested = (mw, crcName = 'CRC Nord') =>
+{
+    const bccList = BCC_CONFIG[crcName] ?? BCC_CONFIG['CRC Nord']
+    const result  = {}
+    let remaining = mw
+    bccList.forEach((b, i) =>
+    {
+        if (i === bccList.length - 1)
+        {
+            result[b.id] = Math.max(0, Math.round(remaining * 2) / 2)
+        }
+        else
+        {
+            const val = b.cap !== null
+                ? Math.min(b.cap, Math.round(mw * b.splitPct))
+                : Math.round(mw * b.splitPct)
+            result[b.id] = val
+            remaining -= val
+        }
+    })
+    return result
 }
 
 // ── Shared BCC dispatch form ──────────────────────────────────────────────────
-function DispatchForm({ order, onDispatch, compact = false })
+function DispatchForm({ order, onDispatch, compact = false, crcName = 'CRC Nord' })
 {
-    const mwNord   = order.mwNord
-    const suggested = buildSuggested(mwNord)
+    // Use the MW relevant for this CRC — Nord reads mwNord, Sud reads mwSud
+    const mwNord    = crcName === 'CRC Sud' ? (order.mwSud ?? order.mwNord ?? 0) : (order.mwNord ?? 0)
+    const crcCons   = crcName === 'CRC Sud' ? 150 : 300
+    const bccList   = BCC_CONFIG[crcName] ?? BCC_CONFIG['CRC Nord']
+    const suggested = buildSuggested(mwNord, crcName)
 
     const [bccMW,   setBccMW]  = useState(suggested)
     const [showAI,  setShowAI] = useState(false)
@@ -82,7 +109,8 @@ function DispatchForm({ order, onDispatch, compact = false })
     const handleSend = () =>
     {
         setSent(true)
-        setTimeout(() => onDispatch(order.id), 1500)
+        // Pass the total MW being dispatched so the caller can do partial accounting
+        setTimeout(() => onDispatch(order.id, total), 1500)
     }
 
     const sendAiMsg = () =>
@@ -104,7 +132,7 @@ function DispatchForm({ order, onDispatch, compact = false })
                     <div className="bg-surface-container p-space-md flex flex-wrap items-center justify-between gap-space-md">
                         <div className="flex flex-col">
                             <span className="font-mono text-[10px] text-on-surface-variant uppercase tracking-wider">
-                                Consigne additionnelle requise (CRC Nord)
+                                Consigne additionnelle requise ({crcName})
                             </span>
                             <div className="flex items-baseline gap-space-xs mt-space-xs">
                                 <span className="font-mono text-3xl font-bold text-error">+{mwNord}</span>
@@ -116,8 +144,8 @@ function DispatchForm({ order, onDispatch, compact = false })
                                 Nouvelle consigne globale CRC
                             </span>
                             <div className="flex items-baseline gap-space-xs justify-end mt-space-xs">
-                                <span className="font-mono text-3xl font-bold text-secondary">{300 + mwNord}</span>
-                                <span className="font-mono text-sm text-on-surface-variant">MW (300 + {mwNord})</span>
+                                <span className="font-mono text-3xl font-bold text-secondary">{crcCons + mwNord}</span>
+                                <span className="font-mono text-sm text-on-surface-variant">MW ({crcCons} + {mwNord})</span>
                             </div>
                         </div>
                     </div>
@@ -144,7 +172,7 @@ function DispatchForm({ order, onDispatch, compact = false })
                     </div>
                     {showAI && (
                         <pre className="font-mono text-[10px] text-on-surface-variant whitespace-pre-wrap leading-relaxed bg-surface-container-lowest border border-surface-container-high p-space-sm max-h-40 overflow-y-auto">
-                            {buildAiSuggestion(mwNord)}
+                            {buildAiSuggestion(mwNord, crcName)}
                         </pre>
                     )}
                     <button
@@ -164,7 +192,7 @@ function DispatchForm({ order, onDispatch, compact = false })
                         <span>Objectif : somme = +{mwNord} MW</span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
-                        {BCC_CONFIG.map((b) =>
+                        {bccList.map((b) =>
                         {
                             const val     = bccMW[b.id] ?? 0
                             const pct     = Math.min(100, Math.max(0, (val / mwNord) * 100))
@@ -257,7 +285,7 @@ function DispatchForm({ order, onDispatch, compact = false })
                                 <Icon name="smart_toy" size={17} />
                             </div>
                             <div>
-                                <span className="font-sans font-bold text-xs text-on-surface uppercase">Analyse IA — CRC Nord</span>
+                                <span className="font-sans font-bold text-xs text-on-surface uppercase">Analyse IA — {crcName}</span>
                                 <p className="font-mono text-[9px] text-secondary">OP-LLM 2.5</p>
                             </div>
                         </div>
@@ -303,10 +331,13 @@ function DispatchForm({ order, onDispatch, compact = false })
 }
 
 // ── Step 1 — Blocking modal (status: 'pending') ───────────────────────────────
-function PendingModal({ order, onReceipt })
+function PendingModal({ order, onReceipt, crcName = 'CRC Nord' })
 {
+    const crcCons    = crcName === 'CRC Sud' ? 150 : 300
     const issuedDate = new Date(order.issuedAt)
     const issuedStr  = `${String(issuedDate.getHours()).padStart(2,'0')}:${String(issuedDate.getMinutes()).padStart(2,'0')}`
+    // Pick the MW relevant for this CRC — Nord reads mwNord, Sud reads mwSud
+    const crcMW = crcName === 'CRC Sud' ? (order.mwSud ?? order.mwNord ?? 0) : (order.mwNord ?? 0)
 
     return (
         <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-[60] flex items-center justify-center p-space-md">
@@ -345,10 +376,10 @@ function PendingModal({ order, onReceipt })
                     <div className="bg-surface-container p-space-md flex flex-wrap items-center justify-between gap-space-md">
                         <div className="flex flex-col">
                             <span className="font-mono text-[10px] text-on-surface-variant uppercase tracking-wider">
-                                Consigne additionnelle (CRC Nord)
+                                Consigne additionnelle ({crcName})
                             </span>
                             <div className="flex items-baseline gap-space-xs mt-space-xs">
-                                <span className="font-mono text-4xl font-bold text-error">+{order.mwNord}</span>
+                                <span className="font-mono text-4xl font-bold text-error">+{crcMW}</span>
                                 <span className="font-mono text-sm text-on-surface-variant">MW d'effacement immédiat</span>
                             </div>
                         </div>
@@ -357,7 +388,7 @@ function PendingModal({ order, onReceipt })
                                 Nouvelle consigne globale CRC
                             </span>
                             <div className="flex items-baseline gap-space-xs justify-end mt-space-xs">
-                                <span className="font-mono text-4xl font-bold text-secondary">{300 + order.mwNord}</span>
+                                <span className="font-mono text-4xl font-bold text-secondary">{crcCons + crcMW}</span>
                                 <span className="font-mono text-sm text-on-surface-variant">MW</span>
                             </div>
                         </div>
@@ -393,7 +424,7 @@ function PendingModal({ order, onReceipt })
 // ── Consolidated floating badge — wraps one or many acknowledged orders ───────
 // Single order  → behaves exactly like the old AcknowledgedBadge
 // Multiple orders → collapsed badge shows count + combined MW, expanded shows tabs
-function ConsolidatedBadge({ orders, onDispatch })
+function ConsolidatedBadge({ orders, onDispatch, crcName = 'CRC Nord' })
 {
     const [expanded,    setExpanded]    = useState(false)
     const [activeIdx,   setActiveIdx]   = useState(0)
@@ -410,8 +441,12 @@ function ConsolidatedBadge({ orders, onDispatch })
 
     const totalMW = orders.reduce((s, o) => s + o.mwNord, 0)
 
-    const ackDate = activeOrder?.acknowledgedAt ? new Date(activeOrder.acknowledgedAt) : null
-    const ackStr  = ackDate
+    // Guard: acknowledgedAt may be null, undefined, or the string "undefined"
+    // (persisted that way by an older version of the store). Only parse dates
+    // that are real ISO strings to avoid new Date("undefined") → Invalid Date.
+    const rawAck  = activeOrder?.acknowledgedAt
+    const ackDate = rawAck && rawAck !== 'undefined' ? new Date(rawAck) : null
+    const ackStr  = ackDate && !isNaN(ackDate.getTime())
         ? `${String(ackDate.getHours()).padStart(2,'0')}:${String(ackDate.getMinutes()).padStart(2,'0')}`
         : '--:--'
 
@@ -571,6 +606,7 @@ function ConsolidatedBadge({ orders, onDispatch })
                                     else setActiveIdx(Math.min(safeIdx, remaining.length - 1))
                                 }}
                                 compact={true}
+                                crcName={crcName}
                             />
                         )}
                     </div>
@@ -580,178 +616,324 @@ function ConsolidatedBadge({ orders, onDispatch })
     )
 }
 
-// ── Step 2 — Floating badge (status: 'acknowledged') — DRAGGABLE ─────────────
-function AcknowledgedBadge({ order, onDispatch })
+// ── CRC Netted Badge — single floating panel for all acknowledged orders ───────
+//
+// Sign convention (same as BCC side, DN is sender):
+//   urgence     = negative  → CRC must shed more, distribute to BCCs via DispatchForm
+//   réalimentation = positive → CRC must restore, distribute via RealimDispatchForm
+//
+// net = Σ(realim MWNord) − Σ(urgence MWNord)
+//   net < 0  → shedding badge (red)  → DispatchForm with |net| MW
+//   net > 0  → realim badge (blue)   → RealimDispatchForm with |net| MW
+//   net = 0  → balanced (green)      → no action, auto-close
+//
+// The expanded panel shows the appropriate dispatch form for the net direction.
+// All contributing order refs are listed in the handle bar.
+function CRCNettedBadge({ urgenceOrders, realimOrders, onDispatchUrgence, onCompleteRealim, onDismissAll, crcName = 'CRC Nord' })
 {
     const [expanded,  setExpanded]  = useState(false)
-
-    // Position state — stored as { left, bottom } from viewport edges
-    // so the container is always anchored by its BOTTOM-LEFT corner.
-    // null = use default CSS anchor (bottom-right).
     const [pos,       setPos]       = useState(null)
     const [dragging,  setDragging]  = useState(false)
     const dragOffset                = useRef({ x: 0, y: 0 })
     const containerRef              = useRef(null)
 
-    const ackDate = order.acknowledgedAt ? new Date(order.acknowledgedAt) : null
-    const ackStr  = ackDate
-        ? `${String(ackDate.getHours()).padStart(2,'0')}:${String(ackDate.getMinutes()).padStart(2,'0')}`
-        : '--:--'
+    // ── Net MW computation ────────────────────────────────────────────────────
+    // Use REMAINING MW per urgence order (target − already dispatched to BCCs)
+    // so the badge shrinks as the CRC dispatches to BCCs.
+    const isSud     = crcName === 'CRC Sud'
+    const urgenceMW = urgenceOrders.reduce((s, o) => {
+        const target      = isSud ? (o.mwSud ?? o.mwNord ?? 0) : (o.mwNord ?? 0)
+        const dispatched  = o.mwDispatched ?? 0
+        return s + Math.max(0, target - dispatched)
+    }, 0)
+    const realimMW  = realimOrders.reduce((s, r) => {
+        const target     = isSud ? (r.mwSud ?? r.mwNord ?? r.mwTotal ?? 0) : (r.mwNord ?? r.mwTotal ?? 0)
+        const dispatched = r.mwDispatched ?? 0
+        return s + Math.max(0, target - dispatched)
+    }, 0)
+    const netMW     = realimMW - urgenceMW   // positive = restore, negative = shed
+    const absMW     = Math.abs(netMW)
+    const isShed    = netMW < 0
+    const isRealim  = netMW > 0
+    const isBalanced = netMW === 0
 
-    // Start drag — capture offset from pointer to bottom-left of container
-    const handleMouseDown = useCallback
-    (
-        (e) =>
-        {
-            if (e.target.closest('button')) return
-            e.preventDefault()
+    const allOrders = [
+        ...urgenceOrders.map((o) => ({ ...o, _kind: 'urgence' })),
+        ...realimOrders.map((r)  => ({ ...r, _kind: 'realim'  })),
+    ]
 
+    // Sub-label when both types coexist
+    const subLabel = urgenceMW > 0 && realimMW > 0
+        ? `(${realimMW} REA − ${urgenceMW} URG = ${netMW > 0 ? '+' : ''}${netMW.toFixed(1)} MW net)`
+        : null
+
+    // Build a synthetic single-order object for the dispatch forms.
+    // mwNord is set to absMW (remaining net) so DispatchForm targets the right amount.
+    // mwSud mirrors it for CRC Sud (DispatchForm picks the right field via crcName).
+    const syntheticUrgence = {
+        id:       allOrders.map((o) => o.id).join('-'),
+        orderRef: urgenceOrders.length > 0
+            ? urgenceOrders.map((o) => o.orderRef).join(' + ')
+            : realimOrders.map((r) => r.orderRef).join(' + '),
+        mwNord:   isSud ? 0   : absMW,
+        mwSud:    isSud ? absMW : 0,
+        mwTotal:  absMW,
+        type:     isShed ? 'urgence' : 'realim',
+    }
+
+    // ── Dispatch handlers ─────────────────────────────────────────────────────
+    // Called by DispatchForm with (id, mwSent) — mwSent is the total BCC distribution.
+    // 1. Post a new CRC-issued urgence order targeted at BCCs.
+    // 2. Call partialDispatch on each source urgence order to reduce remaining MW.
+    // 3. Banner auto-shrinks (urgenceMW recomputed from remaining); disappears when 0.
+    const handleDispatch = async (_id, mwSent) => {
+        const mwToSend = mwSent ?? absMW
+
+        // Post a new urgence order from CRC → BCCs
+        try {
+            await api.post('/api/v1/orders', {
+                order_type:     'urgence'
+                ,mw_total:      mwToSend
+                ,mw_nord:       isSud ? 0 : mwToSend
+                ,mw_sud:        isSud ? mwToSend : 0
+                ,target_crc_id: null
+                ,notes:         `Urgence CRC dispatchee vers BCCs — ${mwToSend} MW`
+            })
+        } catch (err) {
+            console.error('[CRCNettedBadge] Failed to post BCC urgence order:', err?.response?.data ?? err.message)
+        }
+
+        // Reduce the remaining MW on each source urgence order
+        // Distribute mwSent proportionally across all source urgence orders
+        const totalTarget = urgenceOrders.reduce((s, o) => {
+            const t = isSud ? (o.mwSud ?? o.mwNord ?? 0) : (o.mwNord ?? 0)
+            return s + Math.max(0, t - (o.mwDispatched ?? 0))
+        }, 0)
+
+        urgenceOrders.forEach((o) => {
+            const remaining = Math.max(0, (isSud ? (o.mwSud ?? o.mwNord ?? 0) : (o.mwNord ?? 0)) - (o.mwDispatched ?? 0))
+            const share     = totalTarget > 0 ? (remaining / totalTarget) * mwToSend : mwToSend / urgenceOrders.length
+            onDispatchUrgence(o.id, share)
+        })
+
+        realimOrders.forEach((r) => onCompleteRealim(r.id))
+        setExpanded(false)
+    }
+
+    const handleComplete = async (_id, mwSent) => {
+        const mwToSend = mwSent ?? absMW
+
+        // Post a CRC-issued realim order to BCCs
+        try {
+            await api.post('/api/v1/orders', {
+                order_type:     'realim'
+                ,mw_total:      mwToSend
+                ,mw_nord:       isSud ? 0 : mwToSend
+                ,mw_sud:        isSud ? mwToSend : 0
+                ,target_crc_id: null
+                ,notes:         `Réalimentation CRC dispatchee vers BCCs — ${mwToSend} MW`
+            })
+        } catch (err) {
+            console.error('[CRCNettedBadge] Failed to post BCC realim order:', err?.response?.data ?? err.message)
+        }
+
+        urgenceOrders.forEach((o) => onDispatchUrgence(o.id, absMW / Math.max(1, urgenceOrders.length)))
+        realimOrders.forEach ((r) => onCompleteRealim(r.id))
+        setExpanded(false)
+    }
+
+    // Balanced: auto-dismiss after a short delay
+    useEffect(() => {
+        if (!isBalanced) return
+        const t = setTimeout(() => {
+            // Pass the full remaining target so partialDispatch/partialRealim
+            // marks each order as fully dispatched and removes it.
+            urgenceOrders.forEach((o) => {
+                const target = isSud ? (o.mwSud ?? o.mwNord ?? 0) : (o.mwNord ?? 0)
+                const remaining = Math.max(0, target - (o.mwDispatched ?? 0))
+                onDispatchUrgence(o.id, remaining)
+            })
+            realimOrders.forEach((r) => {
+                const target = isSud ? (r.mwSud ?? r.mwNord ?? r.mwTotal ?? 0) : (r.mwNord ?? r.mwTotal ?? 0)
+                const remaining = Math.max(0, target - (r.mwDispatched ?? 0))
+                onCompleteRealim(r.id, remaining)
+            })
+        }, 2000)
+        return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isBalanced])
+
+    // ── Drag ──────────────────────────────────────────────────────────────────
+    const handleMouseDown = useCallback((e) => {
+        if (e.target.closest('button')) return
+        e.preventDefault()
+        const el = containerRef.current
+        if (!el) return
+        const rect = el.getBoundingClientRect()
+        dragOffset.current = {
+            x:  e.clientX - rect.left,
+            y:  window.innerHeight - e.clientY - (window.innerHeight - rect.bottom),
+        }
+        setDragging(true)
+    }, [])
+
+    useEffect(() => {
+        if (!dragging) return
+        const onMove = (e) => {
             const el = containerRef.current
-            if (!el) return
-            const rect = el.getBoundingClientRect()
-
-            // Offset from pointer to the LEFT edge and BOTTOM edge of the element
-            dragOffset.current =
-            {
-                x: e.clientX - rect.left
-                ,y: window.innerHeight - e.clientY - (window.innerHeight - rect.bottom)
-            }
-            setDragging(true)
+            const w  = el ? el.offsetWidth  : 400
+            const h  = el ? el.offsetHeight : 60
+            setPos({
+                left:   Math.max(0, Math.min(e.clientX - dragOffset.current.x, window.innerWidth  - w)),
+                bottom: Math.max(0, Math.min(window.innerHeight - e.clientY - dragOffset.current.y, window.innerHeight - h)),
+            })
         }
-        ,[]
-    )
-
-    // Move — update bottom+left so the container stays anchored by bottom edge
-    useEffect
-    (
-        () =>
-        {
-            if (!dragging) return
-
-            const onMove = (e) =>
-            {
-                const el   = containerRef.current
-                const w    = el ? el.offsetWidth  : 400
-                const h    = el ? el.offsetHeight : 60
-
-                // New left edge
-                const newLeft   = e.clientX - dragOffset.current.x
-                // New bottom edge (distance from bottom of viewport)
-                const newBottom = window.innerHeight - e.clientY - dragOffset.current.y
-
-                // Clamp so the widget never leaves the viewport
-                const clampedLeft   = Math.max(0, Math.min(newLeft,   window.innerWidth  - w))
-                const clampedBottom = Math.max(0, Math.min(newBottom,  window.innerHeight - h))
-
-                setPos({ left: clampedLeft, bottom: clampedBottom })
-            }
-
-            const onUp = () => setDragging(false)
-
-            document.addEventListener('mousemove', onMove)
-            document.addEventListener('mouseup',   onUp)
-            return () =>
-            {
-                document.removeEventListener('mousemove', onMove)
-                document.removeEventListener('mouseup',   onUp)
-            }
+        const onUp = () => setDragging(false)
+        document.addEventListener('mousemove', onMove)
+        document.addEventListener('mouseup',   onUp)
+        return () => {
+            document.removeEventListener('mousemove', onMove)
+            document.removeEventListener('mouseup',   onUp)
         }
-        ,[dragging]
-    )
+    }, [dragging])
 
-    // Compute inline style — always use bottom+left so expanding grows upward
     const posStyle = pos
         ? { position: 'fixed', left: pos.left, bottom: pos.bottom, top: 'auto', right: 'auto' }
         : { position: 'fixed', bottom: '2.75rem', right: '1rem' }
 
+    // ── Colours ───────────────────────────────────────────────────────────────
+    const clr = isBalanced
+        ? { border: 'border-[#4ade80]',   collapsedBg: 'bg-[#4ade80]/20 text-[#4ade80]',          btn: 'bg-[#4ade80] text-background',                             handleBg: 'bg-[#4ade80]/10 border-[#4ade80]/40'       }
+        : isShed
+        ? { border: 'border-error',       collapsedBg: 'bg-error-container text-on-error-container', btn: 'bg-error text-background hover:bg-error-container/80 hover:text-on-error-container', handleBg: 'bg-error-container/30 border-error'         }
+        : { border: 'border-secondary',   collapsedBg: 'bg-secondary-container text-on-secondary-container', btn: 'bg-secondary text-background hover:bg-secondary-container/80', handleBg: 'bg-secondary-container/30 border-secondary' }
+
+    // ── Collapsed strip ───────────────────────────────────────────────────────
+    if (!expanded) {
+        return (
+            <div
+                ref={containerRef}
+                style={{ ...posStyle, zIndex: 60, maxWidth: '42rem', width: '100%' }}
+                className={`shadow-2xl ${dragging ? 'select-none' : ''}`}
+            >
+                <div
+                    className={`flex items-center gap-space-sm px-space-md py-space-sm border ${clr.border} ${clr.collapsedBg} ${isBalanced ? '' : 'animate-pulse'}`}
+                    style={{ cursor: dragging ? 'grabbing' : 'grab' }}
+                    onMouseDown={handleMouseDown}
+                >
+                    <Icon name="drag_indicator" size={16} className="opacity-60 shrink-0" />
+                    <div className="relative flex shrink-0">
+                        <Icon name={isBalanced ? 'check_circle' : isShed ? 'warning' : 'refresh'} size={17} />
+                        {!isBalanced && <span className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ${isShed ? 'bg-error' : 'bg-[#4ade80]'} animate-ping`} />}
+                    </div>
+                    <div className="flex flex-col items-start leading-tight flex-1 min-w-0">
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-wider truncate">
+                            {allOrders.map((o) => o.orderRef).join(' · ')}
+                        </span>
+                        <span className="font-mono text-[11px] font-bold">
+                            {isBalanced
+                                ? 'ORDRES ÉQUILIBRÉS — Fermeture automatique…'
+                                : isShed
+                                ? `${absMW.toFixed(1)} MW NETS À DÉLESTER — En attente distribution BCCs`
+                                : `${absMW.toFixed(1)} MW NETS À RÉTABLIR — En attente distribution BCCs`}
+                        </span>
+                        {subLabel && <span className="font-mono text-[9px] opacity-70">{subLabel}</span>}
+                    </div>
+                    {!isBalanced && (
+                        <button
+                            onClick={() => setExpanded(true)}
+                            onMouseDown={(e) => e.stopPropagation()}
+                            className={`flex items-center gap-space-xs px-space-sm py-space-xs font-mono text-[10px] font-bold transition-colors shrink-0 ${clr.btn}`}
+                            type="button"
+                        >
+                            <Icon name="expand_less" size={15} />
+                            <span>Distribuer</span>
+                        </button>
+                    )}
+                </div>
+            </div>
+        )
+    }
+
+    // ── Expanded panel ────────────────────────────────────────────────────────
     return (
         <div
             ref={containerRef}
             style={{ ...posStyle, zIndex: 60, maxWidth: '42rem', width: '100%' }}
             className={`shadow-2xl ${dragging ? 'select-none' : ''}`}
         >
-            {/* ── Collapsed badge ── */}
-            {!expanded && (
+            <div className={`bg-surface-container-low border flex flex-col-reverse max-h-[80vh] overflow-hidden ${clr.border}`}>
+
+                {/* Handle bar — bottom, via flex-col-reverse */}
                 <div
-                    className="flex items-center gap-space-sm px-space-md py-space-sm bg-error-container text-on-error-container border border-error animate-pulse"
+                    className={`flex items-center justify-between px-space-md py-space-xs border-t shrink-0 ${clr.handleBg}`}
                     style={{ cursor: dragging ? 'grabbing' : 'grab' }}
                     onMouseDown={handleMouseDown}
                 >
-                    {/* Drag handle icon */}
-                    <Icon name="drag_indicator" size={16} className="text-on-error-container/60 shrink-0" />
-
-                    <div className="relative flex shrink-0">
-                        <Icon name="warning" size={17} />
-                        <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-error animate-ping" />
+                    <div className="flex items-center gap-space-xs min-w-0 overflow-x-auto">
+                        <Icon name="drag_indicator" size={13} className="text-on-surface-variant/60 shrink-0 mr-space-xs" />
+                        {/* Urgence chips */}
+                        {urgenceOrders.map((o) => (
+                            <span key={o.id} className="font-mono text-[10px] font-bold px-space-sm py-space-xs shrink-0 bg-error/20 text-error">
+                                {o.orderRef} −{isSud ? (o.mwSud ?? o.mwNord ?? 0) : (o.mwNord ?? 0)} MW
+                            </span>
+                        ))}
+                        {/* Realim chips */}
+                        {realimOrders.map((r) => (
+                            <span key={r.id} className="font-mono text-[10px] font-bold px-space-sm py-space-xs shrink-0 bg-secondary/20 text-secondary">
+                                {r.orderRef} +{isSud ? (r.mwSud ?? r.mwNord ?? r.mwTotal ?? 0) : (r.mwNord ?? r.mwTotal ?? 0)} MW
+                            </span>
+                        ))}
+                        {subLabel && (
+                            <span className={`font-mono text-[9px] px-space-xs ${isShed ? 'text-error' : 'text-secondary'} opacity-70 shrink-0`}>{subLabel}</span>
+                        )}
                     </div>
-
-                    <div className="flex flex-col items-start leading-tight flex-1 min-w-0">
-                        <span className="font-mono text-[10px] font-bold uppercase tracking-wider truncate">
-                            {order.orderRef}
-                        </span>
-                        <span className="font-mono text-[11px] font-bold truncate">
-                            +{order.mwNord} MW — En attente distribution BCCs
-                        </span>
-                    </div>
-
                     <button
-                        onClick={() => setExpanded(true)}
-                        onMouseDown={(e) => e.stopPropagation()}   // don't start drag on button click
-                        className="flex items-center gap-space-xs px-space-sm py-space-xs bg-error hover:bg-error-container/80 text-background font-mono text-[10px] font-bold transition-colors shrink-0"
+                        onClick={() => setExpanded(false)}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        className="flex items-center gap-space-xs px-space-sm py-space-xs bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-mono text-[10px] transition-colors shrink-0"
                         type="button"
-                        title="Distribuer aux BCCs"
                     >
-                        <Icon name="expand_less" size={15} />
-                        <span>Distribuer</span>
+                        <Icon name="expand_more" size={14} />
+                        <span>Réduire</span>
                     </button>
                 </div>
-            )}
 
-            {/* ── Expanded dispatch panel ── */}
-            {expanded && (
-                <div className="bg-surface-container-low border border-error flex flex-col-reverse max-h-[80vh] overflow-hidden">
-
-                    {/* Panel header — drag handle — rendered last in DOM but shows at bottom via flex-col-reverse */}
-                    <div
-                        className="flex items-center justify-between px-space-lg py-space-sm bg-error-container/30 border-t border-error shrink-0"
-                        style={{ cursor: dragging ? 'grabbing' : 'grab' }}
-                        onMouseDown={handleMouseDown}
-                    >
-                        <div className="flex items-center gap-space-sm min-w-0">
-                            <Icon name="drag_indicator" size={15} className="text-on-surface-variant/60 shrink-0" />
-                            <Icon name="warning" size={15} className="text-error shrink-0" />
-                            <span className="font-mono text-xs font-bold text-on-surface uppercase tracking-wider truncate">
-                                {order.orderRef} — Distribution BCCs
-                            </span>
-                            <span className="font-mono text-[10px] text-on-surface-variant shrink-0">
-                                +{order.mwNord} MW · {ackStr}
-                            </span>
-                        </div>
-                        <button
-                            onClick={() => setExpanded(false)}
-                            onMouseDown={(e) => e.stopPropagation()}
-                            className="flex items-center gap-space-xs px-space-sm py-space-xs bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-mono text-[10px] transition-colors shrink-0"
-                            type="button"
-                        >
-                            <Icon name="expand_more" size={14} />
-                            <span>Réduire</span>
-                        </button>
-                    </div>
-
-                    {/* Dispatch form — renders above the handle bar */}
-                    <div className="flex-1 overflow-y-auto p-space-lg">
+                {/* Dispatch form — appropriate for net direction */}
+                <div className="flex-1 overflow-y-auto p-space-lg">
+                    {isShed && (
                         <DispatchForm
-                            order={order}
-                            onDispatch={onDispatch}
+                            order={syntheticUrgence}
+                            onDispatch={handleDispatch}
                             compact={true}
+                            crcName={crcName}
                         />
-                    </div>
+                    )}
+                    {isRealim && (
+                        <RealimDispatchForm
+                            order={syntheticUrgence}
+                            onComplete={handleComplete}
+                        />
+                    )}
+                    {isBalanced && (
+                        <div className="flex flex-col gap-space-md items-center py-space-lg">
+                            <Icon name="check_circle" size={40} className="text-[#4ade80]" />
+                            <div className="text-center">
+                                <p className="font-mono font-bold text-sm text-[#4ade80]">ORDRES ÉQUILIBRÉS</p>
+                                <p className="font-mono text-[10px] text-on-surface-variant mt-space-xs">
+                                    Les ordres d'urgence et de réalimentation se compensent mutuellement.
+                                    Aucune action de distribution requise.
+                                </p>
+                                {subLabel && <p className="font-mono text-[9px] text-on-surface-variant mt-space-xs">{subLabel}</p>}
+                            </div>
+                            <p className="font-mono text-[9px] text-on-surface-variant">Fermeture automatique dans 2 secondes…</p>
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
         </div>
     )
 }
-
 // ── BCC Acknowledgement tracker — shown after CRC dispatches a realim order ──
 // Simulates BCC responses with realistic timers for demo purposes
 // In production this would be driven by websocket events from each BCC
@@ -1163,11 +1345,15 @@ function RealimDispatchForm({ order, onComplete })
 }
 
 // ── Réalimentation pending modal (green, blocking) ────────────────────────────
-function RealimPendingModal({ order, onReceipt })
+function RealimPendingModal({ order, onReceipt, crcName = 'CRC Nord' })
 {
+    const crcCons    = crcName === 'CRC Sud' ? 150 : 300
     const issuedDate = new Date(order.issuedAt)
     const issuedStr  = `${String(issuedDate.getHours()).padStart(2,'0')}:${String(issuedDate.getMinutes()).padStart(2,'0')}`
-    const totalMW    = order.mwNord ?? order.mwTotal ?? 0
+    // Pick the MW relevant for this CRC — Nord reads mwNord, Sud reads mwSud
+    const totalMW    = crcName === 'CRC Sud'
+        ? (order.mwSud ?? order.mwNord ?? order.mwTotal ?? 0)
+        : (order.mwNord ?? order.mwTotal ?? 0)
 
     return (
         <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-[60] flex items-center justify-center p-space-md">
@@ -1206,7 +1392,7 @@ function RealimPendingModal({ order, onReceipt })
                     <div className="bg-surface-container p-space-md flex flex-wrap items-center justify-between gap-space-md">
                         <div className="flex flex-col">
                             <span className="font-mono text-[10px] text-on-surface-variant uppercase">
-                                {order.type === 'totale' ? 'Rétablissement intégral' : 'Réduction délestage (CRC Nord)'}
+                                {order.type === 'totale' ? 'Rétablissement intégral' : `Réduction délestage (${crcName})`}
                             </span>
                             <div className="flex items-baseline gap-space-xs mt-space-xs">
                                 <span className="font-mono text-4xl font-bold text-secondary">-{totalMW}</span>
@@ -1216,7 +1402,7 @@ function RealimPendingModal({ order, onReceipt })
                         <div className="flex flex-col text-right">
                             <span className="font-mono text-[10px] text-on-surface-variant uppercase">Nouvelle consigne CRC</span>
                             <div className="flex items-baseline gap-space-xs justify-end mt-space-xs">
-                                <span className="font-mono text-4xl font-bold text-[#4ade80]">{Math.max(0, 300 - totalMW)}</span>
+                                <span className="font-mono text-4xl font-bold text-[#4ade80]">{Math.max(0, crcCons - totalMW)}</span>
                                 <span className="font-mono text-sm text-on-surface-variant">MW</span>
                             </div>
                         </div>
@@ -1261,8 +1447,10 @@ function RealimBadge({ orders, onComplete, offsetUp = false })
     const activeOrder = orders[safeIdx]
     const totalMW     = orders.reduce((s, o) => s + (o.mwNord ?? o.mwTotal ?? 0), 0)
 
-    const ackDate = activeOrder?.acknowledgedAt ? new Date(activeOrder.acknowledgedAt) : null
-    const ackStr  = ackDate
+    // Guard against acknowledgedAt being null, undefined, or the string "undefined"
+    const rawAckRB  = activeOrder?.acknowledgedAt
+    const ackDate   = rawAckRB && rawAckRB !== 'undefined' ? new Date(rawAckRB) : null
+    const ackStr    = ackDate && !isNaN(ackDate.getTime())
         ? `${String(ackDate.getHours()).padStart(2,'0')}:${String(ackDate.getMinutes()).padStart(2,'0')}`
         : '--:--'
 
@@ -1435,19 +1623,11 @@ function RealimBadge({ orders, onComplete, offsetUp = false })
 // ── Public component ──────────────────────────────────────────────────────────
 export default function CRCUrgencePopup()
 {
-    const { user }                                                          = useAuthStore()
-    const { urgences, realims, acknowledgeReceipt, dispatchComplete, completeRealim, seedDemo, modalOpen } = useUrgenceStore()
+    const { user }                                                                              = useAuthStore()
+    const { urgences, realims, acknowledgeReceipt, dispatchComplete, partialDispatch, completeRealim, partialRealim, modalOpen } = useUrgenceStore()
 
-    // Seed a demo order the first time a CRC user lands on any page
-    useEffect
-    (
-        () =>
-        {
-            if (user?.role === 'CRC') seedDemo()
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        ,[]
-    )
+    // Orders now come from DB via liveStore + useOrders hook (mounted in InternalLayout)
+    // No seedDemo() — that overwrote real work on every login
 
     if (!user || user.role !== 'CRC') return null
 
@@ -1481,6 +1661,7 @@ export default function CRCUrgencePopup()
                     key={pendingUrgences[0].id}
                     order={pendingUrgences[0]}
                     onReceipt={acknowledgeReceipt}
+                    crcName={userCRC}
                 />
             )}
 
@@ -1489,6 +1670,7 @@ export default function CRCUrgencePopup()
                 <RealimPendingModal
                     key={pendingRealims[0].id}
                     order={pendingRealims[0]}
+                    crcName={userCRC}
                     onReceipt={(id) =>
                     {
                         // Move realim from pending → acknowledged in store
@@ -1509,19 +1691,34 @@ export default function CRCUrgencePopup()
             )}
 
             {/* Urgence floating badges */}
-            {!modalOpen && acknowledgedUrgences.length > 0 && (
-                <ConsolidatedBadge
-                    orders={acknowledgedUrgences}
-                    onDispatch={dispatchComplete}
-                />
-            )}
-
-            {/* Realim floating badge — offset upward when urgence badge is also showing */}
-            {!modalOpen && acknowledgedRealims.length > 0 && (
-                <RealimBadge
-                    orders={acknowledgedRealims}
-                    onComplete={completeRealim ?? (() => {})}
-                    offsetUp={acknowledgedUrgences.length > 0}
+            {!modalOpen && (acknowledgedUrgences.length > 0 || acknowledgedRealims.length > 0) && (
+                <CRCNettedBadge
+                    urgenceOrders={acknowledgedUrgences}
+                    realimOrders={acknowledgedRealims}
+                    onDispatchUrgence={(id, mwSent) => {
+                        const crcZone = userCRC === 'CRC Sud' ? 'sud' : 'nord'
+                        if (partialDispatch) partialDispatch(id, mwSent ?? 0, crcZone)
+                        else dispatchComplete(id)
+                    }}
+                    onCompleteRealim={(id, mwSent) => {
+                        const crcZone = userCRC === 'CRC Sud' ? 'sud' : 'nord'
+                        if (partialRealim) partialRealim(id, mwSent ?? 0, crcZone)
+                        else completeRealim?.(id)
+                    }}
+                    onDismissAll={() => {
+                        const crcZone = userCRC === 'CRC Sud' ? 'sud' : 'nord'
+                        acknowledgedUrgences.forEach((o) => {
+                            const target = crcZone === 'sud' ? (o.mwSud ?? o.mwNord ?? 0) : (o.mwNord ?? 0)
+                            if (partialDispatch) partialDispatch(o.id, target, crcZone)
+                            else dispatchComplete(o.id)
+                        })
+                        acknowledgedRealims.forEach((r) => {
+                            const target = crcZone === 'sud' ? (r.mwSud ?? r.mwNord ?? r.mwTotal ?? 0) : (r.mwNord ?? r.mwTotal ?? 0)
+                            if (partialRealim) partialRealim(r.id, target, crcZone)
+                            else completeRealim?.(r.id)
+                        })
+                    }}
+                    crcName={userCRC}
                 />
             )}
         </>

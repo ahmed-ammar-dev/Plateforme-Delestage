@@ -7,7 +7,6 @@ import AlertBar              from '../components/shared/AlertBar'
 import CRCUrgencePopup       from '../components/shared/CRCUrgencePopup'
 import BCCOrderPopup         from '../components/shared/BCCOrderPopup'
 import { useAuthStore }      from '../stores/authStore'
-import { useRealtimeOrders } from '../hooks/useRealtimeOrders'
 import { useWebSocket }      from '../hooks/useWebSocket'
 import { useOrders }         from '../hooks/useOrders'
 
@@ -16,10 +15,9 @@ export default function InternalLayout()
     const [collapsed, setCollapsed] = useState(false)
     const { user }                  = useAuthStore()
 
-    // Opens WebSocket connection and drives urgence/realim popups in real time
-    useRealtimeOrders()
-    // New live system: WebSocket → liveStore + initial REST load
+    // Single WebSocket connection — drives liveStore, urgenceStore, and bccOrderStore
     useWebSocket()
+    // Initial REST load of active orders → liveStore
     useOrders()
 
     return (

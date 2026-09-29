@@ -105,6 +105,16 @@ export default function App()
                     <Route path="bcc/departs"    element={<ProtectedRoute allowedRoles={['BCC']}><BCCDeparts /></ProtectedRoute>} />
                 </Route>
 
+                {/* ── Demo-only standalone route (removed at deploy) ────── */}
+                <Route
+                    path="/simulateur_reseau"
+                    element={
+                        <div className="min-h-screen bg-background text-on-surface">
+                            <SimulateurReseau />
+                        </div>
+                    }
+                />
+
                 {/* ── Fallback ──────────────────────────────────────────── */}
                 <Route path="*" element={<Navigate to="/login" replace />} />
 

@@ -1,27 +1,40 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import DNMap from './DNMap'
-import { useAuthStore }    from '../../stores/authStore'
-import { useUrgenceStore } from '../../stores/urgenceStore'
-import { useGridStore }    from '../../stores/gridStore'
-import { useDNDashboard }  from '../../hooks/useDNDashboard'
-import { useLiveStore }    from '../../stores/liveStore'
-import { useAlertSync }    from '../../hooks/useAlertSync'
-import { useTimeseries }   from '../../hooks/useTimeseries'
-import api                 from '../../lib/api'
+import { useAuthStore }       from '../../stores/authStore'
+import { useUrgenceStore }    from '../../stores/urgenceStore'
+import { useGridStore }       from '../../stores/gridStore'
+import { useDNDashboard }     from '../../hooks/useDNDashboard'
+import { useLiveStore }       from '../../stores/liveStore'
+import { useAlertSync }       from '../../hooks/useAlertSync'
+import { useJ1Reminder }      from '../../hooks/useJ1Reminder'
+import { useAlertStore }      from '../../stores/alertStore'
+import { useProgrammesStore } from '../../stores/programmesStore'
+import { useTimeseries }      from '../../hooks/useTimeseries'
+import api                    from '../../lib/api'
 
 // ── Réalimentation modal ──────────────────────────────────────────────────────
 // Same structure as UrgenceModal but blue/green theme
 // type: 'partielle' (restore partial MW) | 'totale' (end all shedding)
 function RealiModal({ isOpen, onClose, currentlyShedding = 0, onOrderEmis, livePlanifie = 0, liveFrequency = 50.0 })
 {
-    const SPLIT_NORD                       = 67
-    const SPLIT_SUD                        = 33
-
     const [type,       setType]            = useState('partielle')
     const [mwTotal,    setMwTotal]         = useState('')
-    const [splitNord,  setSplitNord]       = useState(SPLIT_NORD)
+    const [splitNord,  setSplitNord]       = useState(67)
     const [confirmTxt, setConfirmTxt]      = useState('')
     const [emitted,    setEmitted]         = useState(false)
+
+    // Reset form and load persisted split key whenever the modal opens
+    useEffect(() =>
+    {
+        if (!isOpen) return
+        setType('partielle')
+        setMwTotal('')
+        setConfirmTxt('')
+        setEmitted(false)
+        api.get('/api/v1/settings/crc-split')
+            .then(({ data }) => setSplitNord(data.split_nord ?? 67))
+            .catch(() => setSplitNord(67))
+    }, [isOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const splitSud = 100 - splitNord
 
@@ -535,9 +548,45 @@ function LoadSheddingChart({ urgenceOrders = [], chartPoints = CHART_POINTS_FALL
                     </text>
                 ))}
 
-                {/* Deficit hatch zone */}
-                <polygon fill="url(#deficitGradient)" points="554,60 580,60 612,60 612,73 580,69 554,60" />
-                <polygon fill="url(#hatchDeficit)"    points="554,60 580,60 612,60 612,73 580,69 554,60" />
+                {/* Deficit fill + hatch — drawn between plan and real wherever real < plan */}
+                {(() =>
+                {
+                    // Collect contiguous segments where réalisé is below consigne
+                    // Each segment becomes one filled polygon (gradient + hatch overlay)
+                    const segments = []
+                    let current    = null
+
+                    realPoints.forEach((pt) =>
+                    {
+                        const planPt = chartPoints.find((p) => p.x === pt.x)
+                        if (!planPt) return
+                        const isDeficit = pt.yReal > pt.yPlan + 1   // yReal > yPlan means MW_real < MW_plan (y inverted)
+                        if (isDeficit)
+                        {
+                            if (!current) current = []
+                            current.push({ x: pt.x, yPlan: planPt.yPlan, yReal: pt.yReal })
+                        }
+                        else
+                        {
+                            if (current && current.length > 0) { segments.push(current); current = null }
+                        }
+                    })
+                    if (current && current.length > 0) segments.push(current)
+
+                    return segments.map((seg, idx) =>
+                    {
+                        // Build closed polygon: top edge (plan line) left→right, then bottom edge (real line) right→left
+                        const topEdge    = seg.map((p) => `${p.x},${p.yPlan}`).join(' ')
+                        const bottomEdge = [...seg].reverse().map((p) => `${p.x},${p.yReal}`).join(' ')
+                        const points     = `${topEdge} ${bottomEdge}`
+                        return (
+                            <g key={idx}>
+                                <polygon fill="url(#deficitGradient)" points={points} />
+                                <polygon fill="url(#hatchDeficit)"    points={points} />
+                            </g>
+                        )
+                    })
+                })()}
 
                 {/* Planned line — full 24h dashed */}
                 <path d={planPath} fill="none" stroke="#acc7ff" strokeDasharray="4,4" strokeWidth="2" />
@@ -976,14 +1025,25 @@ depart coupe dans les 24 dernieres heures.`
 
 function UrgenceModal({ isOpen, onClose, prefillMW = 0, onOrderEmis, cancelledRealims = null, livePlanifie = 0, liveRealise = 0, liveFrequency = 50.0 })
 {
-    const SPLIT_NORD                     = 67   // from ParametresSeuils default
-    const SPLIT_SUD                      = 33
-
     const [mwTotal,    setMwTotal]       = useState(prefillMW || '')
-    const [splitNord,  setSplitNord]     = useState(SPLIT_NORD)
+    const [splitNord,  setSplitNord]     = useState(67)
     const [confirmed,  setConfirmed]     = useState(false)
     const [confirmTxt, setConfirmTxt]    = useState('')
     const [emitted,    setEmitted]       = useState(false)
+
+    // Reset form and load persisted split key whenever the modal opens
+    useEffect(() =>
+    {
+        if (!isOpen) return
+        // Always start fresh — clear any state left from the previous order
+        setMwTotal(prefillMW || '')
+        setConfirmed(false)
+        setConfirmTxt('')
+        setEmitted(false)
+        api.get('/api/v1/settings/crc-split')
+            .then(({ data }) => setSplitNord(data.split_nord ?? 67))
+            .catch(() => setSplitNord(67))
+    }, [isOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const splitSud = 100 - splitNord
 
@@ -992,7 +1052,7 @@ function UrgenceModal({ isOpen, onClose, prefillMW = 0, onOrderEmis, cancelledRe
 
     const handleSplitChange = (val) =>
     {
-        const clamped = Math.max(10, Math.min(90, Number(val)))
+        const clamped = Math.max(0, Math.min(100, Number(val)))
         setSplitNord(clamped)
     }
 
@@ -1155,8 +1215,8 @@ function UrgenceModal({ isOpen, onClose, prefillMW = 0, onOrderEmis, cancelledRe
                                             <div className="flex items-center gap-space-xs">
                                                 <input
                                                     type="number"
-                                                    min={10}
-                                                    max={90}
+                                                    min={0}
+                                                    max={100}
                                                     value={splitNord}
                                                     onChange={(e) => handleSplitChange(e.target.value)}
                                                     className="w-10 bg-transparent border-b border-secondary text-secondary font-mono text-xs text-center focus:outline-none"
@@ -1274,35 +1334,54 @@ function UrgenceModal({ isOpen, onClose, prefillMW = 0, onOrderEmis, cancelledRe
 
 // ── Programme J+1 modal ───────────────────────────────────────────────────────
 
-// Default time slots (48 × 30-min slots for one day)
+// National load-shedding profile — must stay in sync with backend _NATIONAL_PROFILE_MW
+// (backend/app/api/routes/programmes.py).  Peak ≈ 500 MW, overnight low ≈ 55 MW.
+const _NATIONAL_PROFILE_MW = [
+    // 00:00–03:30  overnight low
+     72,  66,  60,  58,  56,  55,  58,  63,
+    // 04:00–07:30  early ramp
+     70,  80,  92, 108, 125, 142, 158, 175,
+    // 08:00–11:30  morning ramp
+    200, 233, 267, 300, 333, 358, 384, 400,
+    // 12:00–15:30  peak
+    425, 450, 475, 492, 500, 492, 475, 450,
+    // 16:00–19:30  afternoon plateau
+    430, 408, 384, 358, 333, 309, 292, 275,
+    // 20:00–23:30  evening decline
+    264, 243, 217, 191, 167, 147, 125, 103,
+]
+
+// Default time slots (48 × 30-min slots) — deterministic, matches backend fallback profile
 function buildDefaultSlots()
 {
-    const slots = []
-    for (let h = 0; h < 24; h++)
-    {
-        for (let m = 0; m < 60; m += 30)
-        {
-            const label = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
-            // Realistic demand curve: low at night, peaks morning/evening
-            const peak =
-                (h >= 7  && h <= 9)  ? 380 + Math.round(Math.random() * 40) :
-                (h >= 11 && h <= 14) ? 350 + Math.round(Math.random() * 50) :
-                (h >= 18 && h <= 22) ? 420 + Math.round(Math.random() * 60) :
-                150 + Math.round(Math.random() * 80)
-            slots.push({ time: label, mw: peak })
-        }
-    }
-    return slots
+    return _NATIONAL_PROFILE_MW.map((mw, i) =>
+    ({
+        time: `${String(Math.floor(i / 2)).padStart(2, '0')}:${i % 2 === 0 ? '00' : '30'}`
+        ,mw
+    }))
 }
 
-function ProgrammeJ1Modal({ isOpen, onClose })
+function ProgrammeJ1Modal({ isOpen, onClose, onProgrammeValidated })
 {
     const fileRef                        = useRef(null)
     const [tab,      setTab]             = useState('upload')   // 'upload' | 'manual'
     const [slots,    setSlots]           = useState(buildDefaultSlots)
     const [fileName, setFileName]        = useState(null)
     const [saved,    setSaved]           = useState(false)
+    const [saving,   setSaving]          = useState(false)
     const [error,    setError]           = useState(null)
+    const [splitNordPreview, setSplitNordPreview] = useState(67)   // live from settings
+
+    // Load split key on open for the distribution preview
+    useEffect(() =>
+    {
+        if (!isOpen) return
+        api.get('/api/v1/settings/crc-split')
+            .then(({ data }) => setSplitNordPreview(data.split_nord ?? 67))
+            .catch(() => {})
+    }, [isOpen])
+
+    const splitSudPreview = 100 - splitNordPreview
 
     // Tomorrow's date
     const tomorrow = new Date()
@@ -1348,9 +1427,54 @@ function ProgrammeJ1Modal({ isOpen, onClose })
         setSaved(false)
     }
 
-    const handleValidate = () =>
+    const handleValidate = async () =>
     {
+        setSaving(true)
+        setSaved(false)
+
+        try
+        {
+            // 1 — Fetch the current CRC split key set by DN in Paramètres & Seuils
+            let splitNord = 67   // safe default if API unreachable
+            try
+            {
+                const { data: splitData } = await api.get('/api/v1/settings/crc-split')
+                splitNord = splitData.split_nord ?? 67
+            }
+            catch { /* keep default */ }
+
+            const splitSud = 100 - splitNord
+
+            // 2 — Build programme_date (tomorrow)
+            const tomorrow = new Date()
+            tomorrow.setDate(tomorrow.getDate() + 1)
+            const programmeDate = tomorrow.toISOString().slice(0, 10)
+
+            // 3 — Build slot payloads with CRC split applied
+            const slotPayloads = slots.map((s) =>
+            ({
+                time_slot:   s.time
+                ,mw_national: s.mw
+                ,mw_nord:     Math.round(s.mw * splitNord) / 100
+                ,mw_sud:      Math.round(s.mw * splitSud)  / 100
+            }))
+
+            // 4 — POST to dn-submit (creates programme, sets validated, broadcasts WS)
+            await api.post('/api/v1/programmes/dn-submit', {
+                programme_date: programmeDate
+                ,slots:         slotPayloads
+            })
+
+            // 5 — Update local J+1 status so reminder hook stops firing
+            if (onProgrammeValidated) onProgrammeValidated(programmeDate)
+        }
+        catch (err)
+        {
+            console.error('[DN J+1] Failed to save programme:', err?.response?.data ?? err.message)
+        }
+
         setSaved(true)
+        setSaving(false)
         setTimeout(() => onClose(), 1800)
     }
 
@@ -1525,6 +1649,56 @@ function ProgrammeJ1Modal({ isOpen, onClose })
                     )}
                 </div>
 
+                {/* ── CRC distribution preview ─────────────────────────────── */}
+                <div className="px-space-lg py-space-md bg-surface-container-lowest border-t border-surface-container-high shrink-0">
+                    <p className="font-mono text-[10px] text-on-surface-variant uppercase tracking-wider mb-space-sm font-semibold">
+                        Répartition automatique par CRC — clé actuelle
+                    </p>
+                    <div className="grid grid-cols-2 gap-space-md mb-space-sm">
+                        <div className="bg-surface-container border border-secondary/20 p-space-md flex items-center justify-between">
+                            <div>
+                                <p className="font-mono text-[9px] text-on-surface-variant uppercase mb-0.5">CRC Nord</p>
+                                <p className="font-mono text-sm font-bold text-secondary">{splitNordPreview} %</p>
+                                <p className="font-mono text-[9px] text-on-surface-variant mt-0.5">
+                                    Pic : <strong className="text-secondary">
+                                        {Math.round(Math.max(...slots.map((s) => s.mw)) * splitNordPreview / 100)} MW
+                                    </strong>
+                                </p>
+                            </div>
+                            <span className="material-symbols-outlined text-secondary/30" style={{ fontSize: 22 }}>call_split</span>
+                        </div>
+                        <div className="bg-surface-container border border-tertiary/20 p-space-md flex items-center justify-between">
+                            <div>
+                                <p className="font-mono text-[9px] text-on-surface-variant uppercase mb-0.5">CRC Sud</p>
+                                <p className="font-mono text-sm font-bold text-tertiary">{splitSudPreview} %</p>
+                                <p className="font-mono text-[9px] text-on-surface-variant mt-0.5">
+                                    Pic : <strong className="text-tertiary">
+                                        {Math.round(Math.max(...slots.map((s) => s.mw)) * splitSudPreview / 100)} MW
+                                    </strong>
+                                </p>
+                            </div>
+                            <span className="material-symbols-outlined text-tertiary/30" style={{ fontSize: 22 }}>call_split</span>
+                        </div>
+                    </div>
+                    <div className="w-full h-3 bg-surface-container-lowest overflow-hidden flex border border-surface-container-high">
+                        <div
+                            className="bg-secondary h-full flex items-center justify-center font-mono text-[9px] text-background font-bold transition-all duration-150"
+                            style={{ width: `${splitNordPreview}%` }}
+                        >
+                            {splitNordPreview >= 15 ? `${splitNordPreview}%` : ''}
+                        </div>
+                        <div
+                            className="bg-tertiary h-full flex items-center justify-center font-mono text-[9px] text-background font-bold transition-all duration-150"
+                            style={{ width: `${splitSudPreview}%` }}
+                        >
+                            {splitSudPreview >= 15 ? `${splitSudPreview}%` : ''}
+                        </div>
+                    </div>
+                    <p className="font-mono text-[9px] text-on-surface-variant mt-space-xs">
+                        Clé modifiable dans <strong>Paramètres &amp; Seuils</strong>
+                    </p>
+                </div>
+
                 {/* Footer */}
                 <div className="px-space-lg py-space-md bg-surface-container border-t border-surface-container-high flex items-center justify-between shrink-0">
                     <div className="font-mono text-[10px] text-on-surface-variant flex items-center gap-space-xs">
@@ -1543,13 +1717,15 @@ function ProgrammeJ1Modal({ isOpen, onClose })
                         </button>
                         <button
                             onClick={handleValidate}
-                            disabled={tab === 'upload' && !fileName}
+                            disabled={(tab === 'upload' && !fileName) || saving}
                             className="px-space-md py-space-xs rounded bg-secondary-container text-on-secondary-container font-mono text-xs font-bold uppercase tracking-wider transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-space-xs"
                             type="button"
                         >
                             {saved
                                 ? <><Icon name="check_circle" size={14} className="text-[#4ade80]" /><span>Programme validé !</span></>
-                                : <><Icon name="send" size={14} /><span>Valider et envoyer aux CRCs</span></>
+                                : saving
+                                    ? <><Icon name="hourglass_empty" size={14} className="animate-spin" /><span>Envoi aux CRCs...</span></>
+                                    : <><Icon name="send" size={14} /><span>Valider et envoyer aux CRCs</span></>
                             }
                         </button>
                     </div>
@@ -1809,12 +1985,39 @@ export default function DNDashboard()
     const { data: dbData, loading: dbLoading, lastUpdated } = useDNDashboard()
     const { addOrUpdateOrder, cancelRealimOrders: cancelRealimInStore } = useLiveStore()
 
-    // Live timeseries for the 24h chart — refreshes every 5 min
-    const { slots: tsSlots, totalEns: tsEns } = useTimeseries(null)
+    // Live timeseries for the 24h chart — national view (crcId = null)
+    const { slots: tsSlots } = useTimeseries(null)
     const chartPoints = tsSlots.length > 0 ? slotsToChartPoints(tsSlots) : CHART_POINTS_FALLBACK
 
     // Sync live DB data → alertStore (replaces hardcoded alerts)
     useAlertSync(dbData)
+
+    // ── J+1 reminder hook — fires once per day when programme not set ──────────
+    const { addNotification, resolveNotification } = useAlertStore()
+    const { resetReminderFired, setJ1Status }       = useProgrammesStore()
+
+    useJ1Reminder({
+        onReminder: () =>
+        {
+            addNotification({
+                type:     'j1_reminder'
+                ,title:   'Programme J+1 non saisi'
+                ,body:    'Le programme de délestage de demain n\'a pas encore été validé. Saisissez-le avant l\'heure limite.'
+                ,severity: 'warn'
+            })
+        }
+        ,onAutoZero: () =>
+        {
+            // Remove the reminder notification and add a critical auto-zero one
+            resolveNotification('j1_reminder')
+            addNotification({
+                type:     'j1_auto_zero'
+                ,title:   'Programme J+1 automatique — Zéro MW'
+                ,body:    'Délai dépassé sans saisie du programme. Un programme à 0 MW a été appliqué automatiquement pour demain.'
+                ,severity: 'crit'
+            })
+        }
+    })
 
     // ── Helper: derive styling classes from BCC status string ─────────────────
     const bccStatusStyle = (statut) =>
@@ -2735,7 +2938,18 @@ export default function DNDashboard()
             )}
 
             {/* ── 8. PROGRAMME J+1 MODAL ───────────────────────────────────── */}
-            <ProgrammeJ1Modal isOpen={j1Open} onClose={() => setJ1Open(false)} />
+            <ProgrammeJ1Modal
+                isOpen={j1Open}
+                onClose={() => setJ1Open(false)}
+                onProgrammeValidated={(programmeDate) =>
+                {
+                    // Clear reminder notifications once the DN submits
+                    resolveNotification('j1_reminder')
+                    resolveNotification('j1_auto_zero')
+                    resetReminderFired()
+                    setJ1Status('validated', null, programmeDate)
+                }}
+            />
 
             {/* ── 9. URGENCE MODAL ─────────────────────────────────────────── */}
             <UrgenceModal

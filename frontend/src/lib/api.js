@@ -27,7 +27,10 @@ api.interceptors.response.use
     (res) => res
     ,(err) =>
     {
-        if (err.response?.status === 401)
+        // Only auto-logout on 401 if the user already has a session token.
+        // On the login page itself a 401 just means wrong credentials —
+        // let the catch block in handleSubmit deal with it instead.
+        if (err.response?.status === 401 && useAuthStore.getState().token)
         {
             useAuthStore.getState().logout()
             window.location.href = '/login'

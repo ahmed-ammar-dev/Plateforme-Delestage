@@ -16,6 +16,7 @@ from app.services.seed_timeseries import seed_timeseries
 from app.services.websocket import manager
 
 from app.api.routes import auth, feeders, orders, executions, programmes, kpis, admin, historique, dashboard, citizen
+from app.api.routes import settings as settings_router
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -64,7 +65,8 @@ app.include_router(kpis.router,        prefix="/api/v1")
 app.include_router(admin.router,       prefix="/api/v1")
 app.include_router(historique.router,  prefix="/api/v1")
 app.include_router(dashboard.router,   prefix="/api/v1")
-app.include_router(citizen.router,     prefix="/api/v1")
+app.include_router(citizen.router,         prefix="/api/v1")
+app.include_router(settings_router.router, prefix="/api/v1")
 
 
 # ── WebSocket endpoint ────────────────────────────────────────────────────────

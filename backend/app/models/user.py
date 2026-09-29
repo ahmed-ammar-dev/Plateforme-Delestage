@@ -47,3 +47,11 @@ class User(Base):
 
     def __repr__(self) -> str:
         return f"<User {self.username} ({self.role})>"
+
+    @property
+    def bcc_name(self) -> str | None:
+        return self.bcc.name if self.bcc else None
+
+    @property
+    def bcc_zone(self) -> str | None:
+        return self.bcc.zone if self.bcc else None
